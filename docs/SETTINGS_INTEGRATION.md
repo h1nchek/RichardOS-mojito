@@ -140,7 +140,10 @@ LineageOS's existing `LineageSettings.System` provider:
 - Battery percentage: hidden, inside the icon, or next to the icon.
 
 The option values and setting keys were checked against the LineageOS 24.0
-Lineage SDK and SystemUI battery repository. Quick Settings tile arrangement is
+Lineage SDK and SystemUI battery repository. CI now also reads the SDK's
+`InclusiveIntegerRangeValidator` declarations and verifies that the RichardOS
+preference value arrays cover exactly the supported ranges (0–3 for battery
+style and 0–2 for percentage display). Quick Settings tile arrangement is
 not duplicated in RichardOS: users continue to edit tiles from the native shade
 editor. The Lock Screen entry opens the existing
 `LockScreenNotificationsPreferencePageFragment`, retaining platform handling
