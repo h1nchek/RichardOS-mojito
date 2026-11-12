@@ -34,7 +34,7 @@ for frame in range(24):
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="2400" viewBox="0 0 1080 2400">
 <defs><radialGradient id="bg"><stop offset="0" stop-color="#202329"/><stop offset="1" stop-color="#090A0D"/></radialGradient></defs>
 <rect width="1080" height="2400" fill="url(#bg)"/>
-<path d="{d}" fill="#F5BE35" opacity="{opacity:.4f}" transform="translate({540+offset:.3f} {1200+offset:.3f}) scale({scale:.5f})"/>
+<path d="{d}" fill="#F5BE35" opacity="{opacity:.4f}" transform="translate(540 1200) scale({scale:.5f}) translate(-256 -256)"/>
 </svg>'''
     (output / f"{frame:05d}.svg").write_text(svg)
 PY
