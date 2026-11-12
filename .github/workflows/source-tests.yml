@@ -38,6 +38,13 @@ jobs:
           repository: LineageOS/android_frameworks_base
           ref: lineage-24.0
           path: upstream/frameworks_base
+          sparse-checkout: |
+            core/java/android/provider/Settings.java
+            core/java/android/os/storage/StorageManager.java
+            core/java/android/os/SELinux.java
+            core/java/android/os/SystemProperties.java
+            packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayApplier.java
+          sparse-checkout-cone-mode: false
 
       - name: Check out LineageOS SDK target
         uses: actions/checkout@v5
