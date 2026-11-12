@@ -50,13 +50,21 @@ Each master is 1440×3200 SVG source artwork. Render PNG previews with
 `bash scripts/render-wallpapers.sh`; the script uses `rsvg-convert` or
 Inkscape. Review the rendered images on the target device before shipping them.
 
-Android's default wallpaper pipeline expects raster assets. These SVG masters
-are not yet installed as system wallpapers and are not wired into a device
-resource overlay or Settings wallpaper picker.
+Android's framework default wallpaper resource is raster. Use
+`scripts/install-wallpaper-overlay.sh /path/to/android/source device/xiaomi/mojito/lineage_mojito.mk`
+to render the Nocturne master as a 1440×3200 PNG into the framework resource
+overlay and register `vendor/richardos/overlay` in the mojito product makefile.
+The script checks that the supplied makefile declares `lineage_mojito` and is
+idempotent. Review the resulting PNG and makefile diff before building.
+
+This installs Nocturne as the framework's default wallpaper resource; it does
+not add a multi-wallpaper picker. Eclipse and Aurum remain artwork masters for
+a later wallpaper picker integration.
 
 ## Integration status
 
 The lion and three wallpaper masters are committed as original RichardOS
-branding source assets. Product makefile integration, raster wallpaper
-packaging, Settings integration, and boot animation branding remain pending.
+branding source assets. Automated default-wallpaper overlay installation is provided, but it has not
+been run against a complete Android checkout or verified in a build. Settings
+integration, a multi-wallpaper picker, and boot animation branding remain pending.
 No compiled ROM branding is claimed yet.
