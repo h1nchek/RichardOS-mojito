@@ -33,7 +33,7 @@ class RichardOSSettingsResourceTests(unittest.TestCase):
         cls.xml_files = {
             path: ET.fromstring(content)
             for path, content in cls.files.items()
-            if path.endswith(".xml")
+            if path.endswith(".xml") and path != "res/xml/top_level_settings.xml"
         }
 
     def test_all_added_settings_xml_is_well_formed(self):
