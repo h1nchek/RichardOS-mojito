@@ -17,6 +17,12 @@ class RichardOSSetupWizardBrandingTest(unittest.TestCase):
             "Welcome to %1$s",
         )
         self.assertEqual(values["setup_services"], "RichardOS features")
+        self.assertEqual(values["setup_navigation"], "Navigation")
+        self.assertEqual(values["navigation_summary"], "Choose how you want to move around RichardOS")
+        self.assertEqual(values["gesture_navigation"], "Gesture navigation")
+        self.assertEqual(values["navbar_navigation"], "3-button navigation")
+        self.assertEqual(values["setup_theme"], "Appearance")
+        self.assertEqual(values["theme_summary"], "Choose the look of your device")
 
     def test_setup_wizard_overrides_verified_lineage24_colors(self):
         root = ET.parse(SETUP / "colors.xml").getroot()
