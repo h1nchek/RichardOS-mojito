@@ -59,6 +59,9 @@ bash "$ROOT/scripts/install-system-branding.sh" "$ANDROID_DIR"
 echo "Installing RichardOS wallpaper resources into the synced source tree..."
 bash "$ROOT/scripts/install-wallpaper-picker.sh" "$ANDROID_DIR"
 bash "$ROOT/scripts/install-wallpaper-overlay.sh" "$ANDROID_DIR" device/xiaomi/mojito/lineage_mojito.mk
+echo "Applying the RichardOS Hub patch to the existing Settings app..."
+bash "$ROOT/scripts/apply-settings-patch.sh" "$ANDROID_DIR/packages/apps/Settings"
+git -C "$ANDROID_DIR/packages/apps/Settings" diff --check
 echo "Checking device and Qualcomm VINTF XML..."
 python3 "$ROOT/scripts/audit-vintf.py" \
   device/xiaomi/sm6150-common/configs/manifests/manifest.xml \
