@@ -24,11 +24,11 @@ diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/co
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
 +++ b/src/com/android/settings/core/gateway/SettingsGateway.java
-@@ -24,6 +24,7 @@ import com.android.settings.TestingSettings;
+@@ -24,2 +24,3 @@ import com.android.settings.TestingSettings;
  import com.android.settings.TrustedCredentialsSettings;
 +import com.android.settings.richardos.RichardOSDashboardFragment;
  import com.android.settings.accessibility.AccessibilityDetailsSettingsFragment;
-@@ -245,6 +246,7 @@ public class SettingsGateway {
+@@ -245,3 +246,4 @@ public class SettingsGateway {
              SafetyCenterQsFragment.class.getName(),
 +            RichardOSDashboardFragment.class.getName(),
      };
