@@ -1,0 +1,9 @@
+# Licensing and attribution notice
+
+The Apache License 2.0 in this repository applies only to original project-authored material where the project has the right to license it, such as its own build scripts, audit utilities, tests, and documentation.
+
+This repository coordinates and references third-party Android platform sources, device trees, kernels, vendor repositories, proprietary binaries, and BlueOS components. Those materials are **not relicensed by this repository's LICENSE file**. Their original copyright notices, license files, redistribution conditions, and applicable firmware restrictions remain in force.
+
+Before redistributing a source modification or build artifact, contributors must check the license and redistribution terms of every included component. Do not add proprietary blobs, firmware images, or other third-party files merely because they are required for a local build.
+
+Relevant upstream projects are listed in [docs/DEVICE_SOURCES.md](docs/DEVICE_SOURCES.md) and the manifests under [manifests/](manifests/).
