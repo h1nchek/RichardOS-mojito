@@ -17,7 +17,7 @@ class RichardOSBrandingTest(unittest.TestCase):
 
     def test_product_identity_does_not_override_lunch_product_name(self):
         content = (ROOT / "vendor/richardos/config/branding.mk").read_text()
-        self.assertNotRegex(content, r"(?m)^PRODUCT_NAME\\s*[:+]?=")
+        self.assertNotRegex(content, r"(?m)^PRODUCT_NAME\s*[:+]?=")
         self.assertIn("PRODUCT_BRAND := RichardOS", content)
         self.assertIn("PRODUCT_MODEL := Redmi Note 10", content)
 
