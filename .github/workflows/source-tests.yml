@@ -21,6 +21,24 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Check out LineageOS manifest
+        uses: actions/checkout@v5
+        with:
+          repository: LineageOS/android
+          ref: lineage-24.0
+          path: upstream/manifest
+          sparse-checkout: |
+            default.xml
+            snippets/lineage.xml
+          sparse-checkout-cone-mode: false
+
+      - name: Audit device manifest dependencies
+        run: |
+          python3 scripts/audit_manifest_dependencies.py \\
+            manifests/mojito-lineage24.xml \\
+            upstream/manifest/default.xml \\
+            upstream/manifest/snippets/lineage.xml
+
       - name: Run unit tests
         run: python3 -m unittest discover -s tests -v
 
