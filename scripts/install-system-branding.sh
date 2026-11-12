@@ -17,6 +17,8 @@ command -v rsvg-convert >/dev/null || { echo "rsvg-convert is required (install 
 command -v zip >/dev/null || { echo "zip is required."; exit 1; }
 
 mkdir -p "$DEST/part0"
+mkdir -p "$ANDROID_TOP/vendor/richardos/overlay"
+cp -a "$ROOT/vendor/richardos/overlay/." "$ANDROID_TOP/vendor/richardos/overlay/"
 python3 - "$LOGO" "$DEST/frames" <<'PY'
 import math, pathlib, sys, xml.etree.ElementTree as ET
 source, output = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
