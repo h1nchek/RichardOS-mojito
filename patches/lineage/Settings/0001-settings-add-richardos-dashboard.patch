@@ -13,11 +13,11 @@ res/xml/top_level_settings.xml | 13 +++++++++++++
 res/drawable/ic_richardos_lion.xml | 10 ++++++++++
 res/xml/richardos_dashboard.xml | 35 +++++++++++++++++++++++++++++++++++
 res/values/richardos_arrays.xml | 22 ++++++++++++++++++++++
-res/values/richardos_strings.xml | 26 ++++++++++++++++++++++++++
+res/values/richardos_strings.xml | 27 +++++++++++++++++++++++++++
 src/com/android/settings/richardos/RichardOSDashboardFragment.java | 139 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-res/xml/richardos_root.xml | 20 ++++++++++++++++++++
-src/com/android/settings/richardos/RichardOSRootFragment.java | 134 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
- 9 files changed, 403 insertions(+), 0 deletions(-)
+res/xml/richardos_root.xml | 21 +++++++++++++++++++++
+src/com/android/settings/richardos/RichardOSRootFragment.java | 135 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
+ 9 files changed, 406 insertions(+), 0 deletions(-)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
@@ -148,7 +148,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/values/richardos_strings.xml
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,27 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<resources>
 +    <string name="richardos_title">RichardOS</string>
@@ -156,7 +156,7 @@ index 0000000000000000000000000000000000000000
 +    <string name="richardos_category_appearance">Appearance</string>
 +    <string name="richardos_category_system">System customization</string>
 +    <string name="richardos_monet_title">Monet &amp; Themes</string>
-+    <string name="richardos_monet_summary">Choose a palette preset. This selection is saved locally; system-wide color application is not implemented yet.</string>
++    <string name="richardos_monet_summary">Choose a system color palette inspired by Material You.</string>
 +    <string name="richardos_statusbar_title">Status Bar &amp; Quick Settings</string>
 +    <string name="richardos_statusbar_summary">Status bar and Quick Settings options — coming soon</string>
 +    <string name="richardos_root_title">Root &amp; System</string>
@@ -164,6 +164,7 @@ index 0000000000000000000000000000000000000000
 +    <string name="richardos_root_device_category">Device</string>
 +    <string name="richardos_root_android">Android version</string>
 +    <string name="richardos_root_build">Build number</string>
++    <string name="richardos_root_security_patch">Android security update</string>
 +    <string name="richardos_root_device">Device</string>
 +    <string name="richardos_root_kernel">Kernel</string>
 +    <string name="richardos_root_security_category">Security</string>
@@ -325,7 +326,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/xml/richardos_root.xml
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,21 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 +    <PreferenceCategory
@@ -333,6 +334,7 @@ index 0000000000000000000000000000000000000000
 +        android:title="@string/richardos_root_device_category">
 +        <Preference android:key="richardos_root_android" android:title="@string/richardos_root_android" android:selectable="false" />
 +        <Preference android:key="richardos_root_build" android:title="@string/richardos_root_build" android:selectable="false" />
++        <Preference android:key="richardos_root_security_patch" android:title="@string/richardos_root_security_patch" android:selectable="false" />
 +        <Preference android:key="richardos_root_device" android:title="@string/richardos_root_device" android:selectable="false" />
 +        <Preference android:key="richardos_root_kernel" android:title="@string/richardos_root_kernel" android:selectable="false" />
 +    </PreferenceCategory>
@@ -351,7 +353,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/src/com/android/settings/richardos/RichardOSRootFragment.java
-@@ -0,0 +1,134 @@
+@@ -0,0 +1,135 @@
 +/*
 + * Copyright (C) 2026 RichardOS
 + *
@@ -415,6 +417,7 @@ index 0000000000000000000000000000000000000000
 +        setSummary("richardos_root_android",
 +                Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ")");
 +        setSummary("richardos_root_build", Build.DISPLAY);
++        setSummary("richardos_root_security_patch", Build.VERSION.SECURITY_PATCH);
 +        setSummary("richardos_root_device",
 +                Build.MANUFACTURER + " " + Build.MODEL + " (" + Build.DEVICE + ")");
 +        setSummary("richardos_root_kernel", safeKernelVersion());
