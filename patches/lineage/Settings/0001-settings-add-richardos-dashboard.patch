@@ -8,29 +8,33 @@ Target: LineageOS/android_packages_apps_Settings, lineage-24.0
 This patch adds RichardOS as a native dashboard inside the existing Settings
 application. It does not create a separate APK or application package.
 
-src/com/android/settings/core/gateway/SettingsGateway.java | 4 ++++
+src/com/android/settings/core/gateway/SettingsGateway.java | 6 ++++++
 res/xml/top_level_settings.xml | 13 +++++++++++++
 res/drawable/ic_richardos_lion.xml | 10 ++++++++++
 res/xml/richardos_dashboard.xml | 35 +++++++++++++++++++++++++++++++++++
-res/values/richardos_arrays.xml | 22 ++++++++++++++++++++++
-res/values/richardos_strings.xml | 31 +++++++++++++++++++++++++++++++
-src/com/android/settings/richardos/RichardOSDashboardFragment.java | 139 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+res/values/richardos_arrays.xml | 34 ++++++++++++++++++++++++++++++++++
+res/values/richardos_strings.xml | 36 ++++++++++++++++++++++++++++++++++++
+src/com/android/settings/richardos/RichardOSDashboardFragment.java | 139 ++++++++++++++++++++++++++++++++++++++++
+res/xml/richardos_statusbar.xml | 11 +++++++++++
+src/com/android/settings/richardos/RichardOSStatusBarFragment.java | 56 ++++++++++++++++++++++++++++++++++++++++
 res/xml/richardos_root.xml | 25 +++++++++++++++++++++++++
-src/com/android/settings/richardos/RichardOSRootFragment.java | 164 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
- 9 files changed, 443 insertions(+), 0 deletions(-)
+src/com/android/settings/richardos/RichardOSRootFragment.java | 164 ++++++++++++++++++++++++++++++++++++++++ -
+ 11 files changed, 529 insertions(+), 0 deletions(-)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
 +++ b/src/com/android/settings/core/gateway/SettingsGateway.java
-@@ -24,2 +24,4 @@ import com.android.settings.TestingSettings;
+@@ -24,2 +24,5 @@ import com.android.settings.TestingSettings;
  import com.android.settings.TrustedCredentialsSettings;
 +import com.android.settings.richardos.RichardOSDashboardFragment;
 +import com.android.settings.richardos.RichardOSRootFragment;
++import com.android.settings.richardos.RichardOSStatusBarFragment;
  import com.android.settings.accessibility.AccessibilityDetailsSettingsFragment;
-@@ -245,2 +246,4 @@ public class SettingsGateway {
+@@ -245,2 +246,5 @@ public class SettingsGateway {
              SafetyCenterQsFragment.class.getName(),
 +            RichardOSDashboardFragment.class.getName(),
 +            RichardOSRootFragment.class.getName(),
++            RichardOSStatusBarFragment.class.getName(),
      };
 
 diff --git a/res/xml/top_level_settings.xml b/res/xml/top_level_settings.xml
@@ -99,10 +103,10 @@ index 0000000000000000000000000000000000000000
 +        android:key="richardos_system"
 +        android:title="@string/richardos_category_system">
 +        <Preference
++            android:fragment="com.android.settings.richardos.RichardOSStatusBarFragment"
 +            android:key="richardos_statusbar"
 +            android:title="@string/richardos_statusbar_title"
-+            android:summary="@string/richardos_statusbar_summary"
-+            android:selectable="false" />
++            android:summary="@string/richardos_statusbar_summary" />
 +        <Preference
 +            android:fragment="com.android.settings.richardos.RichardOSRootFragment"
 +            android:key="richardos_root"
@@ -120,7 +124,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/values/richardos_arrays.xml
-@@ -0,0 +1,22 @@
+@@ -0,0 +1,34 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<resources>
 +    <string-array name="richardos_palette_entries">
@@ -131,6 +135,18 @@ index 0000000000000000000000000000000000000000
 +        <item>Ember</item>
 +        <item>Graphite</item>
 +        <item>Rose</item>
++    </string-array>
++    <string-array name="richardos_battery_style_entries">
++        <item>Default</item><item>Circle</item><item>Text</item><item>Dotted circle</item>
++    </string-array>
++    <string-array name="richardos_battery_style_values">
++        <item>0</item><item>1</item><item>2</item><item>3</item>
++    </string-array>
++    <string-array name="richardos_battery_percent_entries">
++        <item>Hidden</item><item>Inside icon</item><item>Next to icon</item>
++    </string-array>
++    <string-array name="richardos_battery_percent_values">
++        <item>0</item><item>1</item><item>2</item>
 +    </string-array>
 +    <string-array name="richardos_palette_values">
 +        <item>system</item>
@@ -148,7 +164,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/values/richardos_strings.xml
-@@ -0,0 +1,31 @@
+@@ -0,0 +1,36 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<resources>
 +    <string name="richardos_title">RichardOS</string>
@@ -158,7 +174,12 @@ index 0000000000000000000000000000000000000000
 +    <string name="richardos_monet_title">Monet &amp; Themes</string>
 +    <string name="richardos_monet_summary">Choose a system color palette inspired by Material You.</string>
 +    <string name="richardos_statusbar_title">Status Bar &amp; Quick Settings</string>
-+    <string name="richardos_statusbar_summary">Status bar and Quick Settings options — coming soon</string>
++    <string name="richardos_statusbar_summary">Customize battery indicators and status bar behavior.</string>
++    <string name="richardos_statusbar_battery_category">Battery indicator</string>
++    <string name="richardos_statusbar_battery_style">Battery icon style</string>
++    <string name="richardos_statusbar_battery_percent">Battery percentage</string>
++    <string name="richardos_statusbar_qs_category">Quick Settings</string>
++    <string name="richardos_statusbar_qs_hint">Add, remove, or rearrange tiles directly from the Quick Settings panel.</string>
 +    <string name="richardos_root_title">Root &amp; System</string>
 +    <string name="richardos_root_summary">Device information, security status, and boot verification</string>
 +    <string name="richardos_root_device_category">Device</string>
@@ -323,6 +344,85 @@ index 0000000000000000000000000000000000000000
 +
 +    public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
 +            new BaseSearchIndexProvider(R.xml.richardos_dashboard);
++}
++
+diff --git a/res/xml/richardos_statusbar.xml b/res/xml/richardos_statusbar.xml
+new file mode 100644
+index 0000000000000000000000000000000000000000
+--- /dev/null
++++ b/res/xml/richardos_statusbar.xml
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="utf-8"?>
++<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
++    <PreferenceCategory android:key="richardos_statusbar_battery_category" android:title="@string/richardos_statusbar_battery_category">
++        <ListPreference android:key="richardos_statusbar_battery_style" android:title="@string/richardos_statusbar_battery_style" android:entries="@array/richardos_battery_style_entries" android:entryValues="@array/richardos_battery_style_values" android:defaultValue="0" />
++        <ListPreference android:key="richardos_statusbar_battery_percent" android:title="@string/richardos_statusbar_battery_percent" android:entries="@array/richardos_battery_percent_entries" android:entryValues="@array/richardos_battery_percent_values" android:defaultValue="0" />
++    </PreferenceCategory>
++    <PreferenceCategory android:key="richardos_statusbar_qs_category" android:title="@string/richardos_statusbar_qs_category">
++        <Preference android:key="richardos_statusbar_qs_hint" android:title="@string/richardos_statusbar_qs_hint" android:selectable="false" />
++    </PreferenceCategory>
++</PreferenceScreen>
++
+diff --git a/src/com/android/settings/richardos/RichardOSStatusBarFragment.java b/src/com/android/settings/richardos/RichardOSStatusBarFragment.java
+new file mode 100644
+index 0000000000000000000000000000000000000000
+--- /dev/null
++++ b/src/com/android/settings/richardos/RichardOSStatusBarFragment.java
+@@ -0,0 +1,56 @@
++/*
++ * Copyright (C) 2026 RichardOS
++ * Licensed under the Apache License, Version 2.0 (the "License").
++ */
++package com.android.settings.richardos;
++
++import android.app.settings.SettingsEnums;
++import android.os.Bundle;
++import android.util.Log;
++import androidx.preference.ListPreference;
++import com.android.settings.R;
++import com.android.settings.dashboard.DashboardFragment;
++import com.android.settings.search.BaseSearchIndexProvider;
++import com.android.settingslib.search.SearchIndexable;
++import lineageos.providers.LineageSettings;
++
++/** RichardOS status bar and battery indicator settings. */
++@SearchIndexable
++public class RichardOSStatusBarFragment extends DashboardFragment {
++    private static final String TAG = "RichardOSStatusBar";
++    private static final String KEY_STYLE = "richardos_statusbar_battery_style";
++    private static final String KEY_PERCENT = "richardos_statusbar_battery_percent";
++
++    @Override protected int getPreferenceScreenResId() { return R.xml.richardos_statusbar; }
++    @Override protected String getLogTag() { return TAG; }
++    @Override public int getMetricsCategory() { return SettingsEnums.SETTINGS_SYSTEM_CATEGORY; }
++
++    @Override
++    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
++        super.onCreatePreferences(savedInstanceState, rootKey);
++        bind(KEY_STYLE, LineageSettings.System.STATUS_BAR_BATTERY_STYLE);
++        bind(KEY_PERCENT, LineageSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT);
++    }
++
++    private void bind(String key, String setting) {
++        ListPreference pref = findPreference(key);
++        if (pref == null) return;
++        int value = LineageSettings.System.getInt(requireContext().getContentResolver(), setting, 0);
++        pref.setValue(String.valueOf(value));
++        pref.setOnPreferenceChangeListener((p, next) -> {
++            try {
++                int selected = Integer.parseInt((String) next);
++                boolean ok = LineageSettings.System.putInt(requireContext().getContentResolver(), setting, selected);
++                if (!ok) Log.w(TAG, "Could not update " + setting);
++                return ok;
++            } catch (NumberFormatException e) {
++                Log.e(TAG, "Invalid value for " + setting, e);
++                return false;
++            }
++        });
++    }
++
++    public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
++            new BaseSearchIndexProvider(R.xml.richardos_statusbar);
 +}
 +
 diff --git a/res/xml/richardos_root.xml b/res/xml/richardos_root.xml
