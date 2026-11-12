@@ -68,7 +68,7 @@ The inherited source manifest pins candidate device, kernel, and vendor reposito
 6. Add RichardOS applications, settings, and update infrastructure.
 7. Publish reproducible builds, checksums, changelogs, and known issues.
 
-The initial interface and feature direction is documented in [RICHARDOS_DESIGN.md](docs/RICHARDOS_DESIGN.md). The lion mark, graphite/gold identity, original wallpaper artwork, and framework default-wallpaper overlay installer are documented in [BRANDING.md](docs/BRANDING.md). The first native Settings dashboard patch is documented in [SETTINGS_INTEGRATION.md](docs/SETTINGS_INTEGRATION.md).
+The first clean baseline compilation procedure is documented in [FIRST_BUILD.md](docs/FIRST_BUILD.md); use `scripts/build-baseline.sh` before applying RichardOS branding or the experimental Settings patch. The initial interface and feature direction is documented in [RICHARDOS_DESIGN.md](docs/RICHARDOS_DESIGN.md). The lion mark, graphite/gold identity, original wallpaper artwork, and framework default-wallpaper overlay installer are documented in [BRANDING.md](docs/BRANDING.md). The first native Settings dashboard patch is documented in [SETTINGS_INTEGRATION.md](docs/SETTINGS_INTEGRATION.md).
 
 ## Apply the Settings customization
 
@@ -103,10 +103,10 @@ A Linux x86_64 build host is required. Android builds are large; plan for at lea
 Install the Android `repo` tool and required build dependencies, then run:
 
 ```bash
-bash scripts/build.sh "$HOME/android/richardos-mojito"
+bash scripts/build-baseline.sh "$HOME/android/richardos-mojito"
 ```
 
-The helper runs the repository's unit tests, validates the local manifest, syncs LineageOS and the device sources, performs static source/VINTF checks, installs RichardOS product branding, generates the lion boot animation, applies the gold Material You palette, adds the WallpaperPicker2 collection and default wallpaper overlay, then starts the build. The branding installer requires `rsvg-convert` and `zip`; wallpaper rendering also supports Inkscape. These checks do not replace a successful Android build or physical-device testing.
+The baseline helper runs the repository's unit tests, validates the local manifest and existing source checkout, records the resolved manifest, applies the guarded VINTF correction, audits vendor source paths and VINTF, then compiles the unbranded LineageOS baseline. It does not sync automatically; initialize and sync the source tree using the steps in FIRST_BUILD.md. Apply RichardOS product branding, boot animation, palette, wallpapers, and Settings patch only after the baseline is established. The branding installer requires `rsvg-convert` and `zip`; wallpaper rendering also supports Inkscape. These checks do not replace a successful Android build or physical-device testing.
 
 Long-running work should be run inside `tmux` so it survives SSH disconnections.
 
