@@ -56,7 +56,7 @@ jobs:
         run: |
           python3 scripts/audit_settings_integration.py \
             upstream/Settings upstream/frameworks_base \
-            patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch
+            patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch \
             upstream/lineage-sdk/sdk/src/java/lineageos/providers/LineageSettings.java
 
       - name: Check RichardOS patch applicability
