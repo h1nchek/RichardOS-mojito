@@ -42,7 +42,7 @@ JOBS=4 bash scripts/build-baseline.sh "$HOME/android/richardos-mojito"
 
 The script verifies the host and source-tree prerequisites, runs the repository's unit tests, compares every local `extend-project` against the synced LineageOS `default.xml` and `snippets/lineage.xml`, checks required Qualcomm/Lineage policy and hardware source directories, records the resolved manifest, applies the narrowly guarded SM6150 VINTF ordering correction, checks vendor source paths and VINTF XML, then builds the LineageOS baseline with `breakfast mojito` and `m bacon`.
 
-The script deliberately does **not** apply RichardOS branding, wallpapers, boot animation, or the experimental Settings patch. First establish that the device sources can produce a baseline package.
+The baseline script deliberately does **not** apply RichardOS branding, wallpapers, boot animation, or the experimental Settings patch. First establish that the device sources can produce a baseline package. The separate `scripts/build.sh` is the RichardOS customization/build stage and applies the Settings patch.
 
 ## 3. After a successful baseline
 
@@ -50,7 +50,7 @@ The script deliberately does **not** apply RichardOS branding, wallpapers, boot 
 2. Review the build log and output package metadata.
 3. Do not flash until the exact target, package integrity, backup, recovery compatibility, and installation procedure have been reviewed.
 4. Arrange a controlled boot test and record hardware behavior.
-5. Only after the baseline is known-good, layer RichardOS branding and the Settings patch, then build again.
+5. Only after the baseline is known-good, run `bash scripts/build.sh "$HOME/android/richardos-mojito"` from the RichardOS checkout. This second-stage script installs the RichardOS branding and wallpapers, applies the native Settings Hub patch, and builds the customized ROM.
 
 ## Current limitations
 
