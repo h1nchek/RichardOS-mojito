@@ -9,20 +9,20 @@ import re
 import sys
 
 SETTINGS = {
-    "STATUS_BAR_BATTERY_STYLE": ("richardos_battery_style_values",),
-    "STATUS_BAR_SHOW_BATTERY_PERCENT": ("richardos_battery_percent_values",),
+    "STATUS_BAR_BATTERY_STYLE": "richardos_battery_style_values",
+    "STATUS_BAR_SHOW_BATTERY_PERCENT": "richardos_battery_percent_values",
 }
 
 
 def extract_array(patch: str, name: str) -> list[str] | None:
     match = re.search(
-        rf'<string-array\\s+name="{re.escape(name)}">(.*?)</string-array>',
+        rf'<string-array\s+name="{re.escape(name)}">(.*?)</string-array>',
         patch,
         re.DOTALL,
     )
     if not match:
         return None
-    return re.findall(r"<item>\\s*(.*?)\\s*</item>", match.group(1), re.DOTALL)
+    return re.findall(r"<item>\s*(.*?)\s*</item>", match.group(1), re.DOTALL)
 
 
 def main() -> int:
@@ -42,11 +42,15 @@ def main() -> int:
     arrays_section = patch.split(
         "diff --git a/res/values/richardos_arrays.xml", 1
     )
-    arrays_text = arrays_section[1].split("\\ndiff --git ", 1)[0] if len(arrays_section) == 2 else ""
+    arrays_text = (
+        arrays_section[1].split("\ndiff --git ", 1)[0]
+        if len(arrays_section) == 2
+        else ""
+    )
 
-    for name, (array_name,) in SETTINGS.items():
+    for name, array_name in SETTINGS.items():
         declaration = re.compile(
-            rf"public\\s+static\\s+final\\s+String\\s+{name}\\s*="
+            rf"public\s+static\s+final\s+String\s+{name}\s*="
         )
         if not declaration.search(sdk):
             print(f"missing Lineage SDK declaration: {name}", file=sys.stderr)
@@ -56,7 +60,7 @@ def main() -> int:
             failed = True
 
         validator = re.search(
-            rf"{name}_VALIDATOR\\s*=\\s*new InclusiveIntegerRangeValidator\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)",
+            rf"{name}_VALIDATOR\s*=\s*new InclusiveIntegerRangeValidator\(\s*(\d+)\s*,\s*(\d+)\s*\)",
             sdk,
         )
         if not validator:
