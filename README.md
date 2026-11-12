@@ -49,7 +49,7 @@ The inherited source manifest pins candidate device, kernel, and vendor reposito
 - `tests/` — unit tests for the helper scripts.
 - `docs/` — device-source notes, design specification, branding guide, and project documentation.
 - `vendor/richardos/config/` — RichardOS product branding layer for integration into the mojito product makefile.
-- `vendor/richardos/branding/` — original RichardOS logo assets.
+- `vendor/richardos/branding/` — approved lion mark and original wallpaper SVG masters.\n- `scripts/render-wallpapers.sh` — render wallpaper masters to 1440×3200 PNG files for review.
 - `patches/lineage/Settings/` — native Settings integration patch for LineageOS 24.0.
 
 ## Current roadmap
@@ -62,7 +62,7 @@ The inherited source manifest pins candidate device, kernel, and vendor reposito
 6. Add RichardOS applications, settings, and update infrastructure.
 7. Publish reproducible builds, checksums, changelogs, and known issues.
 
-The initial interface and feature direction is documented in [RICHARDOS_DESIGN.md](docs/RICHARDOS_DESIGN.md). The lion mark and palette are documented in [BRANDING.md](docs/BRANDING.md). The first native Settings dashboard patch is documented in [SETTINGS_INTEGRATION.md](docs/SETTINGS_INTEGRATION.md).
+The initial interface and feature direction is documented in [RICHARDOS_DESIGN.md](docs/RICHARDOS_DESIGN.md). The lion mark, graphite/gold identity, and original wallpaper artwork are documented in [BRANDING.md](docs/BRANDING.md). The first native Settings dashboard patch is documented in [SETTINGS_INTEGRATION.md](docs/SETTINGS_INTEGRATION.md).
 
 ## Apply the Settings customization
 
@@ -72,7 +72,7 @@ After syncing the target Settings repository on the `lineage-24.0` branch, apply
 bash scripts/apply-settings-patch.sh /path/to/lineage/packages/apps/Settings
 ```
 
-The helper checks the repository remote, branch, and working-tree cleanliness, then runs `git apply --check` before applying. The dashboard is an in-Settings entry, not a separate application. Its Status Bar section contains Lineage battery controls, Lock Screen links to native lock-screen notification settings, and Root & System contains read-only device/security diagnostics. The Monet selector applies curated seed colors through Android's existing SystemUI theme customization setting and can restore wallpaper-derived colors. This has not yet been compiled or tested on-device. Review the resulting diff and compile Settings before using it in a ROM.
+The helper checks the repository remote, branch, and working-tree cleanliness, then runs `git apply --check` before applying. The dashboard is an in-Settings entry, not a separate application. Its Status Bar section contains Lineage battery controls, Lock Screen links to native lock-screen notification settings, and Root & System contains read-only device/security diagnostics. The Monet selector currently stores a local palette choice only; system-wide palette application is not implemented yet. This has not yet been compiled or tested on-device. Review the resulting diff and compile Settings before using it in a ROM.
 
 ## Build preparation
 
