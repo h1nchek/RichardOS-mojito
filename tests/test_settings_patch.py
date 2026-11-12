@@ -42,7 +42,7 @@ class RichardOSSettingsPatchTests(unittest.TestCase):
     def test_unified_diff_hunk_line_counts_are_consistent(self):
         lines = self.patch.splitlines()
         hunk_re = re.compile(
-            r"^@@ -(\\d+)(?:,(\\d+))? \\+(\\d+)(?:,(\\d+))? @@"
+            r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@"
         )
         checked = 0
         for index, line in enumerate(lines):
