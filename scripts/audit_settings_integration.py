@@ -58,25 +58,25 @@ def main() -> int:
     )
     require(
         storage,
-        r"public\\s+static\\s+boolean\\s+isEncrypted\\s*\\(\\s*\\)",
+        r"public\s+static\s+boolean\s+isEncrypted\s*\(\s*\)",
         "StorageManager.isEncrypted()",
         failures,
     )
     require(
         selinux,
-        r"isSELinuxEnabled\\s*\\(",
+        r"isSELinuxEnabled\s*\(",
         "SELinux.isSELinuxEnabled()",
         failures,
     )
     require(
         selinux,
-        r"isSELinuxEnforced\\s*\\(",
+        r"isSELinuxEnforced\s*\(",
         "SELinux.isSELinuxEnforced()",
         failures,
     )
     require(
         properties,
-        r"get\\s*\\(\\s*String\\s+key\\s*,\\s*String\\s+def\\s*\\)",
+        r"get\s*\(\s*String\s+key\s*,\s*String\s+def\s*\)",
         "SystemProperties.get(String, String)",
         failures,
     )
