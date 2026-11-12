@@ -84,7 +84,7 @@ Install the Android `repo` tool and required build dependencies, then run:
 bash scripts/build.sh "$HOME/android/richardos-mojito"
 ```
 
-The helper runs the repository's unit tests, validates the local manifest, syncs LineageOS and the device sources, performs static source/VINTF checks, installs the RichardOS WallpaperPicker2 partner resources and default wallpaper overlay, then starts the build. The wallpaper installer requires `rsvg-convert` (librsvg) or Inkscape. These checks do not replace a successful Android build or physical-device testing.
+The helper runs the repository's unit tests, validates the local manifest, syncs LineageOS and the device sources, performs static source/VINTF checks, installs RichardOS product branding, generates the lion boot animation, applies the gold Material You palette, adds the WallpaperPicker2 collection and default wallpaper overlay, then starts the build. The branding installer requires `rsvg-convert` and `zip`; wallpaper rendering also supports Inkscape. These checks do not replace a successful Android build or physical-device testing.
 
 Long-running work should be run inside `tmux` so it survives SSH disconnections.
 
