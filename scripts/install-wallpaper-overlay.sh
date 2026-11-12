@@ -24,7 +24,6 @@ fi
 SOURCE="$ROOT/vendor/richardos/branding/wallpapers/richardos-nocturne.svg"
 OVERLAY="$ANDROID_TOP/vendor/richardos/overlay/frameworks/base/core/res/res/drawable-nodpi"
 DEST="$OVERLAY/default_wallpaper.png"
-MARKER="# RichardOS default wallpaper overlay"
 
 if [[ ! -f "$SOURCE" ]]; then
     echo "Missing wallpaper source: $SOURCE" >&2
