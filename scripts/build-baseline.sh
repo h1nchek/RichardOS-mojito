@@ -22,6 +22,8 @@ ANDROID_DIR="$(realpath -m "$ANDROID_DIR")"
 [[ -f "$ANDROID_DIR/build/envsetup.sh" ]] || fail "Missing build/envsetup.sh; source sync is incomplete."
 [[ -f "$ANDROID_DIR/device/xiaomi/mojito/lineage_mojito.mk" ]] || fail "Missing mojito product makefile."
 [[ -f "$ANDROID_DIR/device/xiaomi/sm6150-common/BoardConfigCommon.mk" ]] || fail "Missing SM6150 common device tree."
+[[ -f "$ANDROID_DIR/device/qcom/sepolicy/SEPolicy.mk" ]] || fail "Missing Qualcomm QSSI sepolicy tree (device/qcom/sepolicy)."
+[[ -f "$ANDROID_DIR/device/qcom/sepolicy_vndr/SEPolicy.mk" ]] || fail "Missing Qualcomm vendor sepolicy tree (device/qcom/sepolicy_vndr)."
 
 AVAILABLE_GB="$(df -BG "$ANDROID_DIR" | awk 'NR==2 {gsub(/G/,"",$4); print $4}')"
 [[ -n "$AVAILABLE_GB" ]] || fail "Could not determine free disk space."
