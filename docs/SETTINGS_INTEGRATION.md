@@ -80,3 +80,12 @@ The helper verifies the repository remote and branch, checks for local changes,
 and runs `git apply --check` before applying. The patch has not yet been
 applied to a full synced Android tree or compiled. Do not treat it as a tested
 ROM feature until Settings builds successfully.
+
+
+### Fragment allowlist
+
+The dashboard fragment is registered in
+`src/com/android/settings/core/gateway/SettingsGateway.java` via
+`ENTRY_FRAGMENTS`. This is required because `SettingsActivity` validates
+fragment names before displaying them. The integration patch adds both the
+import and the allowlist entry.
