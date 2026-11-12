@@ -150,3 +150,20 @@ editor. The Lock Screen entry opens the existing
 for notification privacy and device-policy restrictions rather than writing
 secure settings directly. Clock customization remains unimplemented. The fragment is source-level only and has not been compiled or tested
 on-device.
+
+
+### Upstream API audit
+
+The source-test workflow checks the Settings integration against the pinned
+LineageOS 24.0 sources. In addition to verifying that the patch applies cleanly,
+the audit checks:
+
+- the Android framework APIs used by the read-only diagnostics page;
+- the SystemUI theme customization keys and preset source used by Monet;
+- the Lineage SDK integer accessors and battery setting value ranges;
+- the existing lock-screen settings fragment and RichardOS fragment imports
+  and registrations in the Settings gateway.
+
+These checks detect source/API drift, but they are not a Java or Android resource
+compilation. A successful CI run does not replace building the Settings module
+inside a complete synced Android tree.
