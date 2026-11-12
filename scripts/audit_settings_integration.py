@@ -48,7 +48,7 @@ def main() -> int:
     )
     require(
         system_dashboard,
-        r"SettingsEnums\\.SETTINGS_SYSTEM_CATEGORY",
+        r"SettingsEnums\.SETTINGS_SYSTEM_CATEGORY",
         "SettingsEnums.SETTINGS_SYSTEM_CATEGORY used by upstream Settings",
         failures,
     )
@@ -103,7 +103,7 @@ def main() -> int:
             current = None
         elif current == target and line.startswith("+") and not line.startswith("+++"):
             added.append(line[1:])
-    gateway = "\\n".join(added)
+    gateway = "\n".join(added)
     for fragment in (
         "RichardOSDashboardFragment",
         "RichardOSStatusBarFragment",
