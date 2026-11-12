@@ -19,7 +19,7 @@ res/xml/richardos_statusbar.xml | 11 +++++++++++
 src/com/android/settings/richardos/RichardOSStatusBarFragment.java | 56 ++++++++++++++++++++++++++++++++++++++++
 res/xml/richardos_root.xml | 25 +++++++++++++++++++++++++
 src/com/android/settings/richardos/RichardOSRootFragment.java | 164 ++++++++++++++++++++++++++++++++++++++++ -
- 11 files changed, 529 insertions(+), 0 deletions(-)
+ 11 files changed, 533 insertions(+), 0 deletions(-)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
@@ -461,7 +461,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/src/com/android/settings/richardos/RichardOSRootFragment.java
-@@ -0,0 +1,164 @@
+@@ -0,0 +1,168 @@
 +/*
 + * Copyright (C) 2026 RichardOS
 + *
