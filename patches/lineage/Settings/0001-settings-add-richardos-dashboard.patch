@@ -16,8 +16,8 @@ res/values/richardos_arrays.xml | 22 ++++++++++++++++++++++
 res/values/richardos_strings.xml | 31 +++++++++++++++++++++++++++++++
 src/com/android/settings/richardos/RichardOSDashboardFragment.java | 139 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 res/xml/richardos_root.xml | 25 +++++++++++++++++++++++++
-src/com/android/settings/richardos/RichardOSRootFragment.java | 160 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
- 9 files changed, 439 insertions(+), 0 deletions(-)
+src/com/android/settings/richardos/RichardOSRootFragment.java | 164 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
+ 9 files changed, 443 insertions(+), 0 deletions(-)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
@@ -361,7 +361,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/src/com/android/settings/richardos/RichardOSRootFragment.java
-@@ -0,0 +1,160 @@
+@@ -0,0 +1,164 @@
 +/*
 + * Copyright (C) 2026 RichardOS
 + *
@@ -429,9 +429,13 @@ index 0000000000000000000000000000000000000000
 +        setSummary("richardos_root_device",
 +                Build.MANUFACTURER + " " + Build.MODEL + " (" + Build.DEVICE + ")");
 +        setSummary("richardos_root_kernel", safeKernelVersion());
++        setSummary("richardos_root_build_type", Build.TYPE);
++        setSummary("richardos_root_fingerprint", Build.FINGERPRINT);
++        setSummary("richardos_root_boot_slot", getBootSlot());
 +        setSummary("richardos_root_selinux", getSelinuxStatus());
 +        setSummary("richardos_root_encryption", getEncryptionStatus());
 +        setSummary("richardos_root_verified_boot", getVerifiedBootStatus());
++        setSummary("richardos_root_verity", getVerityStatus());
 +        setSummary("richardos_root_bootloader", getBootloaderStatus());
 +        // A generic su-file or package scan is not a reliable root detector.
 +        setSummary("richardos_root_root_status", "Not assessed");
