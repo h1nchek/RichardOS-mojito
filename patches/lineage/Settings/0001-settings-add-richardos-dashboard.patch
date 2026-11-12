@@ -1,0 +1,164 @@
+From 0000000000000000000000000000000000000001 Mon Sep 17 00:00:00 2001
+From: RichardOS <dev@richardos.local>
+Date: Thu, 12 Nov 2026 16:00:00 +0000
+Subject: [PATCH] Settings: add native RichardOS dashboard entry
+
+Target: LineageOS/android_packages_apps_Settings, lineage-24.0
+
+This patch adds RichardOS as a native dashboard inside the existing Settings
+application. It does not create a separate APK or application package.
+
+---
+ res/xml/top_level_settings.xml                 |  8 ++++++++
+ res/xml/richardos_dashboard.xml                | 25 +++++++++++++++++++++++++
+ res/values/richardos_strings.xml               |  9 +++++++++
+ src/com/android/settings/richardos/RichardOSDashboardFragment.java | 55 +++++++++++++++++++++++++++++
+ 4 files changed, 97 insertions(+)
+ create mode 100644 res/xml/richardos_dashboard.xml
+ create mode 100644 res/values/richardos_strings.xml
+ create mode 100644 src/com/android/settings/richardos/RichardOSDashboardFragment.java
+
+diff --git a/res/xml/top_level_settings.xml b/res/xml/top_level_settings.xml
+index 93f4c9fa963499f92b3a0f984459394b50bfc081..0000000000000000000000000000000000000000 100644
+--- a/res/xml/top_level_settings.xml
++++ b/res/xml/top_level_settings.xml
+@@ -1,6 +1,14 @@
+ <PreferenceScreen
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:settings="http://schemas.android.com/apk/res-auto"
+     android:key="top_level_settings">
++
++    <com.android.settings.widget.HomepagePreference
++        android:fragment="com.android.settings.richardos.RichardOSDashboardFragment"
++        android:icon="@drawable/ic_settings_system_dashboard_filled"
++        android:key="top_level_richardos"
++        android:order="-125"
++        android:title="@string/richardos_title"
++        android:summary="@string/richardos_summary" />
+ 
+     <PreferenceCategory
+         android:order="-140"
+diff --git a/res/xml/richardos_dashboard.xml b/res/xml/richardos_dashboard.xml
+new file mode 100644
+index 0000000000000000000000000000000000000000
+--- /dev/null
++++ b/res/xml/richardos_dashboard.xml
+@@ -0,0 +1,25 @@
++<?xml version="1.0" encoding="utf-8"?>
++<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
++
++    <PreferenceCategory
++        android:key="richardos_appearance"
++        android:title="@string/richardos_category_appearance">
++        <Preference
++            android:key="richardos_monet"
++            android:title="@string/richardos_monet_title"
++            android:summary="@string/richardos_monet_summary"
++            android:selectable="false" />
++    </PreferenceCategory>
++
++    <PreferenceCategory
++        android:key="richardos_system"
++        android:title="@string/richardos_category_system">
++        <Preference
++            android:key="richardos_statusbar"
++            android:title="@string/richardos_statusbar_title"
++            android:summary="@string/richardos_statusbar_summary"
++            android:selectable="false" />
++        <Preference
++            android:key="richardos_root"
++            android:title="@string/richardos_root_title"
++            android:summary="@string/richardos_root_summary"
++            android:selectable="false" />
++        <Preference
++            android:key="richardos_lockscreen"
++            android:title="@string/richardos_lockscreen_title"
++            android:summary="@string/richardos_lockscreen_summary"
++            android:selectable="false" />
++    </PreferenceCategory>
++</PreferenceScreen>
+diff --git a/res/values/richardos_strings.xml b/res/values/richardos_strings.xml
+new file mode 100644
+index 0000000000000000000000000000000000000000
+--- /dev/null
++++ b/res/values/richardos_strings.xml
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <string name="richardos_title">RichardOS</string>
++    <string name="richardos_summary">Your Android. Your rules.</string>
++    <string name="richardos_category_appearance">Appearance</string>
++    <string name="richardos_category_system">System customization</string>
++    <string name="richardos_monet_title">Monet &amp; Themes</string>
++    <string name="richardos_monet_summary">Dynamic colors and accent palettes — coming soon</string>
++    <string name="richardos_statusbar_title">Status Bar &amp; Quick Settings</string>
++    <string name="richardos_statusbar_summary">Status bar and Quick Settings options — coming soon</string>
++    <string name="richardos_root_title">Root &amp; System</string>
++    <string name="richardos_root_summary">Read-only system diagnostics — coming soon</string>
++    <string name="richardos_lockscreen_title">Lock Screen</string>
++    <string name="richardos_lockscreen_summary">Clock and privacy options — coming soon</string>
++</resources>
+diff --git a/src/com/android/settings/richardos/RichardOSDashboardFragment.java b/src/com/android/settings/richardos/RichardOSDashboardFragment.java
+new file mode 100644
+index 0000000000000000000000000000000000000000
+--- /dev/null
++++ b/src/com/android/settings/richardos/RichardOSDashboardFragment.java
+@@ -0,0 +1,55 @@
++/*
++ * Copyright (C) 2026 RichardOS
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.settings.richardos;
++
++import android.app.settings.SettingsEnums;
++import android.os.Bundle;
++
++import com.android.settings.R;
++import com.android.settings.dashboard.DashboardFragment;
++import com.android.settings.search.BaseSearchIndexProvider;
++import com.android.settingslib.search.SearchIndexable;
++
++/**
++ * RichardOS customization dashboard embedded in the stock Settings app.
++ */
++@SearchIndexable
++public class RichardOSDashboardFragment extends DashboardFragment {
++
++    private static final String TAG = "RichardOSDashboard";
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++    }
++
++    @Override
++    protected int getPreferenceScreenResId() {
++        return R.xml.richardos_dashboard;
++    }
++
++    @Override
++    protected String getLogTag() {
++        return TAG;
++    }
++
++    @Override
++    public int getMetricsCategory() {
++        return SettingsEnums.SETTINGS_SYSTEM_CATEGORY;
++    }
++
++    public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
++            new BaseSearchIndexProvider(R.xml.richardos_dashboard);
++}
+-- 
+2.43.0
