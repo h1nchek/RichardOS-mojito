@@ -40,7 +40,7 @@ From the RichardOS project checkout:
 JOBS=4 bash scripts/build-baseline.sh "$HOME/android/richardos-mojito"
 ```
 
-The script verifies the host and source-tree prerequisites, runs the repository's unit tests, records the resolved manifest, applies the narrowly guarded SM6150 VINTF ordering correction, checks vendor source paths and VINTF XML, then builds the LineageOS baseline with `breakfast mojito` and `m bacon`.
+The script verifies the host and source-tree prerequisites, runs the repository's unit tests, compares every local `extend-project` against the synced LineageOS `default.xml` and `snippets/lineage.xml`, checks required Qualcomm/Lineage policy and hardware source directories, records the resolved manifest, applies the narrowly guarded SM6150 VINTF ordering correction, checks vendor source paths and VINTF XML, then builds the LineageOS baseline with `breakfast mojito` and `m bacon`.
 
 The script deliberately does **not** apply RichardOS branding, wallpapers, boot animation, or the experimental Settings patch. First establish that the device sources can produce a baseline package.
 
@@ -54,6 +54,6 @@ The script deliberately does **not** apply RichardOS branding, wallpapers, boot 
 
 ## Current limitations
 
-The source manifest pins candidate device, kernel, and vendor repositories. Static CI checks do not prove that those revisions are mutually build-compatible. The first full compile is the test that will reveal missing dependencies, Soong/Make errors, compiler incompatibilities, or device-tree issues.
+The source manifest pins candidate device, kernel, vendor, and Qualcomm legacy-UM policy repositories. CI verifies the names and paths of upstream manifest extensions, and verifies that the pinned project revisions exist. Static CI checks do not prove that those revisions are mutually build-compatible. The first full compile is the test that will reveal missing dependencies, Soong/Make errors, compiler incompatibilities, or device-tree issues.
 
 No successful full build, installable RichardOS package, or physical-device boot test is currently claimed. Keep proprietary vendor files and signing keys private; do not commit credentials or private signing material.
