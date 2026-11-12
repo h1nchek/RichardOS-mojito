@@ -5,4 +5,21 @@
     <string name="setup_welcome_message">Welcome to <xliff:g id="name" example="RichardOS">%1$s</xliff:g></string>
     <string name="setup_services">RichardOS features</string>
     <string name="richardos_logo_description">RichardOS lion emblem</string>
+
+    <!-- Navigation page -->
+    <string name="setup_navigation">Navigation</string>
+    <string name="navigation_summary">Choose how you want to move around RichardOS</string>
+    <string name="gesture_navigation">Gesture navigation</string>
+    <string name="navbar_navigation">3-button navigation</string>
+    <string name="gesture_navigation_short">Gestures</string>
+    <string name="navbar_navigation_short">3-button</string>
+    <string name="hide_gesture_hint">Hide gesture hint</string>
+
+    <!-- Theme page -->
+    <string name="setup_theme">Appearance</string>
+    <string name="theme_summary">Choose the look of your device</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
+    <string name="pure_black_theme">Use pure black background</string>
+    <string name="theme_preview">Theme preview</string>
 </resources>
