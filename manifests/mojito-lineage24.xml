@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Immutable source snapshot resolved from the reviewed ximi-mojito 17.0 refs on 2026-11-09. -->
+<!-- Immutable source snapshot reviewed against LineageOS lineage-24.0 manifests and device dependencies on 2026-11-12. -->
 <manifest>
   <remote name="mojito" fetch="https://github.com/ximi-mojito" />
   <remote name="lineage" fetch="https://github.com/LineageOS" />
@@ -8,6 +8,10 @@
   <project path="device/xiaomi/sm6150-common" name="device_xiaomi_sm6150-common" remote="mojito" revision="aae2067ea624cf86c10df3633725260920a19c87" />
 
   <project path="hardware/xiaomi" name="android_hardware_xiaomi" remote="lineage" revision="6c12251713d74a01636482c9ffbdd9943addbfbf" />
+
+  <!-- SM6150 BoardConfigCommon.mk imports both legacy-UM Qualcomm policy trees. -->
+  <project path="device/qcom/sepolicy" name="android_device_qcom_sepolicy" remote="lineage" revision="3ba04b19a72afb83c5793c7c908670d559a1c5e6" />
+  <project path="device/qcom/sepolicy_vndr" name="android_device_qcom_sepolicy_vndr" remote="lineage" revision="d8b5ffdf51074f0931096991d9e9a9294ad31c98" />
 
   <!-- Device-tree dependencies live in LineageOS manifest groups excluded by a default sync. -->
   <extend-project name="LineageOS/android_hardware_google_interfaces" path="hardware/google/interfaces" groups="default" />
