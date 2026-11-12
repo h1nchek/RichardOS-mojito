@@ -25,11 +25,15 @@ fi
 
 mkdir -p "$(dirname "$DEST_APP")"
 if [[ -e "$DEST_APP" ]]; then
-    echo "Destination already exists; refusing to overwrite: $DEST_APP" >&2
-    echo "Back it up or merge the RichardOS wallpaper module manually." >&2
-    exit 1
+    if ! grep -q 'package="com.richardos.wallpapers"' "$DEST_APP/AndroidManifest.xml" 2>/dev/null ||
+       ! grep -q 'name: "RichardOSWallpapers"' "$DEST_APP/Android.bp" 2>/dev/null; then
+        echo "Destination exists but is not the expected RichardOS module: $DEST_APP" >&2
+        exit 1
+    fi
+    echo "Updating generated wallpaper resources in existing RichardOS module."
+else
+    cp -a "$SOURCE_APP" "$DEST_APP"
 fi
-cp -a "$SOURCE_APP" "$DEST_APP"
 mkdir -p "$DEST_APP/res/drawable-nodpi"
 
 render() {
