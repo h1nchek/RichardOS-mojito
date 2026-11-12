@@ -13,7 +13,7 @@ LOGO="$ROOT/vendor/richardos/branding/richardos-lion.svg"
 [[ -f "$PRODUCT_MK" ]] || { echo "Missing product makefile: $PRODUCT_MK" >&2; exit 1; }
 grep -q 'PRODUCT_NAME := lineage_mojito' "$PRODUCT_MK" || { echo "Not the expected mojito product makefile." >&2; exit 1; }
 command -v python3 >/dev/null
-command -v rsvg-convert >/dev/null || { echo "rsvg-convert is required (install librsvg)."; exit 1; }
+command -v rsvg-convert >/dev/null || command -v inkscape >/dev/null || { echo "Install librsvg (rsvg-convert) or Inkscape."; exit 1; }
 command -v zip >/dev/null || { echo "zip is required."; exit 1; }
 
 mkdir -p "$DEST/part0"
@@ -43,7 +43,7 @@ PY
 rm -f "$DEST/part0/"*.png
 for svg in "$DEST/frames/"*.svg; do
     name="$(basename "$svg" .svg)"
-    rsvg-convert --width 1080 --height 2400 --output "$DEST/part0/$name.png" "$svg"
+    if command -v rsvg-convert >/dev/null 2>&1; then\n        rsvg-convert --width 1080 --height 2400 --output "$DEST/part0/$name.png" "$svg"\n    else\n        inkscape "$svg" --export-type=png --export-filename="$DEST/part0/$name.png" --export-width=1080 --export-height=2400 >/dev/null\n    fi
 done
 printf '1080 2400 30\np 0 0 part0\n' > "$DEST/desc.txt"
 (
