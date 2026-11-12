@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="3200" viewBox="0 0 1440 3200">
+  <defs><linearGradient id="b" x2="0" y2="1"><stop stop-color="#11151D"/><stop offset="1" stop-color="#050609"/></linearGradient><radialGradient id="e"><stop stop-color="#F5BE35" stop-opacity=".22"/><stop offset="1" stop-color="#F5BE35" stop-opacity="0"/></radialGradient></defs>
+  <rect width="1440" height="3200" fill="url(#b)"/>
+  <circle cx="720" cy="1330" r="900" fill="url(#e)"/>
+  <circle cx="720" cy="1250" r="570" fill="#090B10" stroke="#F5BE35" stroke-width="3" stroke-opacity=".72"/>
+  <circle cx="720" cy="1250" r="615" fill="none" stroke="#F5BE35" stroke-opacity=".17" stroke-width="2"/>
+  <path d="M720 635A615 615 0 0 1 720 1865" fill="none" stroke="#F5BE35" stroke-width="18" stroke-linecap="round" opacity=".7"/>
+  <path d="M0 2160Q360 1980 720 2160T1440 2160" fill="none" stroke="#F5BE35" stroke-opacity=".22" stroke-width="2"/>
+  <path d="M0 2260Q360 2080 720 2260T1440 2260" fill="none" stroke="#F5BE35" stroke-opacity=".12" stroke-width="2"/>
+  <text x="720" y="2780" text-anchor="middle" fill="#F5BE35" font-family="sans-serif" font-size="38" letter-spacing="14">RICHARDOS</text>
+  <text x="720" y="2840" text-anchor="middle" fill="#B9B4AA" font-family="sans-serif" font-size="18" letter-spacing="6">BUILT AROUND YOU</text>
+</svg>
