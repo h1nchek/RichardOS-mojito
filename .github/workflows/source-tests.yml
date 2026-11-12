@@ -14,15 +14,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
       - name: Run unit tests
         run: python3 -m unittest discover -s tests -v
+
+
+      - name: Check out LineageOS Settings target
+        uses: actions/checkout@v5
+        with:
+          repository: LineageOS/android_packages_apps_Settings
+          ref: lineage-24.0
+          path: upstream/Settings
+
+      - name: Check RichardOS patch applicability
+        run: |
+          git -C upstream/Settings apply --check "$GITHUB_WORKSPACE/patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch"
 
       - name: Compile Python scripts
         run: python3 -m compileall -q scripts tests
