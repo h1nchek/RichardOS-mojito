@@ -14,8 +14,8 @@ res/drawable/ic_richardos_lion.xml | 10 ++++++++++
 res/xml/richardos_dashboard.xml | 35 +++++++++++++++++++++++++++++++++++
 res/values/richardos_arrays.xml | 22 ++++++++++++++++++++++
 res/values/richardos_strings.xml | 15 +++++++++++++++
-src/com/android/settings/richardos/RichardOSDashboardFragment.java | 141 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
- 7 files changed, 238 insertions(+), 0 deletions(-)
+src/com/android/settings/richardos/RichardOSDashboardFragment.java | 140 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
+ 7 files changed, 237 insertions(+), 1 deletions(-)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
@@ -192,7 +192,6 @@ index 0000000000000000000000000000000000000000
 +import com.android.settings.dashboard.DashboardFragment;
 +import com.android.settings.search.BaseSearchIndexProvider;
 +import com.android.settingslib.search.SearchIndexable;
-+import com.android.settingslib.widget.SelectorWithWidgetPreference;
 +
 +import androidx.preference.ListPreference;
 +import androidx.preference.Preference;
