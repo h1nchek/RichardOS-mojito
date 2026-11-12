@@ -1,6 +1,6 @@
 # RichardOS — product and interface direction
 
-> Status: proposal only. None of the features below are implemented yet.
+> Status: product specification. The first Monet palette selector is implemented in the Settings patch at source level, but has not yet been compiled or tested on-device. Other features remain proposals.
 
 RichardOS is a LineageOS-based ROM for the Xiaomi Redmi Note 10 (`mojito`). Its goal is to keep the clean, restrained feel of Pixel software while adding a small set of useful controls that are genuinely part of the operating system.
 
