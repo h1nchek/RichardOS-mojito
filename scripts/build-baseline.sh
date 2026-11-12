@@ -40,9 +40,9 @@ python3 -m unittest discover -s "$ROOT/tests" -v
 
 cd "$ANDROID_DIR"
 echo "Checking local manifest extensions against the synced LineageOS manifest..."
-python3 "$ROOT/scripts/audit_manifest_dependencies.py" \\
-  "$ROOT/manifests/mojito-lineage24.xml" \\
-  "$ANDROID_DIR/.repo/manifests/default.xml" \\
+python3 "$ROOT/scripts/audit_manifest_dependencies.py" \
+  "$ROOT/manifests/mojito-lineage24.xml" \
+  "$ANDROID_DIR/.repo/manifests/default.xml" \
   "$ANDROID_DIR/.repo/manifests/snippets/lineage.xml"
 echo "Checking the resolved repo manifest..."
 repo manifest -r -o "$ANDROID_DIR/resolved-manifest-richardos.xml"
