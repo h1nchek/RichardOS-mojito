@@ -54,7 +54,7 @@ class RichardOSSettingsPatchTests(unittest.TestCase):
             old_actual = 0
             new_actual = 0
             for entry in lines[index + 1:]:
-                if entry.startswith(("diff --git ", "@@ ")):
+                if entry.startswith(("diff --git ", "@@ ")) or entry == "-- ":
                     break
                 if entry.startswith("\\ No newline"):
                     continue
