@@ -91,10 +91,17 @@ fragment names before displaying them. The integration patch adds both the
 import and the allowlist entry.
 
 
-### Monet palette preference (prototype)
+### Monet palette application (initial implementation)
 
-The dashboard now includes a native `ListPreference` with System default,
-Ocean, Sage, Orchid, Ember, Graphite, and Rose presets. AndroidX Preference
-persists the selected value in Settings' default shared preferences. This is
-only preference storage: it does not yet change Android's system Monet
-resources, overlays, or SystemUI colors.
+The dashboard includes a native `ListPreference` with System default, Ocean,
+Sage, Orchid, Ember, Graphite, and Rose presets. On selection, the fragment
+updates `Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES`, preserving
+unrelated JSON entries. Presets set both `android.theme.customization.system_palette`
+and `android.theme.customization.accent_color`, with color source `preset`;
+System default removes these overrides so SystemUI can use wallpaper-derived
+colors again. The platform's existing SystemUI theme controller consumes this
+setting and generates the dynamic tonal resources.
+
+This is source-level implementation only. It has not been applied to a full
+synced checkout, compiled, or verified on a phone. The feature depends on the
+target branch's existing SystemUI theme controller being active.
