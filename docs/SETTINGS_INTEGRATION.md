@@ -129,3 +129,18 @@ displays **Unknown**. Build fingerprint and build type are informational and
 should not be interpreted as a security verdict. The
 implementation uses platform APIs/properties available to the privileged
 Settings build and has not yet been compiled or tested on hardware.
+
+
+### Status Bar & Quick Settings (initial implementation)
+
+The dashboard opens a native RichardOS Settings fragment with two controls backed by
+LineageOS's existing `LineageSettings.System` provider:
+
+- Battery icon style: default, circle, text, or dotted circle.
+- Battery percentage: hidden, inside the icon, or next to the icon.
+
+The option values and setting keys were checked against the LineageOS 24.0
+Lineage SDK and SystemUI battery repository. Quick Settings tile arrangement is
+not duplicated in RichardOS: users continue to edit tiles from the native shade
+editor. The fragment is source-level only and has not been compiled or tested
+on-device.
