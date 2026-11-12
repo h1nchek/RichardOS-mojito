@@ -47,7 +47,7 @@ LineageOS sources directly:
   makefile.
 
 The installer checks for the expected mojito product target and requires
-`rsvg-convert` and `zip`. It appends a RichardOS-owned block to the product
+`rsvg-convert` or Inkscape, plus `zip`. It appends a RichardOS-owned block to the product
 makefile; review that diff before building. The script has not yet been run in a
 complete Android checkout, and the animation has not been rendered or tested
 on a phone.
