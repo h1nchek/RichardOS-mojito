@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="partner_wallpapers" translatable="false">
+        <item>richardos_nocturne</item>
+        <item>richardos_eclipse</item>
+        <item>richardos_aurum</item>
+    </string-array>
+</resources>
