@@ -46,8 +46,8 @@ else
 fi
 mv "$TMP" "$DEST"
 
-if ! grep -qF "$MARKER" "$PRODUCT_MK"; then
-    printf '\n%s\nPRODUCT_PACKAGE_OVERLAYS += vendor/richardos/overlay\n' "$MARKER" >> "$PRODUCT_MK"
+if ! grep -qF 'PRODUCT_PACKAGE_OVERLAYS += vendor/richardos/overlay' "$PRODUCT_MK"; then
+    printf '\n# RichardOS resource overlays\nPRODUCT_PACKAGE_OVERLAYS += vendor/richardos/overlay\n' >> "$PRODUCT_MK"
 fi
 
 echo "Installed RichardOS default wallpaper overlay:"
