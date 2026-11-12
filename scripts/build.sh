@@ -36,6 +36,7 @@ echo "Syncing LineageOS and Redmi Note 10 sources..."
 repo sync -j"$JOBS" --fail-fast
 REQUIRED_SOURCE_DIRS=(
   hardware/xiaomi hardware/google/interfaces hardware/google/pixel
+  device/qcom/sepolicy device/qcom/sepolicy_vndr device/lineage/sepolicy
   hardware/lineage/interfaces hardware/qcom-caf/bootctrl hardware/qcom-caf/common
   hardware/qcom-caf/sm8150/audio hardware/qcom-caf/sm8150/display
   hardware/qcom-caf/sm8150/media hardware/qcom-caf/wlan
