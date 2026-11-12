@@ -112,17 +112,20 @@ target branch's existing SystemUI theme controller being active.
 ### Root & System diagnostics (initial implementation)
 
 The Root & System page is a native Settings fragment and reports Android release/API
-level, build display, manufacturer/model/device codename, kernel version, Android
-security patch level, SELinux mode, data-encryption state, Verified Boot state,
-and bootloader lock state. It reads platform build/security properties only and
-does not change device state.
+level, build display and type, build fingerprint, manufacturer/model/device codename,
+kernel version, active A/B boot slot when exposed, Android security patch level,
+SELinux mode, data-encryption state, dm-verity mode, Verified Boot state, and
+bootloader lock state. It reads platform build/security properties only and does
+not change device state.
 
 Root status is intentionally shown as **Not assessed**. A generic scan for a
 `su` binary or root-manager package is not reliable enough to claim that a device
 is or is not rooted. No root-hiding, integrity spoofing, bootloader bypass, or
 automatic root-management actions are implemented.
 
-Verified Boot and bootloader fields depend on bootloader-provided properties;
-if the device does not expose them, the page displays **Unknown**. The
+Boot slot, dm-verity, Verified Boot, and bootloader fields depend on
+bootloader-provided properties; if the device does not expose them, the page
+displays **Unknown**. Build fingerprint and build type are informational and
+should not be interpreted as a security verdict. The
 implementation uses platform APIs/properties available to the privileged
 Settings build and has not yet been compiled or tested on hardware.
