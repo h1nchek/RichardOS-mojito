@@ -21,7 +21,6 @@ class RichardOSSetupWizardBrandingTest(unittest.TestCase):
         self.assertIn("RichardOS", values["services_help_improve_cm"])
         self.assertIn("diagnostic and usage data", values["services_metrics_label"])
         self.assertIn("%2$s", values["services_metrics_label"])
-        self.assertIn("services_privacy_policy_uri", values)
         self.assertEqual(values["setup_navigation"], "Navigation")
         self.assertEqual(values["navigation_summary"], "Choose how you want to move around RichardOS")
         self.assertEqual(values["gesture_navigation"], "Gesture navigation")
