@@ -37,10 +37,11 @@ fi
 mkdir -p "$DEST_APP/res/drawable-nodpi"
 
 render() {
-    local name="$1"
-    local source="$ROOT/vendor/richardos/branding/wallpapers/$name.svg"
-    local full="$DEST_APP/res/drawable-nodpi/$name.png"
-    local thumb="$DEST_APP/res/drawable-nodpi/${name}_small.png"
+    local resource_name="$1"
+    local artwork_name="$2"
+    local source="$ROOT/vendor/richardos/branding/wallpapers/$artwork_name.svg"
+    local full="$DEST_APP/res/drawable-nodpi/$resource_name.png"
+    local thumb="$DEST_APP/res/drawable-nodpi/${resource_name}_small.png"
     if command -v rsvg-convert >/dev/null 2>&1; then
         rsvg-convert --width 1440 --height 3200 --format png --output "$full" "$source"
         rsvg-convert --width 360 --height 800 --format png --output "$thumb" "$source"
@@ -50,9 +51,9 @@ render() {
     fi
     file "$full" "$thumb"
 }
-render richardos-nocturne
-render richardos-eclipse
-render richardos-aurum
+render richardos_nocturne richardos-nocturne
+render richardos_eclipse richardos-eclipse
+render richardos_aurum richardos-aurum
 
 if ! grep -qF '# RichardOS WallpaperPicker2 partner package' "$PRODUCT_MK"; then
     cat >> "$PRODUCT_MK" <<'EOF'
