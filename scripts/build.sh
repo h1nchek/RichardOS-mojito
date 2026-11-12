@@ -15,6 +15,10 @@ if [[ "$(uname -s)" != Linux || "$(uname -m)" != x86_64 ]]; then
 fi
 command -v repo >/dev/null 2>&1 || { echo "ERROR: Android repo tool is not installed or not in PATH." >&2; exit 1; }
 command -v python3 >/dev/null 2>&1 || { echo "ERROR: Python 3 is required." >&2; exit 1; }
+command -v rsvg-convert >/dev/null 2>&1 || command -v inkscape >/dev/null 2>&1 || {
+  echo "ERROR: install librsvg (rsvg-convert) or Inkscape for RichardOS wallpaper assets." >&2
+  exit 1
+}
 python3 "$ROOT/scripts/audit_repo_manifests.py" "$ROOT/manifests/mojito-lineage24.xml"
 echo "Running RichardOS helper unit tests..."
 python3 -m unittest discover -s "$ROOT/tests" -v
@@ -45,6 +49,9 @@ echo "Checking proprietary vendor source paths..."
 python3 "$ROOT/scripts/audit-vendor-blobs.py" "$ANDROID_DIR"
 echo "Applying guarded SM6150 VINTF ordering correction..."
 python3 "$ROOT/scripts/patch-mojito-device-tree.py"
+echo "Installing RichardOS wallpaper resources into the synced source tree..."
+bash "$ROOT/scripts/install-wallpaper-picker.sh" "$ANDROID_DIR"
+bash "$ROOT/scripts/install-wallpaper-overlay.sh" "$ANDROID_DIR" device/xiaomi/mojito/lineage_mojito.mk
 echo "Checking device and Qualcomm VINTF XML..."
 python3 "$ROOT/scripts/audit-vintf.py" \
   device/xiaomi/sm6150-common/configs/manifests/manifest.xml \
