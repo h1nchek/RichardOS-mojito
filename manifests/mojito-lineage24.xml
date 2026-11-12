@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Immutable source snapshot resolved from the reviewed ximi-mojito 17.0 refs on 2026-11-09. -->
+<manifest>
+  <remote name="mojito" fetch="https://github.com/ximi-mojito" />
+  <remote name="lineage" fetch="https://github.com/LineageOS" />
+
+  <project path="device/xiaomi/mojito" name="device_xiaomi_mojito" remote="mojito" revision="efdf9962669b2f0dec80906e892a9b8d98dbe09b" />
+  <project path="device/xiaomi/sm6150-common" name="device_xiaomi_sm6150-common" remote="mojito" revision="aae2067ea624cf86c10df3633725260920a19c87" />
+
+  <project path="hardware/xiaomi" name="android_hardware_xiaomi" remote="lineage" revision="6c12251713d74a01636482c9ffbdd9943addbfbf" />
+
+  <!-- Device-tree dependencies live in LineageOS manifest groups excluded by a default sync. -->
+  <extend-project name="LineageOS/android_hardware_google_interfaces" path="hardware/google/interfaces" groups="default" />
+  <extend-project name="LineageOS/android_hardware_google_pixel" path="hardware/google/pixel" groups="default" />
+  <extend-project name="LineageOS/android_hardware_qcom_bootctrl" path="hardware/qcom-caf/bootctrl" groups="default" />
+  <extend-project name="LineageOS/android_hardware_qcom-caf_common" path="hardware/qcom-caf/common" groups="default" />
+  <extend-project name="LineageOS/android_hardware_qcom_audio" path="hardware/qcom-caf/sm8150/audio" groups="default" />
+  <extend-project name="LineageOS/android_hardware_qcom_display" path="hardware/qcom-caf/sm8150/display" groups="default" />
+  <extend-project name="LineageOS/android_hardware_qcom_media" path="hardware/qcom-caf/sm8150/media" groups="default" />
+  <extend-project name="LineageOS/android_hardware_qcom_wlan" path="hardware/qcom-caf/wlan" groups="default" />
+  <extend-project name="LineageOS/android_vendor_qcom_opensource_usb" path="vendor/qcom/opensource/usb" groups="default" />
+  <extend-project name="LineageOS/android_vendor_qcom_opensource_dataservices" path="vendor/qcom/opensource/dataservices" groups="default" />
+  <extend-project name="LineageOS/android_vendor_qcom_opensource_display-commonsys-intf" path="vendor/qcom/opensource/commonsys-intf/display" groups="default" />
+  <extend-project name="LineageOS/android_vendor_qcom_opensource_display" path="vendor/qcom/opensource/display" groups="default" />
+  <extend-project name="LineageOS/android_vendor_qcom_opensource_interfaces" path="vendor/qcom/opensource/interfaces" groups="default" />
+
+  <project path="kernel/xiaomi/mojito" name="android_kernel_xiaomi_mojito" remote="mojito" revision="87e3f1844a65ef9a1cb965fac6096a7dcd84f6ea" />
+
+  <project path="vendor/xiaomi/mojito" name="android_vendor_xiaomi_mojito" remote="mojito" revision="ef30fe68e01b50088093b56da82457202ab1dfe3" />
+  <project path="vendor/xiaomi/sm6150-common" name="android_vendor_xiaomi_sm6150-common" remote="mojito" revision="b6f3a74a92888bb8f0f52144d89488ad6fa3fd54" />
+</manifest>
