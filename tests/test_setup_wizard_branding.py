@@ -35,6 +35,18 @@ class RichardOSSetupWizardBrandingTest(unittest.TestCase):
         for name, value in expected.items():
             self.assertEqual(colors[name], value)
 
+    def test_welcome_layout_uses_existing_richardos_lion(self):
+        layout = (SETUP.parent / "layout/welcome_activity.xml").read_text()
+        self.assertIn('android:src="@drawable/richardos_lion"', layout)
+        self.assertIn('android:id="@+id/brand_logo"', layout)
+        self.assertIn("richardos_logo_description", layout)
+
+    def test_installer_renders_existing_lion_asset(self):
+        script = (ROOT / "scripts/install-system-branding.sh").read_text()
+        self.assertIn('rsvg-convert --width 768 --height 768', script)
+        self.assertIn('richardos_lion.png', script)
+        self.assertIn('"$LOGO"', script)
+
     def test_installer_copies_and_registers_richardos_overlay(self):
         script = (ROOT / "scripts/install-system-branding.sh").read_text()
         self.assertIn(
