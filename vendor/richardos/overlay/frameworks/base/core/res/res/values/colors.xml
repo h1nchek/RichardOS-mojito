@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- RichardOS warm-gold Material You accent palette: light theme. -->
+    <color name="system_accent1_10_light">#FFF8E7</color>
+    <color name="system_accent1_50_light">#FFF0C2</color>
+    <color name="system_accent1_100_light">#FFE39A</color>
+    <color name="system_accent1_200_light">#F5CA65</color>
+    <color name="system_accent1_300_light">#DFAE36</color>
+    <color name="system_accent1_400_light">#C99318</color>
+    <color name="system_accent1_500_light">#AD7900</color>
+    <color name="system_accent1_600_light">#8F6200</color>
+    <color name="system_accent1_700_light">#704B00</color>
+    <color name="system_accent1_800_light">#523600</color>
+    <color name="system_accent1_900_light">#352200</color>
+    <color name="system_accent1_1000_light">#000000</color>
+
+    <color name="system_accent2_10_light">#FFF9ED</color>
+    <color name="system_accent2_50_light">#F5EBDD</color>
+    <color name="system_accent2_100_light">#E8DCCB</color>
+    <color name="system_accent2_200_light">#D1C3AF</color>
+    <color name="system_accent2_300_light">#B9AA95</color>
+    <color name="system_accent2_400_light">#A2927D</color>
+    <color name="system_accent2_500_light">#8B7B67</color>
+    <color name="system_accent2_600_light">#746551</color>
+    <color name="system_accent2_700_light">#5D503D</color>
+    <color name="system_accent2_800_light">#473B2A</color>
+    <color name="system_accent2_900_light">#302719</color>
+    <color name="system_accent2_1000_light">#000000</color>
+
+    <color name="system_accent3_10_light">#FFF7E9</color>
+    <color name="system_accent3_50_light">#FCE8C9</color>
+    <color name="system_accent3_100_light">#F2D8B0</color>
+    <color name="system_accent3_200_light">#DCC09A</color>
+    <color name="system_accent3_300_light">#C6A985</color>
+    <color name="system_accent3_400_light">#B09270</color>
+    <color name="system_accent3_500_light">#9A7C5C</color>
+    <color name="system_accent3_600_light">#836648</color>
+    <color name="system_accent3_700_light">#6D5136</color>
+    <color name="system_accent3_800_light">#573D25</color>
+    <color name="system_accent3_900_light">#412A15</color>
+    <color name="system_accent3_1000_light">#000000</color>
+
+    <!-- Dark theme uses lighter gold tones for readable foreground accents. -->
+    <color name="system_accent1_10_dark">#FFF8E7</color>
+    <color name="system_accent1_50_dark">#FFF0C2</color>
+    <color name="system_accent1_100_dark">#FFE39A</color>
+    <color name="system_accent1_200_dark">#F5CA65</color>
+    <color name="system_accent1_300_dark">#E4B84F</color>
+    <color name="system_accent1_400_dark">#D2A63A</color>
+    <color name="system_accent1_500_dark">#C09227</color>
+    <color name="system_accent1_600_dark">#AD8015</color>
+    <color name="system_accent1_700_dark">#9B7000</color>
+    <color name="system_accent1_800_dark">#805B00</color>
+    <color name="system_accent1_900_dark">#634600</color>
+    <color name="system_accent1_1000_dark">#000000</color>
+
+    <color name="system_accent2_10_dark">#FFF9ED</color>
+    <color name="system_accent2_50_dark">#F5EBDD</color>
+    <color name="system_accent2_100_dark">#E8DCCB</color>
+    <color name="system_accent2_200_dark">#D1C3AF</color>
+    <color name="system_accent2_300_dark">#B9AA95</color>
+    <color name="system_accent2_400_dark">#A2927D</color>
+    <color name="system_accent2_500_dark">#8B7B67</color>
+    <color name="system_accent2_600_dark">#746551</color>
+    <color name="system_accent2_700_dark">#5D503D</color>
+    <color name="system_accent2_800_dark">#473B2A</color>
+    <color name="system_accent2_900_dark">#302719</color>
+    <color name="system_accent2_1000_dark">#000000</color>
+
+    <color name="system_accent3_10_dark">#FFF7E9</color>
+    <color name="system_accent3_50_dark">#FCE8C9</color>
+    <color name="system_accent3_100_dark">#F2D8B0</color>
+    <color name="system_accent3_200_dark">#DCC09A</color>
+    <color name="system_accent3_300_dark">#C6A985</color>
+    <color name="system_accent3_400_dark">#B09270</color>
+    <color name="system_accent3_500_dark">#9A7C5C</color>
+    <color name="system_accent3_600_dark">#836648</color>
+    <color name="system_accent3_700_dark">#6D5136</color>
+    <color name="system_accent3_800_dark">#573D25</color>
+    <color name="system_accent3_900_dark">#412A15</color>
+    <color name="system_accent3_1000_dark">#000000</color>
+</resources>
