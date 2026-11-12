@@ -8,25 +8,29 @@ Target: LineageOS/android_packages_apps_Settings, lineage-24.0
 This patch adds RichardOS as a native dashboard inside the existing Settings
 application. It does not create a separate APK or application package.
 
-src/com/android/settings/core/gateway/SettingsGateway.java | 2 ++
+src/com/android/settings/core/gateway/SettingsGateway.java | 4 ++++
 res/xml/top_level_settings.xml | 13 +++++++++++++
 res/drawable/ic_richardos_lion.xml | 10 ++++++++++
 res/xml/richardos_dashboard.xml | 35 +++++++++++++++++++++++++++++++++++
 res/values/richardos_arrays.xml | 22 ++++++++++++++++++++++
-res/values/richardos_strings.xml | 15 +++++++++++++++
-src/com/android/settings/richardos/RichardOSDashboardFragment.java | 139 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
- 7 files changed, 236 insertions(+), 1 deletions(-)
+res/values/richardos_strings.xml | 26 ++++++++++++++++++++++++++
+src/com/android/settings/richardos/RichardOSDashboardFragment.java | 139 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+res/xml/richardos_root.xml | 20 ++++++++++++++++++++
+src/com/android/settings/richardos/RichardOSRootFragment.java | 134 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
+ 9 files changed, 403 insertions(+), 0 deletions(-)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
 +++ b/src/com/android/settings/core/gateway/SettingsGateway.java
-@@ -24,2 +24,3 @@ import com.android.settings.TestingSettings;
+@@ -24,2 +24,4 @@ import com.android.settings.TestingSettings;
  import com.android.settings.TrustedCredentialsSettings;
 +import com.android.settings.richardos.RichardOSDashboardFragment;
++import com.android.settings.richardos.RichardOSRootFragment;
  import com.android.settings.accessibility.AccessibilityDetailsSettingsFragment;
-@@ -245,2 +246,3 @@ public class SettingsGateway {
+@@ -245,2 +246,4 @@ public class SettingsGateway {
              SafetyCenterQsFragment.class.getName(),
 +            RichardOSDashboardFragment.class.getName(),
++            RichardOSRootFragment.class.getName(),
      };
 
 diff --git a/res/xml/top_level_settings.xml b/res/xml/top_level_settings.xml
@@ -100,10 +104,10 @@ index 0000000000000000000000000000000000000000
 +            android:summary="@string/richardos_statusbar_summary"
 +            android:selectable="false" />
 +        <Preference
++            android:fragment="com.android.settings.richardos.RichardOSRootFragment"
 +            android:key="richardos_root"
 +            android:title="@string/richardos_root_title"
-+            android:summary="@string/richardos_root_summary"
-+            android:selectable="false" />
++            android:summary="@string/richardos_root_summary" />
 +        <Preference
 +            android:key="richardos_lockscreen"
 +            android:title="@string/richardos_lockscreen_title"
@@ -144,7 +148,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/values/richardos_strings.xml
-@@ -0,0 +1,15 @@
+@@ -0,0 +1,26 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<resources>
 +    <string name="richardos_title">RichardOS</string>
@@ -156,7 +160,18 @@ index 0000000000000000000000000000000000000000
 +    <string name="richardos_statusbar_title">Status Bar &amp; Quick Settings</string>
 +    <string name="richardos_statusbar_summary">Status bar and Quick Settings options — coming soon</string>
 +    <string name="richardos_root_title">Root &amp; System</string>
-+    <string name="richardos_root_summary">Read-only system diagnostics — coming soon</string>
++    <string name="richardos_root_summary">Device information, security status, and boot verification</string>
++    <string name="richardos_root_device_category">Device</string>
++    <string name="richardos_root_android">Android version</string>
++    <string name="richardos_root_build">Build number</string>
++    <string name="richardos_root_device">Device</string>
++    <string name="richardos_root_kernel">Kernel</string>
++    <string name="richardos_root_security_category">Security</string>
++    <string name="richardos_root_selinux">SELinux</string>
++    <string name="richardos_root_encryption">Data encryption</string>
++    <string name="richardos_root_verified_boot">Verified Boot</string>
++    <string name="richardos_root_bootloader">Bootloader</string>
++    <string name="richardos_root_root_status">Root status</string>
 +    <string name="richardos_lockscreen_title">Lock Screen</string>
 +    <string name="richardos_lockscreen_summary">Clock and privacy options — coming soon</string>
 +</resources>
@@ -303,6 +318,172 @@ index 0000000000000000000000000000000000000000
 +
 +    public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
 +            new BaseSearchIndexProvider(R.xml.richardos_dashboard);
++}
++
+diff --git a/res/xml/richardos_root.xml b/res/xml/richardos_root.xml
+new file mode 100644
+index 0000000000000000000000000000000000000000
+--- /dev/null
++++ b/res/xml/richardos_root.xml
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="utf-8"?>
++<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
++    <PreferenceCategory
++        android:key="richardos_root_device_category"
++        android:title="@string/richardos_root_device_category">
++        <Preference android:key="richardos_root_android" android:title="@string/richardos_root_android" android:selectable="false" />
++        <Preference android:key="richardos_root_build" android:title="@string/richardos_root_build" android:selectable="false" />
++        <Preference android:key="richardos_root_device" android:title="@string/richardos_root_device" android:selectable="false" />
++        <Preference android:key="richardos_root_kernel" android:title="@string/richardos_root_kernel" android:selectable="false" />
++    </PreferenceCategory>
++    <PreferenceCategory
++        android:key="richardos_root_security_category"
++        android:title="@string/richardos_root_security_category">
++        <Preference android:key="richardos_root_selinux" android:title="@string/richardos_root_selinux" android:selectable="false" />
++        <Preference android:key="richardos_root_encryption" android:title="@string/richardos_root_encryption" android:selectable="false" />
++        <Preference android:key="richardos_root_verified_boot" android:title="@string/richardos_root_verified_boot" android:selectable="false" />
++        <Preference android:key="richardos_root_bootloader" android:title="@string/richardos_root_bootloader" android:selectable="false" />
++        <Preference android:key="richardos_root_root_status" android:title="@string/richardos_root_root_status" android:selectable="false" />
++    </PreferenceCategory>
++</PreferenceScreen>
+diff --git a/src/com/android/settings/richardos/RichardOSRootFragment.java b/src/com/android/settings/richardos/RichardOSRootFragment.java
+new file mode 100644
+index 0000000000000000000000000000000000000000
+--- /dev/null
++++ b/src/com/android/settings/richardos/RichardOSRootFragment.java
+@@ -0,0 +1,134 @@
++/*
++ * Copyright (C) 2026 RichardOS
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++package com.android.settings.richardos;
++
++import android.app.settings.SettingsEnums;
++import android.os.Build;
++import android.os.SELinux;
++import android.os.SystemProperties;
++import android.os.storage.StorageManager;
++import android.text.TextUtils;
++
++import com.android.settings.R;
++import com.android.settings.dashboard.DashboardFragment;
++import com.android.settingslib.search.SearchIndexable;
++
++import androidx.preference.Preference;
++
++/**
++ * Read-only device and security diagnostics. No root or integrity bypasses.
++ */
++@SearchIndexable
++public class RichardOSRootFragment extends DashboardFragment {
++
++    private static final String TAG = "RichardOSRoot";
++
++    @Override
++    protected int getPreferenceScreenResId() {
++        return R.xml.richardos_root;
++    }
++
++    @Override
++    protected String getLogTag() {
++        return TAG;
++    }
++
++    @Override
++    public int getMetricsCategory() {
++        return SettingsEnums.SETTINGS_SYSTEM_CATEGORY;
++    }
++
++    @Override
++    public void onResume() {
++        super.onResume();
++        updateDiagnostics();
++    }
++
++    private void updateDiagnostics() {
++        setSummary("richardos_root_android",
++                Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ")");
++        setSummary("richardos_root_build", Build.DISPLAY);
++        setSummary("richardos_root_device",
++                Build.MANUFACTURER + " " + Build.MODEL + " (" + Build.DEVICE + ")");
++        setSummary("richardos_root_kernel", safeKernelVersion());
++        setSummary("richardos_root_selinux", getSelinuxStatus());
++        setSummary("richardos_root_encryption", getEncryptionStatus());
++        setSummary("richardos_root_verified_boot", getVerifiedBootStatus());
++        setSummary("richardos_root_bootloader", getBootloaderStatus());
++        // A generic su-file or package scan is not a reliable root detector.
++        setSummary("richardos_root_root_status", "Not assessed");
++    }
++
++    private void setSummary(String key, String value) {
++        Preference preference = findPreference(key);
++        if (preference != null) {
++            preference.setSummary(TextUtils.isEmpty(value) ? "Unknown" : value);
++        }
++    }
++
++    private String safeKernelVersion() {
++        String version = System.getProperty("os.version");
++        return TextUtils.isEmpty(version) ? "Unknown" : version;
++    }
++
++    private String getSelinuxStatus() {
++        try {
++            if (!SELinux.isSELinuxEnabled()) {
++                return "Disabled";
++            }
++            return SELinux.isSELinuxEnforced() ? "Enforcing" : "Permissive";
++        } catch (RuntimeException e) {
++            return "Unknown";
++        }
++    }
++
++    private String getEncryptionStatus() {
++        try {
++            return StorageManager.isEncrypted() ? "Enabled" : "Not enabled";
++        } catch (RuntimeException e) {
++            return "Unknown";
++        }
++    }
++
++    private String getVerifiedBootStatus() {
++        String state = SystemProperties.get("ro.boot.verifiedbootstate", "unknown");
++        switch (state) {
++            case "green":
++                return "Green — verified";
++            case "yellow":
++                return "Yellow — custom key";
++            case "orange":
++                return "Orange — bootloader unlocked";
++            case "red":
++                return "Red — verification error";
++            default:
++                return "Unknown";
++        }
++    }
++
++    private String getBootloaderStatus() {
++        String locked = SystemProperties.get("ro.boot.flash.locked", "");
++        String deviceState = SystemProperties.get("ro.boot.vbmeta.device_state", "");
++        if ("1".equals(locked) || "locked".equals(deviceState)) {
++            return "Locked";
++        }
++        if ("0".equals(locked) || "unlocked".equals(deviceState)) {
++            return "Unlocked";
++        }
++        return "Unknown";
++    }
 +}
 +
 -- 
