@@ -11,6 +11,11 @@ class RichardOSSettingsPatchTests(unittest.TestCase):
     def setUpClass(cls):
         cls.patch = PATCH.read_text()
 
+    def test_apply_helper_accepts_repo_managed_git_metadata_file(self):
+        helper = (ROOT / "scripts/apply-settings-patch.sh").read_text()
+        self.assertIn('[[ ! -e "$SETTINGS_DIR/.git" ]]', helper)
+        self.assertNotIn('[[ ! -d "$SETTINGS_DIR/.git" ]]', helper)
+
     def test_root_diagnostics_fragment_is_search_indexed(self):
         self.assertIn(
             "new BaseSearchIndexProvider(R.xml.richardos_root)",
