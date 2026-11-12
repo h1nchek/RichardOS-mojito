@@ -32,7 +32,6 @@ for frame in range(24):
     phase = frame / 24 * math.tau
     scale = 1.48 + 0.025 * math.sin(phase)
     opacity = 0.76 + 0.20 * (0.5 + 0.5 * math.sin(phase))
-    offset = (512 * (1 - scale)) / 2
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="2400" viewBox="0 0 1080 2400">
 <defs><radialGradient id="bg"><stop offset="0" stop-color="#202329"/><stop offset="1" stop-color="#090A0D"/></radialGradient></defs>
 <rect width="1080" height="2400" fill="url(#bg)"/>
