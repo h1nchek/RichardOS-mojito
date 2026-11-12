@@ -23,6 +23,7 @@ python3 "$ROOT/scripts/audit_repo_manifests.py" "$ROOT/manifests/mojito-lineage2
 echo "Running RichardOS helper unit tests..."
 python3 -m unittest discover -s "$ROOT/tests" -v
 mkdir -p "$ANDROID_DIR"
+bash "$ROOT/scripts/check-build-host.sh" pre-sync "$ANDROID_DIR"
 AVAILABLE_GB="$(df -BG "$ANDROID_DIR" | awk 'NR==2 {gsub(/G/,"",$4); print $4}')"
 if [[ -z "$AVAILABLE_GB" || "$AVAILABLE_GB" -lt 350 ]]; then
   echo "ERROR: at least 350 GB free SSD space is recommended; found ${AVAILABLE_GB:-unknown} GB." >&2
