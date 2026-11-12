@@ -109,8 +109,10 @@ def main() -> int:
         "RichardOSStatusBarFragment",
         "RichardOSRootFragment",
     ):
-        if f"com.android.settings.richardos.{fragment}" not in gateway:
-            failures.append(f"SettingsGateway does not register {fragment}")
+        imported = f"import com.android.settings.richardos.{fragment};" in gateway
+        registered = f"{fragment}.class.getName()" in gateway
+        if not imported or not registered:
+            failures.append(f"SettingsGateway does not import and register {fragment}")
 
     if failures:
         for failure in failures:
