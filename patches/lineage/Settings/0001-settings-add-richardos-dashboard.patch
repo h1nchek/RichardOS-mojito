@@ -13,11 +13,11 @@ res/xml/top_level_settings.xml | 13 +++++++++++++
 res/drawable/ic_richardos_lion.xml | 10 ++++++++++
 res/xml/richardos_dashboard.xml | 35 +++++++++++++++++++++++++++++++++++
 res/values/richardos_arrays.xml | 22 ++++++++++++++++++++++
-res/values/richardos_strings.xml | 27 +++++++++++++++++++++++++++
+res/values/richardos_strings.xml | 31 +++++++++++++++++++++++++++++++
 src/com/android/settings/richardos/RichardOSDashboardFragment.java | 139 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-res/xml/richardos_root.xml | 21 +++++++++++++++++++++
-src/com/android/settings/richardos/RichardOSRootFragment.java | 135 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
- 9 files changed, 406 insertions(+), 0 deletions(-)
+res/xml/richardos_root.xml | 25 +++++++++++++++++++++++++
+src/com/android/settings/richardos/RichardOSRootFragment.java | 160 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
+ 9 files changed, 439 insertions(+), 0 deletions(-)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
@@ -148,7 +148,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/values/richardos_strings.xml
-@@ -0,0 +1,27 @@
+@@ -0,0 +1,31 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<resources>
 +    <string name="richardos_title">RichardOS</string>
@@ -167,10 +167,14 @@ index 0000000000000000000000000000000000000000
 +    <string name="richardos_root_security_patch">Android security update</string>
 +    <string name="richardos_root_device">Device</string>
 +    <string name="richardos_root_kernel">Kernel</string>
++    <string name="richardos_root_build_type">Build type</string>
++    <string name="richardos_root_fingerprint">Build fingerprint</string>
++    <string name="richardos_root_boot_slot">Boot slot</string>
 +    <string name="richardos_root_security_category">Security</string>
 +    <string name="richardos_root_selinux">SELinux</string>
 +    <string name="richardos_root_encryption">Data encryption</string>
 +    <string name="richardos_root_verified_boot">Verified Boot</string>
++    <string name="richardos_root_verity">dm-verity</string>
 +    <string name="richardos_root_bootloader">Bootloader</string>
 +    <string name="richardos_root_root_status">Root status</string>
 +    <string name="richardos_lockscreen_title">Lock Screen</string>
@@ -326,7 +330,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/xml/richardos_root.xml
-@@ -0,0 +1,21 @@
+@@ -0,0 +1,25 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 +    <PreferenceCategory
@@ -337,6 +341,9 @@ index 0000000000000000000000000000000000000000
 +        <Preference android:key="richardos_root_security_patch" android:title="@string/richardos_root_security_patch" android:selectable="false" />
 +        <Preference android:key="richardos_root_device" android:title="@string/richardos_root_device" android:selectable="false" />
 +        <Preference android:key="richardos_root_kernel" android:title="@string/richardos_root_kernel" android:selectable="false" />
++        <Preference android:key="richardos_root_build_type" android:title="@string/richardos_root_build_type" android:selectable="false" />
++        <Preference android:key="richardos_root_fingerprint" android:title="@string/richardos_root_fingerprint" android:selectable="false" />
++        <Preference android:key="richardos_root_boot_slot" android:title="@string/richardos_root_boot_slot" android:selectable="false" />
 +    </PreferenceCategory>
 +    <PreferenceCategory
 +        android:key="richardos_root_security_category"
@@ -344,6 +351,7 @@ index 0000000000000000000000000000000000000000
 +        <Preference android:key="richardos_root_selinux" android:title="@string/richardos_root_selinux" android:selectable="false" />
 +        <Preference android:key="richardos_root_encryption" android:title="@string/richardos_root_encryption" android:selectable="false" />
 +        <Preference android:key="richardos_root_verified_boot" android:title="@string/richardos_root_verified_boot" android:selectable="false" />
++        <Preference android:key="richardos_root_verity" android:title="@string/richardos_root_verity" android:selectable="false" />
 +        <Preference android:key="richardos_root_bootloader" android:title="@string/richardos_root_bootloader" android:selectable="false" />
 +        <Preference android:key="richardos_root_root_status" android:title="@string/richardos_root_root_status" android:selectable="false" />
 +    </PreferenceCategory>
@@ -353,7 +361,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/src/com/android/settings/richardos/RichardOSRootFragment.java
-@@ -0,0 +1,135 @@
+@@ -0,0 +1,160 @@
 +/*
 + * Copyright (C) 2026 RichardOS
 + *
@@ -476,6 +484,31 @@ index 0000000000000000000000000000000000000000
 +        }
 +    }
 +
++
++    private String getBootSlot() {
++        String slot = SystemProperties.get("ro.boot.slot_suffix", "");
++        if ("_a".equals(slot) || "a".equals(slot)) {
++            return "A";
++        }
++        if ("_b".equals(slot) || "b".equals(slot)) {
++            return "B";
++        }
++        return "Unknown";
++    }
++
++    private String getVerityStatus() {
++        String mode = SystemProperties.get("ro.boot.veritymode", "");
++        switch (mode) {
++            case "enforcing":
++                return "Enforcing";
++            case "logging":
++                return "Logging";
++            case "eio":
++                return "EIO";
++            default:
++                return "Unknown";
++        }
++    }
 +    private String getBootloaderStatus() {
 +        String locked = SystemProperties.get("ro.boot.flash.locked", "");
 +        String deviceState = SystemProperties.get("ro.boot.vbmeta.device_state", "");
