@@ -8,13 +8,14 @@ Use a native or virtualized **Linux x86_64** environment, not Windows Command Pr
 
 Recommended minimum for this source set:
 
+- At least 8 CPU threads.
 - 32 GB RAM.
 - 350 GB free SSD before syncing; keep additional room for build output and caches.
 - Stable internet connection.
 - A filesystem with enough free inodes.
 - Android `repo`, Git, Python 3, Java/build dependencies required by the target LineageOS branch.
 
-The build helper caps parallel compilation at 8 jobs by default. Override with `JOBS=4` or another value from 1 to 8 if memory is constrained.
+The read-only `scripts/check-build-host.sh` preflight checks Linux x86_64, at least 8 CPU threads, 32 GB RAM, and free space (350 GB before sync; 80 GB after sync). It does not install packages, modify disks, or delete files. The build helper caps parallel compilation at 8 jobs by default. Override with `JOBS=4` or another value from 1 to 8 if memory is constrained.
 
 ## 1. Initialize the Android source tree
 
