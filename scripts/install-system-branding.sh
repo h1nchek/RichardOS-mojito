@@ -66,4 +66,13 @@ $(call inherit-product, vendor/richardos/config/branding.mk)
 PRODUCT_COPY_FILES += vendor/richardos/bootanimation.zip:system/media/bootanimation.zip
 EOF
 fi
+# Make RichardOS overlays visible to the Android resource merger.
+if ! grep -qF '# RichardOS resource overlays' "$PRODUCT_MK"; then
+    cat >> "$PRODUCT_MK" <<'EOF'
+
+# RichardOS resource overlays
+PRODUCT_PACKAGE_OVERLAYS += vendor/richardos/overlay
+EOF
+fi
+
 echo "Generated RichardOS bootanimation and registered product branding."
