@@ -24,6 +24,8 @@ ANDROID_DIR="$(realpath -m "$ANDROID_DIR")"
 [[ -f "$ANDROID_DIR/device/xiaomi/sm6150-common/BoardConfigCommon.mk" ]] || fail "Missing SM6150 common device tree."
 [[ -f "$ANDROID_DIR/device/qcom/sepolicy/SEPolicy.mk" ]] || fail "Missing Qualcomm QSSI sepolicy tree (device/qcom/sepolicy)."
 [[ -f "$ANDROID_DIR/device/qcom/sepolicy_vndr/SEPolicy.mk" ]] || fail "Missing Qualcomm vendor sepolicy tree (device/qcom/sepolicy_vndr)."
+[[ -f "$ANDROID_DIR/device/lineage/sepolicy/libion/sepolicy.mk" ]] || fail "Missing LineageOS libion sepolicy integration."
+[[ -f "$ANDROID_DIR/device/lineage/sepolicy/libperfmgr/sepolicy.mk" ]] || fail "Missing LineageOS libperfmgr sepolicy integration."
 
 AVAILABLE_GB="$(df -BG "$ANDROID_DIR" | awk 'NR==2 {gsub(/G/,"",$4); print $4}')"
 [[ -n "$AVAILABLE_GB" ]] || fail "Could not determine free disk space."
@@ -37,6 +39,11 @@ python3 "$ROOT/scripts/audit_repo_manifests.py" "$ROOT/manifests/mojito-lineage2
 python3 -m unittest discover -s "$ROOT/tests" -v
 
 cd "$ANDROID_DIR"
+echo "Checking local manifest extensions against the synced LineageOS manifest..."
+python3 "$ROOT/scripts/audit_manifest_dependencies.py" \\
+  "$ROOT/manifests/mojito-lineage24.xml" \\
+  "$ANDROID_DIR/.repo/manifests/default.xml" \\
+  "$ANDROID_DIR/.repo/manifests/snippets/lineage.xml"
 echo "Checking the resolved repo manifest..."
 repo manifest -r -o "$ANDROID_DIR/resolved-manifest-richardos.xml"
 
