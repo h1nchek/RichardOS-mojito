@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.richardos.wallpapers">
+
+    <application
+        android:allowBackup="false"
+        android:label="@string/app_name"
+        android:hasCode="true">
+
+        <receiver
+            android:name=".PartnerCustomizationReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.launcher3.action.PARTNER_CUSTOMIZATION" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
