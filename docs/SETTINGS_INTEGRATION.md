@@ -67,7 +67,7 @@ An experimental patch is now available at
 `patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch`.
 It adds a RichardOS entry to the Settings homepage, uses the gold lion vector
 mark, and opens a native dashboard with the four planned sections. Status Bar,
-Root & System now opens a read-only diagnostics page; Status Bar and Lock Screen remain placeholders. Monet has a
+Root & System now opens a read-only diagnostics page; Status Bar contains battery controls, Root & System provides read-only diagnostics, and Lock Screen routes into LineageOS's native lock-screen notification settings page. Monet has a
 native palette selector that writes curated seed colors to the existing
 SystemUI theme customization setting, while System default removes RichardOS
 overrides to restore wallpaper-derived colors.
@@ -142,5 +142,8 @@ LineageOS's existing `LineageSettings.System` provider:
 The option values and setting keys were checked against the LineageOS 24.0
 Lineage SDK and SystemUI battery repository. Quick Settings tile arrangement is
 not duplicated in RichardOS: users continue to edit tiles from the native shade
-editor. The fragment is source-level only and has not been compiled or tested
+editor. The Lock Screen entry opens the existing
+`LockScreenNotificationsPreferencePageFragment`, retaining platform handling
+for notification privacy and device-policy restrictions rather than writing
+secure settings directly. Clock customization remains unimplemented. The fragment is source-level only and has not been compiled or tested
 on-device.
