@@ -43,6 +43,7 @@ def main() -> int:
     selinux = read(base / "core/java/android/os/SELinux.java", failures)
     properties = read(base / "core/java/android/os/SystemProperties.java", failures)
     lineage_sdk = read(args.lineage_sdk_source, failures)
+    patch = read(args.settings_patch, failures)
     theme_applier = read(
         base / "packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayApplier.java",
         failures,
@@ -128,8 +129,6 @@ def main() -> int:
         failures.append("missing upstream LockScreenNotificationsPreferencePageFragment")
 
     gateway = ""
-    patch_path = args.settings_patch
-    patch = read(patch_path, failures)
     target = "src/com/android/settings/core/gateway/SettingsGateway.java"
     current = None
     added: list[str] = []
