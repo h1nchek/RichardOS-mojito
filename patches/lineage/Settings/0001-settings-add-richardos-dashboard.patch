@@ -11,10 +11,11 @@ application. It does not create a separate APK or application package.
 ---
  src/com/android/settings/core/gateway/SettingsGateway.java |  2 ++
  res/xml/top_level_settings.xml                 |  8 ++++++++
- res/xml/richardos_dashboard.xml                | 25 +++++++++++++++++++++++++
+ res/xml/richardos_dashboard.xml                | 27 +++++++++++++++++++++++++++
+ res/values/richardos_arrays.xml                | 16 ++++++++++++++++
  res/values/richardos_strings.xml               |  9 +++++++++
  src/com/android/settings/richardos/RichardOSDashboardFragment.java | 50 ++++++++++++++++++++++++++
- 6 files changed, 102 insertions(+)
+ 7 files changed, 120 insertions(+)
  create mode 100644 res/drawable/ic_richardos_lion.xml
  create mode 100644 res/xml/richardos_dashboard.xml
  create mode 100644 res/values/richardos_strings.xml
@@ -86,11 +87,13 @@ index 0000000000000000000000000000000000000000
 +    <PreferenceCategory
 +        android:key="richardos_appearance"
 +        android:title="@string/richardos_category_appearance">
-+        <Preference
-+            android:key="richardos_monet"
++        <ListPreference
++            android:key="richardos_monet_palette"
 +            android:title="@string/richardos_monet_title"
 +            android:summary="@string/richardos_monet_summary"
-+            android:selectable="false" />
++            android:entries="@array/richardos_palette_entries"
++            android:entryValues="@array/richardos_palette_values"
++            android:defaultValue="system" />
 +    </PreferenceCategory>
 +
 +    <PreferenceCategory
@@ -113,6 +116,34 @@ index 0000000000000000000000000000000000000000
 +            android:selectable="false" />
 +    </PreferenceCategory>
 +</PreferenceScreen>
+diff --git a/res/values/richardos_arrays.xml b/res/values/richardos_arrays.xml
+new file mode 100644
+index 0000000000000000000000000000000000000000
+--- /dev/null
++++ b/res/values/richardos_arrays.xml
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="utf-8"?>
++<resources>
++    <string-array name="richardos_palette_entries">
++        <item>System default</item>
++        <item>Ocean</item>
++        <item>Sage</item>
++        <item>Orchid</item>
++        <item>Ember</item>
++        <item>Graphite</item>
++        <item>Rose</item>
++    </string-array>
++    <string-array name="richardos_palette_values">
++        <item>system</item>
++        <item>ocean</item>
++        <item>sage</item>
++        <item>orchid</item>
++        <item>ember</item>
++        <item>graphite</item>
++        <item>rose</item>
++    </string-array>
++</resources>
++
 diff --git a/res/values/richardos_strings.xml b/res/values/richardos_strings.xml
 new file mode 100644
 index 0000000000000000000000000000000000000000
@@ -126,7 +157,7 @@ index 0000000000000000000000000000000000000000
 +    <string name="richardos_category_appearance">Appearance</string>
 +    <string name="richardos_category_system">System customization</string>
 +    <string name="richardos_monet_title">Monet &amp; Themes</string>
-+    <string name="richardos_monet_summary">Dynamic colors and accent palettes — coming soon</string>
++    <string name="richardos_monet_summary">Choose a palette preset. This selection is saved locally; system-wide color application is not implemented yet.</string>
 +    <string name="richardos_statusbar_title">Status Bar &amp; Quick Settings</string>
 +    <string name="richardos_statusbar_summary">Status bar and Quick Settings options — coming soon</string>
 +    <string name="richardos_root_title">Root &amp; System</string>
