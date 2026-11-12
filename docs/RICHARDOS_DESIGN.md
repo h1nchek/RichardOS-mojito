@@ -100,6 +100,19 @@ All controls should use standard Settings patterns: title, concise summary, curr
 
 ### A. Monet & Themes
 
+
+**Confirmed palette model: curated palettes + custom color picker**
+
+The Monet experience combines both approaches:
+
+- **Curated palettes:** a small, quality-controlled set of RichardOS palettes with names and preview swatches. Initial candidates: Ocean, Sage, Orchid, Ember, Graphite, and Rose.
+- **Custom accent:** a color picker for choosing a preferred accent color, with a preview before applying.
+- **Wallpaper colors:** retain Android's wallpaper-derived dynamic colors as the default and allow returning to them at any time.
+- **Mode awareness:** palette previews should be shown in both light and dark themes where supported.
+- **Contrast and accessibility:** avoid accepting or applying combinations that make text or essential controls unreadable. Prefer platform-generated tonal palettes and contrast-aware resources rather than simply applying one flat color everywhere.
+
+The initial curated palette names are design placeholders; exact seed colors and tonal mappings will be selected during implementation and validated against Android's dynamic-color engine. The custom picker should select a seed/accent color, not promise arbitrary recoloring of every app.
+
 **V1 controls**
 - Theme mode: Follow system / Light / Dark (only if not already adequately exposed by Android Settings; otherwise link to the native control).
 - Color source: Wallpaper colors / RichardOS palette.
