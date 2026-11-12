@@ -19,6 +19,18 @@ command -v zip >/dev/null || { echo "zip is required."; exit 1; }
 mkdir -p "$DEST/part0"
 mkdir -p "$ANDROID_TOP/vendor/richardos/overlay"
 cp -a "$ROOT/vendor/richardos/overlay/." "$ANDROID_TOP/vendor/richardos/overlay/"
+
+# Render the existing approved lion emblem for the SetupWizard welcome screen.
+SETUP_DRAWABLE="$ANDROID_TOP/vendor/richardos/overlay/packages/apps/SetupWizard/res/drawable-nodpi"
+mkdir -p "$SETUP_DRAWABLE"
+if command -v rsvg-convert >/dev/null 2>&1; then
+    rsvg-convert --width 768 --height 768 --format png \
+        --output "$SETUP_DRAWABLE/richardos_lion.png" "$LOGO"
+else
+    inkscape "$LOGO" --export-type=png \
+        --export-filename="$SETUP_DRAWABLE/richardos_lion.png" \
+        --export-width=768 --export-height=768 >/dev/null
+fi
 python3 - "$LOGO" "$DEST/frames" <<'PY'
 import math, pathlib, sys, xml.etree.ElementTree as ET
 source, output = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
