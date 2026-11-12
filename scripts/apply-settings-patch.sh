@@ -25,8 +25,17 @@ case "$REMOTE" in
 esac
 
 BRANCH="$(git -C "$SETTINGS_DIR" branch --show-current)"
-if [[ "$BRANCH" != "lineage-24.0" ]]; then
-    echo "Error: expected branch lineage-24.0, got: $BRANCH" >&2
+TRACKING_REF="refs/remotes/origin/lineage-24.0"
+
+# Android repo checkouts commonly use a detached HEAD. Accept that only when
+# the synced commit is an ancestor of the fetched LineageOS target branch.
+if git -C "$SETTINGS_DIR" show-ref --verify --quiet "$TRACKING_REF"; then
+    if ! git -C "$SETTINGS_DIR" merge-base --is-ancestor HEAD "$TRACKING_REF"; then
+        echo "Error: HEAD is not based on origin/lineage-24.0." >&2
+        exit 2
+    fi
+elif [[ "$BRANCH" != "lineage-24.0" ]]; then
+    echo "Error: expected lineage-24.0 (or its detached repo-sync checkout); got branch: $BRANCH" >&2
     exit 2
 fi
 
