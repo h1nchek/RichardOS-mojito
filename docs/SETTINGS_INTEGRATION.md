@@ -66,9 +66,11 @@ root, spoof device integrity, bypass verified boot, or change bootloader state.
 An experimental patch is now available at
 `patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch`.
 It adds a RichardOS entry to the Settings homepage, uses the gold lion vector
-mark, and opens a native dashboard with the four planned sections. The section
-rows are deliberately non-clickable placeholders; no Monet controls or saved
-palette state have been implemented yet.
+mark, and opens a native dashboard with the four planned sections. Status Bar,
+Root & System, and Lock Screen remain non-clickable placeholders. Monet has a
+native palette selector that writes curated seed colors to the existing
+SystemUI theme customization setting, while System default removes RichardOS
+overrides to restore wallpaper-derived colors.
 
 Apply it to a clean Settings checkout on `lineage-24.0` with:
 
