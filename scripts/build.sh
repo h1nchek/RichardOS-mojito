@@ -49,6 +49,8 @@ echo "Checking proprietary vendor source paths..."
 python3 "$ROOT/scripts/audit-vendor-blobs.py" "$ANDROID_DIR"
 echo "Applying guarded SM6150 VINTF ordering correction..."
 python3 "$ROOT/scripts/patch-mojito-device-tree.py"
+echo "Installing RichardOS system identity, gold palette, and boot animation..."
+bash "$ROOT/scripts/install-system-branding.sh" "$ANDROID_DIR"
 echo "Installing RichardOS wallpaper resources into the synced source tree..."
 bash "$ROOT/scripts/install-wallpaper-picker.sh" "$ANDROID_DIR"
 bash "$ROOT/scripts/install-wallpaper-overlay.sh" "$ANDROID_DIR" device/xiaomi/mojito/lineage_mojito.mk
