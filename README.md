@@ -35,7 +35,7 @@ The initial target is Xiaomi Redmi Note 10 (`mojito`). The project uses LineageO
 | Codename | `mojito` |
 | SoC | Qualcomm Snapdragon 678 |
 | Architecture | ARM64 |
-| Platform baseline | LineageOS 24.0 (Android 16) |
+| Platform baseline | LineageOS 24.0 (Android 17) |
 | Kernel/device/vendor sources | See [DEVICE_SOURCES.md](docs/DEVICE_SOURCES.md) and [manifest](manifests/mojito-lineage24.xml) |
 
 The inherited source manifest pins candidate device, kernel, and vendor repositories to immutable revisions. A successful sync or static audit does not prove that the target builds or boots.
@@ -45,17 +45,19 @@ The inherited source manifest pins candidate device, kernel, and vendor reposito
 - `manifests/` — local Android repo manifests.
 - `scripts/` — source audits, guarded device-tree fix, and build helper.
 - `tests/` — unit tests for the helper scripts.
-- `docs/` — device-source notes and project documentation.
+- `docs/` — device-source notes, design specification, and project documentation.
 
 ## Current roadmap
 
-1. Re-audit the inherited device sources and manifest against the selected LineageOS branch.
-2. Sync the Android platform and run static preflight checks.
+1. Re-audit the inherited device sources and manifest against LineageOS 24.0 / Android 17.
+2. Sync the Android platform and run static preflight checks when suitable storage is available.
 3. Build an unmodified LineageOS baseline for `mojito`.
 4. Boot-test the baseline and validate core hardware.
-5. Start RichardOS system integration and Material You design work.
+5. Implement the first RichardOS SystemUI and Settings customizations.
 6. Add RichardOS applications, settings, and update infrastructure.
 7. Publish reproducible builds, checksums, changelogs, and known issues.
+
+The initial interface and feature direction is documented in [RICHARDOS_DESIGN.md](docs/RICHARDOS_DESIGN.md).
 
 ## Build preparation
 
