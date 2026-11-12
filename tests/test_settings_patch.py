@@ -85,6 +85,8 @@ class RichardOSSettingsPatchTests(unittest.TestCase):
                     new_actual += 1
                 elif entry.startswith("-") and not entry.startswith("---"):
                     old_actual += 1
+                if old_actual == old_expected and new_actual == new_expected:
+                    break
             self.assertEqual(old_expected, old_actual, line)
             self.assertEqual(new_expected, new_actual, line)
             checked += 1
