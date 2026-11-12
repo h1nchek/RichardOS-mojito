@@ -34,9 +34,9 @@ mkdir -p .repo/local_manifests
 cp "$ROOT/manifests/mojito-lineage24.xml" .repo/local_manifests/richardos-mojito.xml
 echo "Syncing LineageOS and Redmi Note 10 sources..."
 repo sync -j"$JOBS" --fail-fast
-python3 "$ROOT/scripts/audit_manifest_dependencies.py" \\
-  "$ROOT/manifests/mojito-lineage24.xml" \\
-  "$ANDROID_DIR/.repo/manifests/default.xml" \\
+python3 "$ROOT/scripts/audit_manifest_dependencies.py" \
+  "$ROOT/manifests/mojito-lineage24.xml" \
+  "$ANDROID_DIR/.repo/manifests/default.xml" \
   "$ANDROID_DIR/.repo/manifests/snippets/lineage.xml"
 REQUIRED_SOURCE_DIRS=(
   hardware/xiaomi hardware/google/interfaces hardware/google/pixel
