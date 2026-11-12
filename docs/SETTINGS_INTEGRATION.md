@@ -89,3 +89,12 @@ The dashboard fragment is registered in
 `ENTRY_FRAGMENTS`. This is required because `SettingsActivity` validates
 fragment names before displaying them. The integration patch adds both the
 import and the allowlist entry.
+
+
+### Monet palette preference (prototype)
+
+The dashboard now includes a native `ListPreference` with System default,
+Ocean, Sage, Orchid, Ember, Graphite, and Rose presets. AndroidX Preference
+persists the selected value in Settings' default shared preferences. This is
+only preference storage: it does not yet change Android's system Monet
+resources, overlays, or SystemUI colors.
