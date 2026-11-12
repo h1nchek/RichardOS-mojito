@@ -67,7 +67,7 @@ PRODUCT_COPY_FILES += vendor/richardos/bootanimation.zip:system/media/bootanimat
 EOF
 fi
 # Make RichardOS overlays visible to the Android resource merger.
-if ! grep -qF '# RichardOS resource overlays' "$PRODUCT_MK"; then
+if ! grep -qF 'PRODUCT_PACKAGE_OVERLAYS += vendor/richardos/overlay' "$PRODUCT_MK"; then
     cat >> "$PRODUCT_MK" <<'EOF'
 
 # RichardOS resource overlays
