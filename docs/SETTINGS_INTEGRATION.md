@@ -20,9 +20,9 @@ The following files were inspected on the `lineage-24.0` branch:
 - `AndroidManifest.xml`
   - Declares the existing Settings package as `com.android.settings`.
 
-This confirms the integration direction: RichardOS should add a DashboardFragment
-and preference resources to the existing Settings source tree, then register the
-entry in the top-level Settings preference screen. It should not add a new
+This confirms the integration direction: RichardOS adds a DashboardFragment
+and preference resources to the existing Settings source tree, then registers the
+entry in the top-level Settings preference screen. It does not add a new
 standalone app or package.
 
 ## Planned implementation
@@ -61,9 +61,22 @@ The first milestone is deliberately small:
 Root & System is a read-only diagnostics area. It must not attempt to hide
 root, spoof device integrity, bypass verified boot, or change bootloader state.
 
-## Validation status
+## Patch status
 
-The upstream branch and representative integration files have been inspected.
-No patch has yet been applied to a complete synced Settings checkout, and no
-Android compilation has been run. The repository currently contains the design
-and integration plan only; it does not claim that the Hub is implemented.
+An experimental patch is now available at
+\`patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch\`.
+It adds a RichardOS entry to the Settings homepage, uses the gold lion vector
+mark, and opens a native dashboard with the four planned sections. The section
+rows are deliberately non-clickable placeholders; no Monet controls or saved
+palette state have been implemented yet.
+
+Apply it to a clean Settings checkout on \`lineage-24.0\` with:
+
+\`\`\`bash
+bash scripts/apply-settings-patch.sh /path/to/lineage/packages/apps/Settings
+\`\`\`
+
+The helper verifies the repository remote and branch, checks for local changes,
+and runs \`git apply --check\` before applying. The patch has not yet been
+applied to a full synced Android tree or compiled. Do not treat it as a tested
+ROM feature until Settings builds successfully.
