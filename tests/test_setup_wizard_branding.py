@@ -76,5 +76,49 @@ class RichardOSSetupWizardBrandingTest(unittest.TestCase):
         self.assertIn("PRODUCT_PACKAGE_OVERLAYS += vendor/richardos/overlay", script)
 
 
+    def test_all_setup_wizard_overlay_xml_is_well_formed(self):
+        resource_root = SETUP.parent
+        xml_files = sorted(resource_root.rglob("*.xml"))
+        self.assertGreater(len(xml_files), 0)
+        for xml_file in xml_files:
+            with self.subTest(path=xml_file.relative_to(resource_root)):
+                ET.parse(xml_file)
+
+    def test_values_files_have_no_duplicate_resource_names(self):
+        for values_dir in sorted(SETUP.parent.glob("values*")):
+            if not values_dir.is_dir():
+                continue
+            for xml_file in sorted(values_dir.glob("*.xml")):
+                with self.subTest(path=xml_file.relative_to(SETUP.parent)):
+                    root = ET.parse(xml_file).getroot()
+                    names = [
+                        item.attrib["name"]
+                        for item in root
+                        if "name" in item.attrib
+                    ]
+                    self.assertEqual(
+                        len(names),
+                        len(set(names)),
+                        f"Duplicate resource name in {xml_file}",
+                    )
+
+    def test_setup_wizard_lion_drawable_is_generated_by_installer(self):
+        layout_files = [
+            SETUP.parent / "layout/welcome_activity.xml",
+            SETUP.parent / "layout/finish_activity.xml",
+        ]
+        for layout_file in layout_files:
+            self.assertIn(
+                '@drawable/richardos_lion',
+                layout_file.read_text(),
+            )
+        script = (ROOT / "scripts/install-system-branding.sh").read_text()
+        self.assertIn(
+            'SETUP_DRAWABLE="$ANDROID_TOP/vendor/richardos/overlay/packages/apps/SetupWizard/res/drawable-nodpi"',
+            script,
+        )
+        self.assertIn('"$SETUP_DRAWABLE/richardos_lion.png"', script)
+
+
 if __name__ == "__main__":
     unittest.main()
