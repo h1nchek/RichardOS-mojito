@@ -8,19 +8,14 @@ Target: LineageOS/android_packages_apps_Settings, lineage-24.0
 This patch adds RichardOS as a native dashboard inside the existing Settings
 application. It does not create a separate APK or application package.
 
----
- src/com/android/settings/core/gateway/SettingsGateway.java |  2 ++
- res/xml/top_level_settings.xml                 |  8 ++++++++
- res/xml/richardos_dashboard.xml                | 27 +++++++++++++++++++++++++++
- res/values/richardos_arrays.xml                | 16 ++++++++++++++++
- res/values/richardos_strings.xml               |  9 +++++++++
- src/com/android/settings/richardos/RichardOSDashboardFragment.java | 50 ++++++++++++++++++++++++++
- 7 files changed, 120 insertions(+)
- create mode 100644 res/drawable/ic_richardos_lion.xml
- create mode 100644 res/xml/richardos_dashboard.xml
- create mode 100644 res/values/richardos_strings.xml
- create mode 100644 src/com/android/settings/richardos/RichardOSDashboardFragment.java
-
+src/com/android/settings/core/gateway/SettingsGateway.java | 2 ++
+res/xml/top_level_settings.xml | 13 +++++++++++++
+res/drawable/ic_richardos_lion.xml | 10 ++++++++++
+res/xml/richardos_dashboard.xml | 35 +++++++++++++++++++++++++++++++++++
+res/values/richardos_arrays.xml | 22 ++++++++++++++++++++++
+res/values/richardos_strings.xml | 15 +++++++++++++++
+src/com/android/settings/richardos/RichardOSDashboardFragment.java | 50 ++++++++++++++++++++++++++++++++++++++++ -
+ 7 files changed, 147 insertions(+), 0 deletions(-)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
@@ -29,7 +24,7 @@ index 0000000000000000000000000000000000000000..00000000000000000000000000000000
  import com.android.settings.TrustedCredentialsSettings;
 +import com.android.settings.richardos.RichardOSDashboardFragment;
  import com.android.settings.accessibility.AccessibilityDetailsSettingsFragment;
-@@ -245,3 +246,4 @@ public class SettingsGateway {
+@@ -245,2 +246,3 @@ public class SettingsGateway {
              SafetyCenterQsFragment.class.getName(),
 +            RichardOSDashboardFragment.class.getName(),
      };
@@ -38,7 +33,7 @@ diff --git a/res/xml/top_level_settings.xml b/res/xml/top_level_settings.xml
 index 93f4c9fa963499f92b3a0f984459394b50bfc081..0000000000000000000000000000000000000000 100644
 --- a/res/xml/top_level_settings.xml
 +++ b/res/xml/top_level_settings.xml
-@@ -1,6 +1,14 @@
+@@ -1,7 +1,20 @@
  <PreferenceScreen
      xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:settings="http://schemas.android.com/apk/res-auto"
@@ -64,7 +59,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/drawable/ic_richardos_lion.xml
-@@ -0,0 +1,8 @@
+@@ -0,0 +1,10 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<vector xmlns:android="http://schemas.android.com/apk/res/android"
 +    android:width="24dp"
@@ -80,7 +75,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/xml/richardos_dashboard.xml
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,35 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 +
@@ -121,7 +116,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/values/richardos_arrays.xml
-@@ -0,0 +1,16 @@
+@@ -0,0 +1,22 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<resources>
 +    <string-array name="richardos_palette_entries">
@@ -149,7 +144,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/values/richardos_strings.xml
-@@ -0,0 +1,9 @@
+@@ -0,0 +1,15 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<resources>
 +    <string name="richardos_title">RichardOS</string>
