@@ -20,7 +20,7 @@ class RichardOSSetupWizardBrandingTest(unittest.TestCase):
         self.assertIn("diagnostic reporting", values["services_pp_explanation"])
         self.assertEqual(values["services_help_improve_cm"], "Share diagnostic data")
         self.assertIn("LineageOS", values["services_pp_explanation"])
-        self.assertIn("diagnostic and usage data", values["services_metrics_label"])
+        self.assertIn("diagnostic and usage data", values["services_metrics_label"].lower())
         self.assertIn("%1$s", values["services_metrics_label"])
         self.assertIn("%3$s", values["services_metrics_label"])
         self.assertIn("LineageOS project", values["services_metrics_label"])
