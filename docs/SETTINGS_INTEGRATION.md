@@ -67,7 +67,7 @@ An experimental patch is now available at
 `patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch`.
 It adds a RichardOS entry to the Settings homepage, uses the gold lion vector
 mark, and opens a native dashboard with the four planned sections. Status Bar,
-Root & System, and Lock Screen remain non-clickable placeholders. Monet has a
+Root & System now opens a read-only diagnostics page; Status Bar and Lock Screen remain placeholders. Monet has a
 native palette selector that writes curated seed colors to the existing
 SystemUI theme customization setting, while System default removes RichardOS
 overrides to restore wallpaper-derived colors.
@@ -107,3 +107,22 @@ setting and generates the dynamic tonal resources.
 This is source-level implementation only. It has not been applied to a full
 synced checkout, compiled, or verified on a phone. The feature depends on the
 target branch's existing SystemUI theme controller being active.
+
+
+### Root & System diagnostics (initial implementation)
+
+The Root & System page is a native Settings fragment and reports Android release/API
+level, build display, manufacturer/model/device codename, kernel version, Android
+security patch level, SELinux mode, data-encryption state, Verified Boot state,
+and bootloader lock state. It reads platform build/security properties only and
+does not change device state.
+
+Root status is intentionally shown as **Not assessed**. A generic scan for a
+`su` binary or root-manager package is not reliable enough to claim that a device
+is or is not rooted. No root-hiding, integrity spoofing, bootloader bypass, or
+automatic root-management actions are implemented.
+
+Verified Boot and bootloader fields depend on bootloader-provided properties;
+if the device does not expose them, the page displays **Unknown**. The
+implementation uses platform APIs/properties available to the privileged
+Settings build and has not yet been compiled or tested on hardware.
