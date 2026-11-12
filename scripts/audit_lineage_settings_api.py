@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that RichardOS uses battery settings exposed by the pinned Lineage SDK."""
+"""Audit RichardOS battery preferences against the pinned Lineage SDK API."""
 
 from __future__ import annotations
 
@@ -8,10 +8,21 @@ import pathlib
 import re
 import sys
 
-CONSTANTS = (
-    "STATUS_BAR_BATTERY_STYLE",
-    "STATUS_BAR_SHOW_BATTERY_PERCENT",
-)
+SETTINGS = {
+    "STATUS_BAR_BATTERY_STYLE": ("richardos_battery_style_values",),
+    "STATUS_BAR_SHOW_BATTERY_PERCENT": ("richardos_battery_percent_values",),
+}
+
+
+def extract_array(patch: str, name: str) -> list[str] | None:
+    match = re.search(
+        rf'<string-array\\s+name="{re.escape(name)}">(.*?)</string-array>',
+        patch,
+        re.DOTALL,
+    )
+    if not match:
+        return None
+    return re.findall(r"<item>\\s*(.*?)\\s*</item>", match.group(1), re.DOTALL)
 
 
 def main() -> int:
@@ -28,9 +39,14 @@ def main() -> int:
         return 2
 
     failed = False
-    for name in CONSTANTS:
+    arrays_section = patch.split(
+        "diff --git a/res/values/richardos_arrays.xml", 1
+    )
+    arrays_text = arrays_section[1].split("\\ndiff --git ", 1)[0] if len(arrays_section) == 2 else ""
+
+    for name, (array_name,) in SETTINGS.items():
         declaration = re.compile(
-            rf"public\s+static\s+final\s+String\s+{name}\s*="
+            rf"public\\s+static\\s+final\\s+String\\s+{name}\\s*="
         )
         if not declaration.search(sdk):
             print(f"missing Lineage SDK declaration: {name}", file=sys.stderr)
@@ -39,9 +55,29 @@ def main() -> int:
             print(f"RichardOS patch does not use SDK constant: {name}", file=sys.stderr)
             failed = True
 
+        validator = re.search(
+            rf"{name}_VALIDATOR\\s*=\\s*new InclusiveIntegerRangeValidator\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*\\)",
+            sdk,
+        )
+        if not validator:
+            print(f"missing supported integer range for {name}", file=sys.stderr)
+            failed = True
+            continue
+
+        minimum, maximum = map(int, validator.groups())
+        expected = [str(value) for value in range(minimum, maximum + 1)]
+        actual = extract_array(arrays_text, array_name)
+        if actual != expected:
+            print(
+                f"{array_name} must match Lineage SDK range {minimum}..{maximum}; "
+                f"found {actual}",
+                file=sys.stderr,
+            )
+            failed = True
+
     if failed:
         return 1
-    print("RichardOS battery settings match the checked-out Lineage SDK API.")
+    print("RichardOS battery keys and preference values match the checked-out Lineage SDK API.")
     return 0
 
 
