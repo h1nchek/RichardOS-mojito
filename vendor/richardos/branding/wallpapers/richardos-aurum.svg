@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="3200" viewBox="0 0 1440 3200">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#15130F"/><stop offset=".52" stop-color="#252016"/><stop offset="1" stop-color="#08090C"/></linearGradient><linearGradient id="r" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F5BE35" stop-opacity=".72"/><stop offset="1" stop-color="#F5BE35" stop-opacity=".04"/></linearGradient></defs>
+  <rect width="1440" height="3200" fill="url(#bg)"/>
+  <path d="M-250 700 650 -200h390L-250 1100Z" fill="url(#r)" opacity=".28"/>
+  <path d="M-120 1150 1050 -20h250L130 1150Z" fill="none" stroke="#F5BE35" stroke-width="3" opacity=".35"/>
+  <path d="M320 3200 1690 1830v-360L-40 3140Z" fill="url(#r)" opacity=".18"/>
+  <path d="M650 3200 1690 2160" stroke="#F5BE35" stroke-width="2" opacity=".25"/>
+  <circle cx="1040" cy="1250" r="430" fill="none" stroke="#F5BE35" stroke-width="2" opacity=".2"/>
+  <circle cx="1040" cy="1250" r="350" fill="none" stroke="#F5BE35" stroke-width="1" opacity=".12"/>
+  <text x="112" y="2860" fill="#F5BE35" font-family="sans-serif" font-size="36" letter-spacing="12">RICHARDOS</text>
+  <text x="114" y="2920" fill="#D8CFB8" opacity=".7" font-family="sans-serif" font-size="19" letter-spacing="5">YOUR ANDROID. YOUR RULES.</text>
+</svg>
