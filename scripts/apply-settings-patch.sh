@@ -39,8 +39,8 @@ elif [[ "$BRANCH" != "lineage-24.0" ]]; then
     exit 2
 fi
 
-if ! git -C "$SETTINGS_DIR" diff --quiet || ! git -C "$SETTINGS_DIR" diff --cached --quiet; then
-    echo "Error: Settings checkout has local modifications; commit or stash them first." >&2
+if [[ -n "$(git -C "$SETTINGS_DIR" status --porcelain --untracked-files=all)" ]]; then
+    echo "Error: Settings checkout has tracked or untracked local changes; commit or stash them first." >&2
     exit 2
 fi
 
