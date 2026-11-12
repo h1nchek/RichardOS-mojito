@@ -42,11 +42,13 @@ def main() -> int:
     arrays_section = patch.split(
         "diff --git a/res/values/richardos_arrays.xml", 1
     )
-    arrays_text = (
-        arrays_section[1].split("\ndiff --git ", 1)[0]
-        if len(arrays_section) == 2
-        else ""
-    )
+    arrays_text = ""
+    if len(arrays_section) == 2:
+        arrays_diff = arrays_section[1].split("\ndiff --git ", 1)[0]
+        arrays_text = "\n".join(
+            line[1:] for line in arrays_diff.splitlines()
+            if line.startswith("+") and not line.startswith("+++")
+        )
 
     for name, array_name in SETTINGS.items():
         declaration = re.compile(
