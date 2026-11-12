@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- RichardOS Setup Wizard legacy accent. Dynamic-color surfaces still
+         come from the framework's RichardOS Material You palette. -->
+    <color name="lineage_accent">#F5BE35</color>
+    <color name="button_bar_text_enabled">#17191E</color>
+    <color name="button_bar_text_disabled">#5217191E</color>
+    <color name="divider">#40F5BE35</color>
+</resources>
