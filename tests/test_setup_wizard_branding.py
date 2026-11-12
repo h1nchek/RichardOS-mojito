@@ -5,25 +5,44 @@ import xml.etree.ElementTree as ET
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 SETUP = ROOT / "vendor/richardos/overlay/packages/apps/SetupWizard/res/values"
 
+
 class RichardOSSetupWizardBrandingTest(unittest.TestCase):
-    def test_setup_wizard_strings_are_branded(self):
+    def test_setup_wizard_welcome_uses_richardos_name(self):
         root = ET.parse(SETUP / "strings.xml").getroot()
         values = {item.attrib["name"]: "".join(item.itertext()) for item in root}
         self.assertEqual(values["app_name"], "RichardOS Setup")
         self.assertEqual(values["os_name"], "RichardOS")
-        self.assertIn("RichardOS", values["setup_welcome_message"])
+        self.assertEqual(
+            values["setup_welcome_message"],
+            "Welcome to %1$s",
+        )
         self.assertEqual(values["setup_services"], "RichardOS features")
 
-    def test_setup_wizard_uses_richardos_gold_accent(self):
+    def test_setup_wizard_overrides_verified_lineage24_colors(self):
         root = ET.parse(SETUP / "colors.xml").getroot()
-        colors = {item.attrib["name"]: item.text for item in root.findall("color")}
-        self.assertEqual(colors["lineage_accent"], "#F5BE35")
-        self.assertIn("button_bar_text_enabled", colors)
-        self.assertIn("divider", colors)
+        colors = {item.attrib["name"]: item.text.strip() for item in root.findall("color")}
+        expected = {
+            "lineage_accent": "#F5BE35",
+            "button_bar_text_enabled": "#17191E",
+            "button_bar_text_disabled": "#5217191E",
+            "setup_compat_footer_primary_button_bg_color": "#F5BE35",
+            "setup_compat_footer_primary_button_text_color": "#17191E",
+            "materialColorPrimary": "#F5BE35",
+            "materialColorOnPrimary": "#17191E",
+            "finish_swipe_arrow": "#F5BE35",
+            "divider": "#40F5BE35",
+        }
+        for name, value in expected.items():
+            self.assertEqual(colors[name], value)
 
-    def test_system_branding_installer_copies_setup_wizard_overlay(self):
+    def test_installer_copies_and_registers_richardos_overlay(self):
         script = (ROOT / "scripts/install-system-branding.sh").read_text()
-        self.assertIn('cp -a "$ROOT/vendor/richardos/overlay/." "$ANDROID_TOP/vendor/richardos/overlay/"', script)
+        self.assertIn(
+            'cp -a "$ROOT/vendor/richardos/overlay/." "$ANDROID_TOP/vendor/richardos/overlay/"',
+            script,
+        )
+        self.assertIn("PRODUCT_PACKAGE_OVERLAYS += vendor/richardos/overlay", script)
+
 
 if __name__ == "__main__":
     unittest.main()
