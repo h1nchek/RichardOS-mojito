@@ -30,14 +30,9 @@ if [[ ! -f "$SOURCE" ]]; then
     echo "Missing wallpaper source: $SOURCE" >&2
     exit 1
 fi
-if grep -qF "$MARKER" "$PRODUCT_MK"; then
-    echo "RichardOS wallpaper overlay is already registered."
-else
-    if ! grep -q '^PRODUCT_PACKAGE_OVERLAYS[[:space:]]*+=' "$PRODUCT_MK"; then
-        printf '\n%s\nPRODUCT_PACKAGE_OVERLAYS += vendor/richardos/overlay\n' "$MARKER" >> "$PRODUCT_MK"
-    else
-        printf '\n%s\nPRODUCT_PACKAGE_OVERLAYS += vendor/richardos/overlay\n' "$MARKER" >> "$PRODUCT_MK"
-    fi
+if ! command -v rsvg-convert >/dev/null 2>&1 && ! command -v inkscape >/dev/null 2>&1; then
+    echo "Install librsvg (rsvg-convert) or Inkscape to render the wallpaper." >&2
+    exit 1
 fi
 
 mkdir -p "$OVERLAY"
@@ -51,6 +46,10 @@ else
     exit 1
 fi
 mv "$TMP" "$DEST"
+
+if ! grep -qF "$MARKER" "$PRODUCT_MK"; then
+    printf '\n%s\nPRODUCT_PACKAGE_OVERLAYS += vendor/richardos/overlay\n' "$MARKER" >> "$PRODUCT_MK"
+fi
 
 echo "Installed RichardOS default wallpaper overlay:"
 echo "  $DEST"
