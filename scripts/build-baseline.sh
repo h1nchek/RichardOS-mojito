@@ -44,6 +44,19 @@ python3 "$ROOT/scripts/audit_manifest_dependencies.py" \
   "$ROOT/manifests/mojito-lineage24.xml" \
   "$ANDROID_DIR/.repo/manifests/default.xml" \
   "$ANDROID_DIR/.repo/manifests/snippets/lineage.xml"
+REQUIRED_SOURCE_DIRS=(
+  device/qcom/sepolicy device/qcom/sepolicy_vndr device/lineage/sepolicy
+  hardware/xiaomi hardware/google/interfaces hardware/google/pixel
+  hardware/lineage/interfaces hardware/qcom-caf/bootctrl hardware/qcom-caf/common
+  hardware/qcom-caf/sm8150/audio hardware/qcom-caf/sm8150/display
+  hardware/qcom-caf/sm8150/media hardware/qcom-caf/wlan
+  vendor/qcom/opensource/dataservices vendor/qcom/opensource/commonsys-intf/display
+  vendor/qcom/opensource/display vendor/qcom/opensource/interfaces vendor/qcom/opensource/usb
+)
+for relative_path in "${REQUIRED_SOURCE_DIRS[@]}"; do
+  [[ -d "$ANDROID_DIR/$relative_path" ]] || fail "Missing required device dependency: $relative_path"
+done
+
 echo "Checking the resolved repo manifest..."
 repo manifest -r -o "$ANDROID_DIR/resolved-manifest-richardos.xml"
 
