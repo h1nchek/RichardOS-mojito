@@ -15,7 +15,7 @@ res/xml/richardos_dashboard.xml | 35 +++++++++++++++++++++++++++++++++++
 res/values/richardos_arrays.xml | 22 ++++++++++++++++++++++
 res/values/richardos_strings.xml | 15 +++++++++++++++
 src/com/android/settings/richardos/RichardOSDashboardFragment.java | 140 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
- 7 files changed, 237 insertions(+), 1 deletions(-)
+ 7 files changed, 237 insertions(+), 0 deletions(-)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
@@ -165,7 +165,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/src/com/android/settings/richardos/RichardOSDashboardFragment.java
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,140 @@
 +/*
 + * Copyright (C) 2026 RichardOS
 + *
