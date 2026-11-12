@@ -43,6 +43,10 @@ def main() -> int:
     selinux = read(base / "core/java/android/os/SELinux.java", failures)
     properties = read(base / "core/java/android/os/SystemProperties.java", failures)
     lineage_sdk = read(args.lineage_sdk_source, failures)
+    theme_applier = read(
+        base / "packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayApplier.java",
+        failures,
+    )
 
     system_dashboard = read(
         settings / "src/com/android/settings/system/SystemDashboardFragment.java",
@@ -84,6 +88,24 @@ def main() -> int:
         "SystemProperties.get(String, String)",
         failures,
     )
+
+    theme_contract = {
+        "OVERLAY_CATEGORY_SYSTEM_PALETTE": "android.theme.customization.system_palette",
+        "OVERLAY_CATEGORY_ACCENT_COLOR": "android.theme.customization.accent_color",
+        "OVERLAY_COLOR_SOURCE": "android.theme.customization.color_source",
+        "OVERLAY_COLOR_BOTH": "android.theme.customization.color_both",
+        "COLOR_SOURCE_PRESET": "preset",
+        "TIMESTAMP_FIELD": "_applied_timestamp",
+    }
+    for constant, value in theme_contract.items():
+        require(
+            theme_applier,
+            rf'{constant}\s*=\s*"{re.escape(value)}"',
+            f"ThemeOverlayApplier.{constant}",
+            failures,
+        )
+        if f'"{value}"' not in patch:
+            failures.append(f"RichardOS patch does not use the upstream value {value}")
 
     require(
         lineage_sdk,
