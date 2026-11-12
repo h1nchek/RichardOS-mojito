@@ -3,7 +3,7 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ANDROID_DIR="${1:-$HOME/android/richardos-mojito}"
 DEFAULT_JOBS="$(nproc)"
-(( DEFAULT_JOBS > 8 )) && DEFAULT_JOBS=8
+if (( DEFAULT_JOBS > 8 )); then DEFAULT_JOBS=8; fi
 JOBS="${JOBS:-$DEFAULT_JOBS}"
 if [[ ! "$JOBS" =~ ^[1-9][0-9]*$ ]] || (( JOBS > 8 )); then
   echo "ERROR: JOBS must be an integer from 1 to 8; got: $JOBS" >&2
