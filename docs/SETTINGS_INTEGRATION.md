@@ -64,19 +64,19 @@ root, spoof device integrity, bypass verified boot, or change bootloader state.
 ## Patch status
 
 An experimental patch is now available at
-\`patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch\`.
+`patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch`.
 It adds a RichardOS entry to the Settings homepage, uses the gold lion vector
 mark, and opens a native dashboard with the four planned sections. The section
 rows are deliberately non-clickable placeholders; no Monet controls or saved
 palette state have been implemented yet.
 
-Apply it to a clean Settings checkout on \`lineage-24.0\` with:
+Apply it to a clean Settings checkout on `lineage-24.0` with:
 
-\`\`\`bash
+```bash
 bash scripts/apply-settings-patch.sh /path/to/lineage/packages/apps/Settings
-\`\`\`
+```
 
 The helper verifies the repository remote and branch, checks for local changes,
-and runs \`git apply --check\` before applying. The patch has not yet been
+and runs `git apply --check` before applying. The patch has not yet been
 applied to a full synced Android tree or compiled. Do not treat it as a tested
 ROM feature until Settings builds successfully.
