@@ -14,8 +14,8 @@ res/drawable/ic_richardos_lion.xml | 10 ++++++++++
 res/xml/richardos_dashboard.xml | 35 +++++++++++++++++++++++++++++++++++
 res/values/richardos_arrays.xml | 22 ++++++++++++++++++++++
 res/values/richardos_strings.xml | 15 +++++++++++++++
-src/com/android/settings/richardos/RichardOSDashboardFragment.java | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 7 files changed, 147 insertions(+)
+src/com/android/settings/richardos/RichardOSDashboardFragment.java | 141 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -
+ 7 files changed, 238 insertions(+), 0 deletions(-)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
@@ -165,7 +165,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/src/com/android/settings/richardos/RichardOSDashboardFragment.java
-@@ -0,0 +1,50 @@
+@@ -0,0 +1,141 @@
 +/*
 + * Copyright (C) 2026 RichardOS
 + *
@@ -184,11 +184,23 @@ index 0000000000000000000000000000000000000000
 +package com.android.settings.richardos;
 +
 +import android.app.settings.SettingsEnums;
++import android.os.Bundle;
++import android.provider.Settings;
++import android.util.Log;
 +
 +import com.android.settings.R;
 +import com.android.settings.dashboard.DashboardFragment;
 +import com.android.settings.search.BaseSearchIndexProvider;
 +import com.android.settingslib.search.SearchIndexable;
++import com.android.settingslib.widget.SelectorWithWidgetPreference;
++
++import androidx.preference.ListPreference;
++import androidx.preference.Preference;
++
++import org.json.JSONException;
++import org.json.JSONObject;
++
++import java.util.Locale;
 +
 +/**
 + * RichardOS customization dashboard embedded in the stock Settings app.
@@ -197,6 +209,16 @@ index 0000000000000000000000000000000000000000
 +public class RichardOSDashboardFragment extends DashboardFragment {
 +
 +    private static final String TAG = "RichardOSDashboard";
++    private static final String KEY_MONET_PALETTE = "richardos_monet_palette";
++    private static final String KEY_SYSTEM_PALETTE =
++            "android.theme.customization.system_palette";
++    private static final String KEY_ACCENT_COLOR =
++            "android.theme.customization.accent_color";
++    private static final String KEY_COLOR_SOURCE =
++            "android.theme.customization.color_source";
++    private static final String KEY_COLOR_BOTH =
++            "android.theme.customization.color_both";
++    private static final String KEY_TIMESTAMP = "_applied_timestamp";
 +
 +    @Override
 +    protected int getPreferenceScreenResId() {
@@ -213,8 +235,77 @@ index 0000000000000000000000000000000000000000
 +        return SettingsEnums.SETTINGS_SYSTEM_CATEGORY;
 +    }
 +
++    @Override
++    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
++        super.onCreatePreferences(savedInstanceState, rootKey);
++        ListPreference palette = findPreference(KEY_MONET_PALETTE);
++        if (palette != null) {
++            palette.setOnPreferenceChangeListener((preference, newValue) ->
++                    applyPalette((String) newValue));
++        }
++    }
++
++    private boolean applyPalette(String palette) {
++        final String existing = Settings.Secure.getString(
++                requireContext().getContentResolver(),
++                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES);
++        final JSONObject overlays;
++        try {
++            overlays = existing == null ? new JSONObject() : new JSONObject(existing);
++            final Integer seedColor = getSeedColor(palette);
++            if (seedColor == null) {
++                return false;
++            }
++
++            if ("system".equals(palette)) {
++                // Restore wallpaper-derived colors without disturbing unrelated overlay settings.
++                overlays.remove(KEY_SYSTEM_PALETTE);
++                overlays.remove(KEY_ACCENT_COLOR);
++                overlays.remove(KEY_COLOR_SOURCE);
++                overlays.remove(KEY_COLOR_BOTH);
++            } else {
++                final String color = String.format(Locale.ROOT, "%06X",
++                        seedColor.intValue() & 0xFFFFFF);
++                overlays.put(KEY_SYSTEM_PALETTE, color);
++                overlays.put(KEY_ACCENT_COLOR, color);
++                overlays.put(KEY_COLOR_SOURCE, "preset");
++                overlays.put(KEY_COLOR_BOTH, "1");
++            }
++            overlays.put(KEY_TIMESTAMP, System.currentTimeMillis());
++            return Settings.Secure.putString(
++                    requireContext().getContentResolver(),
++                    Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES,
++                    overlays.toString());
++        } catch (JSONException | SecurityException e) {
++            Log.e(TAG, "Unable to apply RichardOS color palette", e);
++            return false;
++        }
++    }
++
++    private Integer getSeedColor(String palette) {
++        switch (palette) {
++            case "system":
++                return 0;
++            case "ocean":
++                return 0xFF3978C6;
++            case "sage":
++                return 0xFF66856A;
++            case "orchid":
++                return 0xFF9865B5;
++            case "ember":
++                return 0xFFC66A35;
++            case "graphite":
++                return 0xFF747985;
++            case "rose":
++                return 0xFFCA6685;
++            default:
++                return null;
++        }
++    }
++
 +    public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
 +            new BaseSearchIndexProvider(R.xml.richardos_dashboard);
 +}
++
 -- 
 2.43.0
