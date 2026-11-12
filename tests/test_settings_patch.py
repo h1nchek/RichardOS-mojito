@@ -39,6 +39,26 @@ class RichardOSSettingsPatchTests(unittest.TestCase):
             statusbar,
         )
 
+    def test_status_bar_fragment_uses_lineage_sdk_settings(self):
+        self.assertIn(
+            "LineageSettings.System.STATUS_BAR_BATTERY_STYLE",
+            self.patch,
+        )
+        self.assertIn(
+            "LineageSettings.System.STATUS_BAR_SHOW_BATTERY_PERCENT",
+            self.patch,
+        )
+        self.assertIn(
+            "import lineageos.providers.LineageSettings;",
+            self.patch,
+        )
+
+    def test_lock_screen_entry_targets_existing_settings_fragment(self):
+        self.assertIn(
+            "com.android.settings.notification.LockScreenNotificationsPreferencePageFragment",
+            self.patch,
+        )
+
     def test_unified_diff_hunk_line_counts_are_consistent(self):
         lines = self.patch.splitlines()
         hunk_re = re.compile(
