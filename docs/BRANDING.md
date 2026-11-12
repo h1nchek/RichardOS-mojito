@@ -38,10 +38,10 @@ LineageOS sources directly:
   `ro.richardos.*` identity properties while preserving the `lineage_mojito`
   lunch product name and the real Redmi Note 10 model identity.
 - `vendor/richardos/overlay/frameworks/base/core/res/res/values/colors.xml`
-  supplies warm-gold Material You accent palettes for light and dark themes.
+  supplies warm-gold Material You accent palettes for light and dark themes. The system-branding installer registers `vendor/richardos/overlay` through `PRODUCT_PACKAGE_OVERLAYS` so the SetupWizard and framework resources are actually included in resource merging.
   Neutral surfaces remain Android-controlled; wallpaper-based dynamic color
   selection may still replace the base palette.
-- `vendor/richardos/overlay/packages/apps/Contacts/res/values/colors.xml`
+- `vendor/richardos/overlay/packages/apps/SetupWizard/res/values/strings.xml` changes the verified LineageOS 24 welcome title template to `Welcome to RichardOS`, renames the setup app and feature page, and preserves the existing wizard flow. Its `colors.xml` overrides verified SetupWizard accent, footer-button, and finish-arrow resources with RichardOS gold.\n- `vendor/richardos/overlay/packages/apps/Contacts/res/values/colors.xml`
   applies RichardOS gold to the Contacts app's verified primary/action-bar and
   floating-action-button accent resources. Other apps continue to consume the
   shared Android dynamic palette where supported.
@@ -92,5 +92,5 @@ separate wallpaper application.
 
 The lion and three wallpaper masters are committed as original RichardOS
 branding source assets. Automated default-wallpaper overlay installation is provided, but it has not
-been run against a complete Android checkout or verified in a build. Settings integration, Material You palette overlay, boot-animation generator, and WallpaperPicker2 partner APK are source-level additions. None has been compiled or tested on a device.
+been run against a complete Android checkout or verified in a build. Settings integration, SetupWizard/Contacts resource overlays, Material You palette overlay, boot-animation generator, and WallpaperPicker2 partner APK are source-level additions. None has been compiled or tested on a device.
 No compiled ROM branding is claimed yet.
