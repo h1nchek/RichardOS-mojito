@@ -42,6 +42,16 @@ def main() -> int:
     selinux = read(base / "core/java/android/os/SELinux.java", failures)
     properties = read(base / "core/java/android/os/SystemProperties.java", failures)
 
+    system_dashboard = read(
+        settings / "src/com/android/settings/system/SystemDashboardFragment.java",
+        failures,
+    )
+    require(
+        system_dashboard,
+        r"SettingsEnums\\.SETTINGS_SYSTEM_CATEGORY",
+        "SettingsEnums.SETTINGS_SYSTEM_CATEGORY used by upstream Settings",
+        failures,
+    )
     require(
         secure_settings,
         r"THEME_CUSTOMIZATION_OVERLAY_PACKAGES",
