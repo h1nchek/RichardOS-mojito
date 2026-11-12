@@ -80,7 +80,7 @@ def main() -> int:
     )
     require(
         properties,
-        r"get\s*\(\s*String\s+key\s*,\s*String\s+def\s*\)",
+        r"get\s*\(\s*(?:@[A-Za-z0-9_]+(?:\([^)]*\))?\s+)*String\s+key\s*,\s*(?:@[A-Za-z0-9_]+(?:\([^)]*\))?\s+)*String\s+def\s*\)",
         "SystemProperties.get(String, String)",
         failures,
     )
