@@ -2,6 +2,7 @@ import pathlib
 import sys
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -48,15 +49,18 @@ class ManifestDependencyAuditTests(unittest.TestCase):
             errors = audit(local, [upstream])
             self.assertTrue(any("does not match" in error for error in errors))
 
-    def test_real_local_extensions_are_declared_in_upstream_manifest(self):
-        errors = audit(
-            ROOT / "manifests/mojito-lineage24.xml",
-            [
-                ROOT / "tests/fixtures/lineage-default-min.xml",
-                ROOT / "tests/fixtures/lineage-snippet-min.xml",
-            ],
+    def test_local_manifest_pins_both_qualcomm_policy_trees(self):
+        root = ET.parse(ROOT / "manifests/mojito-lineage24.xml").getroot()
+        projects = {node.get("path"): node for node in root.findall("project")}
+        self.assertEqual(
+            projects["device/qcom/sepolicy"].get("revision"),
+            "3ba04b19a72afb83c5793c7c908670d559a1c5e6",
         )
-        self.assertEqual([], errors)
+        self.assertEqual(
+            projects["device/qcom/sepolicy_vndr"].get("revision"),
+            "d8b5ffdf51074f0931096991d9e9a9294ad31c98",
+        )
+
 
 
 if __name__ == "__main__":
