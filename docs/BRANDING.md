@@ -41,6 +41,10 @@ LineageOS sources directly:
   supplies warm-gold Material You accent palettes for light and dark themes.
   Neutral surfaces remain Android-controlled; wallpaper-based dynamic color
   selection may still replace the base palette.
+- `vendor/richardos/overlay/packages/apps/Contacts/res/values/colors.xml`
+  applies RichardOS gold to the Contacts app's verified primary/action-bar and
+  floating-action-button accent resources. Other apps continue to consume the
+  shared Android dynamic palette where supported.
 - `scripts/install-system-branding.sh` generates a subtle 24-frame lion
   boot animation at 1080×2400, installs the framework palette overlay, and
   registers the product identity and boot animation in the mojito product
