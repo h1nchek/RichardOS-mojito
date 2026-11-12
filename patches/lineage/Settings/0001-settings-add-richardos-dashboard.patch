@@ -113,10 +113,10 @@ index 0000000000000000000000000000000000000000
 +            android:title="@string/richardos_root_title"
 +            android:summary="@string/richardos_root_summary" />
 +        <Preference
++            android:fragment="com.android.settings.notification.LockScreenNotificationsPreferencePageFragment"
 +            android:key="richardos_lockscreen"
 +            android:title="@string/richardos_lockscreen_title"
-+            android:summary="@string/richardos_lockscreen_summary"
-+            android:selectable="false" />
++            android:summary="@string/richardos_lockscreen_summary" />
 +    </PreferenceCategory>
 +</PreferenceScreen>
 diff --git a/res/values/richardos_arrays.xml b/res/values/richardos_arrays.xml
