@@ -1,6 +1,6 @@
 # Redmi Note 10 (mojito) — device source notes
 
-Last reviewed: 2026-11-09. These are source-level observations only. No successful full build or physical-device boot test is recorded.
+Last reviewed: 2026-11-12. These are source-level observations only. No successful full build or physical-device boot test is recorded.
 
 ## Candidate source set
 
@@ -14,7 +14,7 @@ The local manifest pins these candidate repositories to immutable revisions reso
 | `vendor/xiaomi/mojito` | [android_vendor_xiaomi_mojito](https://github.com/ximi-mojito/android_vendor_xiaomi_mojito) | `ef30fe68e01b` |
 | `vendor/xiaomi/sm6150-common` | [android_vendor_xiaomi_sm6150-common](https://github.com/ximi-mojito/android_vendor_xiaomi_sm6150-common) | `b6f3a74a9288` |
 
-The manifest also selects LineageOS Xiaomi hardware and Google/Qualcomm dependencies needed by the device trees.
+The manifest also selects LineageOS Xiaomi hardware and Google/Qualcomm dependencies needed by the device trees. It explicitly pins both Qualcomm policy projects at `device/qcom/sepolicy` and `device/qcom/sepolicy_vndr` to the `lineage-24.0-legacy-um` source line. The common SM6150 BoardConfig includes `device/qcom/sepolicy_vndr/SEPolicy.mk`, and that file imports the QSSI policy tree from `device/qcom/sepolicy`; neither dependency is supplied by the base LineageOS manifest, so both must be present in the local manifest.
 
 ## Makefile relationships reviewed
 
@@ -40,7 +40,7 @@ The device repositories' `17.0` branch names are not proof of compatibility with
 
 ## Required validation
 
-1. Complete a fresh `repo sync` using the local manifest.
+1. Confirm the local manifest includes the Qualcomm QSSI and vendor policy trees, then complete a fresh `repo sync`.
 2. Run vendor blob, VINTF, and Soong dependency audits against the actual checkout.
 3. Complete a clean full LineageOS baseline build.
 4. Inspect the generated package and verify its SHA-256.
