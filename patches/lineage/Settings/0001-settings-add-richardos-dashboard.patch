@@ -14,8 +14,8 @@ res/drawable/ic_richardos_lion.xml | 10 ++++++++++
 res/xml/richardos_dashboard.xml | 35 +++++++++++++++++++++++++++++++++++
 res/values/richardos_arrays.xml | 22 ++++++++++++++++++++++
 res/values/richardos_strings.xml | 15 +++++++++++++++
-src/com/android/settings/richardos/RichardOSDashboardFragment.java | 50 ++++++++++++++++++++++++++++++++++++++++ -
- 7 files changed, 147 insertions(+), 0 deletions(-)
+src/com/android/settings/richardos/RichardOSDashboardFragment.java | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 7 files changed, 147 insertions(+)
 diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
 index 0000000000000000000000000000000000000000..0000000000000000000000000000000000000000 100644
 --- a/src/com/android/settings/core/gateway/SettingsGateway.java
