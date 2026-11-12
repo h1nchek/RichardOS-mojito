@@ -49,7 +49,13 @@ The inherited source manifest pins candidate device, kernel, and vendor reposito
 - `tests/` — unit tests for the helper scripts.
 - `docs/` — device-source notes, design specification, branding guide, and project documentation.
 - `vendor/richardos/config/` — RichardOS product branding layer for integration into the mojito product makefile.
-- `vendor/richardos/branding/` — approved lion mark and original wallpaper SVG masters.\n- `scripts/render-wallpapers.sh` — render wallpaper masters to 1440×3200 PNG files for review.\n- `scripts/install-wallpaper-overlay.sh` — install Nocturne as the framework default wallpaper overlay in a synced mojito checkout.
+- `vendor/richardos/branding/` — approved lion mark and original wallpaper SVG masters.
+- `vendor/richardos/overlay/` — warm-gold Material You palette overlay.
+- `vendor/richardos/wallpapers/` — WallpaperPicker2 partner APK source.
+- `scripts/render-wallpapers.sh` — render wallpaper masters to PNG previews.
+- `scripts/install-system-branding.sh` — install product identity, palette, and generated lion boot animation.
+- `scripts/install-wallpaper-overlay.sh` — install Nocturne as the framework default wallpaper.
+- `scripts/install-wallpaper-picker.sh` — add all three wallpapers to WallpaperPicker2.
 - `patches/lineage/Settings/` — native Settings integration patch for LineageOS 24.0.
 
 ## Current roadmap
