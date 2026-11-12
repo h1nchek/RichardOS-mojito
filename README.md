@@ -72,7 +72,7 @@ After syncing the target Settings repository on the `lineage-24.0` branch, apply
 bash scripts/apply-settings-patch.sh /path/to/lineage/packages/apps/Settings
 ```
 
-The helper checks the repository remote, branch, and working-tree cleanliness, then runs `git apply --check` before applying. The dashboard is an in-Settings entry, not a separate application. Its sections are currently placeholders; A prototype Monet palette selector is present and persists the selected preset locally; applying colors system-wide is not implemented yet. Review the resulting diff and compile Settings before using it in a ROM.
+The helper checks the repository remote, branch, and working-tree cleanliness, then runs `git apply --check` before applying. The dashboard is an in-Settings entry, not a separate application. Its Status Bar, Root & System, and Lock Screen sections are placeholders. The Monet selector applies curated seed colors through Android's existing SystemUI theme customization setting and can restore wallpaper-derived colors. This has not yet been compiled or tested on-device. Review the resulting diff and compile Settings before using it in a ROM.
 
 ## Build preparation
 
