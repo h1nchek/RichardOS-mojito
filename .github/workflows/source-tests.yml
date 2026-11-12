@@ -55,7 +55,7 @@ jobs:
       - name: Audit RichardOS Android framework API
         run: |
           python3 scripts/audit_settings_integration.py \
-            upstream/Settings upstream/frameworks_base \\
+            upstream/Settings upstream/frameworks_base \
             patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch
 
       - name: Check RichardOS patch applicability
