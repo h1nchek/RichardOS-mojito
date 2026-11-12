@@ -43,7 +43,11 @@ PY
 rm -f "$DEST/part0/"*.png
 for svg in "$DEST/frames/"*.svg; do
     name="$(basename "$svg" .svg)"
-    if command -v rsvg-convert >/dev/null 2>&1; then\n        rsvg-convert --width 1080 --height 2400 --output "$DEST/part0/$name.png" "$svg"\n    else\n        inkscape "$svg" --export-type=png --export-filename="$DEST/part0/$name.png" --export-width=1080 --export-height=2400 >/dev/null\n    fi
+    if command -v rsvg-convert >/dev/null 2>&1; then
+        rsvg-convert --width 1080 --height 2400 --output "$DEST/part0/$name.png" "$svg"
+    else
+        inkscape "$svg" --export-type=png --export-filename="$DEST/part0/$name.png" --export-width=1080 --export-height=2400 >/dev/null
+    fi
 done
 printf '1080 2400 30\np 0 0 part0\n' > "$DEST/desc.txt"
 (
