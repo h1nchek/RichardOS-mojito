@@ -98,7 +98,7 @@ they do not replace Android resource compilation or a full ROM build.
 
 ## Build preparation
 
-A Linux x86_64 build host is required. Android builds are large; plan for at least 32 GB RAM and roughly 350 GB of free SSD space.
+A Linux x86_64 build host is required. Plan for at least 8 CPU threads, 32 GB RAM, and 350 GB of free SSD space before sync (80 GB after sync). `scripts/check-build-host.sh` performs a read-only preflight before either build stage.
 
 Install the Android `repo` tool and required build dependencies, then run:
 
