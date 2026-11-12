@@ -27,15 +27,30 @@ Recommended placements:
 - Settings branding and About screen;
 - project channel and repository artwork;
 - wallpapers and release graphics;
-- boot animation and boot splash (separate implementation work).
+- system accent palette and boot animation.
 
-## Build branding
+## System-wide identity
 
-Product-level Android branding lives in `vendor/richardos/config/branding.mk`.
-It is intentionally isolated from upstream LineageOS files. The device product
-makefile must include it after the platform product configuration. That include
-has not yet been applied because the exact synced device-tree makefile and
-include order have not been validated.
+The branding layer is kept in RichardOS-owned files rather than editing upstream
+LineageOS sources directly:
+
+- `vendor/richardos/config/branding.mk` sets the RichardOS product brand and
+  `ro.richardos.*` identity properties while preserving the `lineage_mojito`
+  lunch product name and the real Redmi Note 10 model identity.
+- `vendor/richardos/overlay/frameworks/base/core/res/res/values/colors.xml`
+  supplies warm-gold Material You accent palettes for light and dark themes.
+  Neutral surfaces remain Android-controlled; wallpaper-based dynamic color
+  selection may still replace the base palette.
+- `scripts/install-system-branding.sh` generates a subtle 24-frame lion
+  boot animation at 1080×2400, installs the framework palette overlay, and
+  registers the product identity and boot animation in the mojito product
+  makefile.
+
+The installer checks for the expected mojito product target and requires
+`rsvg-convert` and `zip`. It appends a RichardOS-owned block to the product
+makefile; review that diff before building. The script has not yet been run in a
+complete Android checkout, and the animation has not been rendered or tested
+on a phone.
 
 ## Original wallpaper artwork
 
@@ -73,5 +88,5 @@ separate wallpaper application.
 
 The lion and three wallpaper masters are committed as original RichardOS
 branding source assets. Automated default-wallpaper overlay installation is provided, but it has not
-been run against a complete Android checkout or verified in a build. Settings integration and boot animation branding remain pending. The WallpaperPicker2 partner APK and installer are source-level additions and have not been built or tested.
+been run against a complete Android checkout or verified in a build. Settings integration, Material You palette overlay, boot-animation generator, and WallpaperPicker2 partner APK are source-level additions. None has been compiled or tested on a device.
 No compiled ROM branding is claimed yet.
