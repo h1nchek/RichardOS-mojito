@@ -45,7 +45,8 @@ The inherited source manifest pins candidate device, kernel, and vendor reposito
 - `manifests/` — local Android repo manifests.
 - `scripts/` — source audits, guarded device-tree fix, and build helper.
 - `tests/` — unit tests for the helper scripts.
-- `docs/` — device-source notes, design specification, and project documentation.
+- `docs/` — device-source notes, design specification, branding guide, and project documentation.
+- `vendor/richardos/config/` — RichardOS product branding layer for integration into the mojito product makefile.
 
 ## Current roadmap
 
