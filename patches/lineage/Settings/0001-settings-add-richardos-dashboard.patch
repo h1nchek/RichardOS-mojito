@@ -58,7 +58,8 @@ index 93f4c9fa963499f92b3a0f984459394b50bfc081..00000000000000000000000000000000
 +    </PreferenceCategory>
  
      <PreferenceCategory
-         android:order="-140"diff --git a/res/drawable/ic_richardos_lion.xml b/res/drawable/ic_richardos_lion.xml
+         android:order="-140"
+diff --git a/res/drawable/ic_richardos_lion.xml b/res/drawable/ic_richardos_lion.xml
 new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
