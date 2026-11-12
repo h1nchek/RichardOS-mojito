@@ -4,6 +4,9 @@
     <string name="os_name" translatable="false">RichardOS</string>
     <string name="setup_welcome_message">Welcome to <xliff:g id="name" example="RichardOS">%1$s</xliff:g></string>
     <string name="setup_services">RichardOS features</string>
+    <string name="services_pp_explanation">These services extend the capabilities of your device. Diagnostic data, if enabled, is handled according to the linked privacy policy.</string>
+    <string name="services_help_improve_cm">Help improve <xliff:g id="name" example="RichardOS">%s</xliff:g></string>
+    <string name="services_metrics_label"><xliff:g id="name" example="Help improve RichardOS">%1$s</xliff:g> by automatically sending diagnostic and usage data to <xliff:g id="name" example="RichardOS">%2$s</xliff:g>. This information helps improve reliability, performance, battery life, and future features.</string>
     <string name="richardos_logo_description">RichardOS lion emblem</string>
 
     <!-- Navigation page -->
