@@ -26,6 +26,7 @@ ANDROID_DIR="$(realpath -m "$ANDROID_DIR")"
 [[ -f "$ANDROID_DIR/device/qcom/sepolicy_vndr/SEPolicy.mk" ]] || fail "Missing Qualcomm vendor sepolicy tree (device/qcom/sepolicy_vndr)."
 [[ -f "$ANDROID_DIR/device/lineage/sepolicy/libion/sepolicy.mk" ]] || fail "Missing LineageOS libion sepolicy integration."
 [[ -f "$ANDROID_DIR/device/lineage/sepolicy/libperfmgr/sepolicy.mk" ]] || fail "Missing LineageOS libperfmgr sepolicy integration."
+bash "$ROOT/scripts/check-build-host.sh" post-sync "$ANDROID_DIR"
 
 AVAILABLE_GB="$(df -BG "$ANDROID_DIR" | awk 'NR==2 {gsub(/G/,"",$4); print $4}')"
 [[ -n "$AVAILABLE_GB" ]] || fail "Could not determine free disk space."
