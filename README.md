@@ -72,7 +72,7 @@ After syncing the target Settings repository on the `lineage-24.0` branch, apply
 bash scripts/apply-settings-patch.sh /path/to/lineage/packages/apps/Settings
 ```
 
-The helper checks the repository remote, branch, and working-tree cleanliness, then runs `git apply --check` before applying. The dashboard is an in-Settings entry, not a separate application. Its Status Bar and Lock Screen sections are placeholders; Root & System contains read-only device/security diagnostics. The Monet selector applies curated seed colors through Android's existing SystemUI theme customization setting and can restore wallpaper-derived colors. This has not yet been compiled or tested on-device. Review the resulting diff and compile Settings before using it in a ROM.
+The helper checks the repository remote, branch, and working-tree cleanliness, then runs `git apply --check` before applying. The dashboard is an in-Settings entry, not a separate application. Its Status Bar section contains Lineage battery controls, Lock Screen links to native lock-screen notification settings, and Root & System contains read-only device/security diagnostics. The Monet selector applies curated seed colors through Android's existing SystemUI theme customization setting and can restore wallpaper-derived colors. This has not yet been compiled or tested on-device. Review the resulting diff and compile Settings before using it in a ROM.
 
 ## Build preparation
 
