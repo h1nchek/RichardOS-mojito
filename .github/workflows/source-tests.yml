@@ -34,9 +34,9 @@ jobs:
 
       - name: Audit device manifest dependencies
         run: |
-          python3 scripts/audit_manifest_dependencies.py \\
-            manifests/mojito-lineage24.xml \\
-            upstream/manifest/default.xml \\
+          python3 scripts/audit_manifest_dependencies.py \
+            manifests/mojito-lineage24.xml \
+            upstream/manifest/default.xml \
             upstream/manifest/snippets/lineage.xml
 
       - name: Run unit tests
