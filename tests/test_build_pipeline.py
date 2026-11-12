@@ -20,6 +20,17 @@ class RichardOSBuildPipelineTests(unittest.TestCase):
         self.assertLess(patch, build)
         self.assertIn('git -C "$ANDROID_DIR/packages/apps/Settings" diff --check', script)
 
+    def test_both_stages_run_the_read_only_host_preflight(self):
+        baseline = (ROOT / "scripts/build-baseline.sh").read_text()
+        custom = (ROOT / "scripts/build.sh").read_text()
+        host = (ROOT / "scripts/check-build-host.sh").read_text()
+        self.assertIn("check-build-host.sh\" post-sync", baseline)
+        self.assertIn("check-build-host.sh\" pre-sync", custom)
+        self.assertIn("MIN_FREE_GB=350", host)
+        self.assertIn("MIN_FREE_GB=80", host)
+        self.assertIn("CPUS >= 8", host)
+        self.assertIn("MEMORY_GB >= 32", host)
+
     def test_first_build_documentation_keeps_two_stages_separate(self):
         doc = (ROOT / "docs/FIRST_BUILD.md").read_text()
         self.assertIn("build-baseline.sh", doc)
