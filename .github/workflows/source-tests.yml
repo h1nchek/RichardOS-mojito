@@ -34,7 +34,10 @@ jobs:
 
       - name: Check RichardOS patch applicability
         run: |
-          git -C upstream/Settings apply --check "$GITHUB_WORKSPACE/patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch"
+          PATCH="$GITHUB_WORKSPACE/patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch"
+          git -C upstream/Settings apply --check "$PATCH"
+          git -C upstream/Settings apply "$PATCH"
+          git -C upstream/Settings diff --check
 
       - name: Compile Python scripts
         run: python3 -m compileall -q scripts tests
