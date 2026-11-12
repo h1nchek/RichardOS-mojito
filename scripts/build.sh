@@ -60,4 +60,4 @@ repo manifest -r -o "$ROOT/resolved-manifest-richardos.xml"
 source build/envsetup.sh
 breakfast mojito
 m bacon -j"$JOBS"
-echo "Baseline build completed. Inspect the output, verify ZIP and SHA-256, then arrange physical-device testing."
+echo "RichardOS build completed. Inspect the output, verify ZIP and SHA-256, then arrange physical-device testing."
