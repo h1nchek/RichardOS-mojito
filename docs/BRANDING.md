@@ -57,14 +57,21 @@ overlay and register `vendor/richardos/overlay` in the mojito product makefile.
 The script checks that the supplied makefile declares `lineage_mojito` and is
 idempotent. Review the resulting PNG and makefile diff before building.
 
-This installs Nocturne as the framework's default wallpaper resource; it does
-not add a multi-wallpaper picker. Eclipse and Aurum remain artwork masters for
-a later wallpaper picker integration.
+This installs Nocturne as the framework's default wallpaper resource. For the
+three-image WallpaperPicker2 collection, use
+`scripts/install-wallpaper-picker.sh /path/to/android/source`. That helper
+copies the partner APK source into the Android tree, renders all three full-size
+PNGs and thumbnails, and adds `RichardOSWallpapers` to the mojito product
+packages. WallpaperPicker2 discovers the package through its partner-customization
+broadcast receiver and reads the `partner_wallpapers` resource array.
+
+The picker integration is based on the LineageOS 24.0 WallpaperPicker2 legacy
+partner-resource contract. It does not replace WallpaperPicker2 or add a
+separate wallpaper application.
 
 ## Integration status
 
 The lion and three wallpaper masters are committed as original RichardOS
 branding source assets. Automated default-wallpaper overlay installation is provided, but it has not
-been run against a complete Android checkout or verified in a build. Settings
-integration, a multi-wallpaper picker, and boot animation branding remain pending.
+been run against a complete Android checkout or verified in a build. Settings integration and boot animation branding remain pending. The WallpaperPicker2 partner APK and installer are source-level additions and have not been built or tested.
 No compiled ROM branding is claimed yet.
