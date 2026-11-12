@@ -30,7 +30,7 @@ def main() -> int:
     failed = False
     for name in CONSTANTS:
         declaration = re.compile(
-            rf"public\\s+static\\s+final\\s+String\\s+{name}\\s*="
+            rf"public\s+static\s+final\s+String\s+{name}\s*="
         )
         if not declaration.search(sdk):
             print(f"missing Lineage SDK declaration: {name}", file=sys.stderr)
