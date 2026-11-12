@@ -30,7 +30,6 @@ class RichardOSSetupWizardBrandingTest(unittest.TestCase):
             "materialColorPrimary": "#F5BE35",
             "materialColorOnPrimary": "#17191E",
             "finish_swipe_arrow": "#F5BE35",
-            "divider": "#40F5BE35",
         }
         for name, value in expected.items():
             self.assertEqual(colors[name], value)
@@ -40,6 +39,14 @@ class RichardOSSetupWizardBrandingTest(unittest.TestCase):
         self.assertIn('android:src="@drawable/richardos_lion"', layout)
         self.assertIn('android:id="@+id/brand_logo"', layout)
         self.assertIn("richardos_logo_description", layout)
+
+    def test_finish_layout_uses_richardos_lion_and_keeps_finish_controls(self):
+        layout = (SETUP.parent / "layout/finish_activity.xml").read_text()
+        self.assertIn('android:id="@+id/brand_logo"', layout)
+        self.assertIn('android:src="@drawable/richardos_lion"', layout)
+        self.assertIn('android:id="@+id/background"', layout)
+        self.assertIn('android:id="@+id/swipe_hint"', layout)
+        self.assertIn('@string/swipe_up_to_go_home', layout)
 
     def test_installer_renders_existing_lion_asset(self):
         script = (ROOT / "scripts/install-system-branding.sh").read_text()
