@@ -10,7 +10,7 @@ if [[ -z "$SETTINGS_DIR" ]]; then
     exit 2
 fi
 
-if [[ ! -d "$SETTINGS_DIR/.git" ]]; then
+if [[ ! -e "$SETTINGS_DIR/.git" ]]; then
     echo "Error: not a Git checkout: $SETTINGS_DIR" >&2
     exit 2
 fi
