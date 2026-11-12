@@ -27,6 +27,7 @@ def main() -> int:
     parser.add_argument("settings_root", type=pathlib.Path)
     parser.add_argument("frameworks_base_root", type=pathlib.Path)
     parser.add_argument("settings_patch", type=pathlib.Path)
+    parser.add_argument("lineage_sdk_source", type=pathlib.Path)
     args = parser.parse_args()
 
     settings = args.settings_root
@@ -41,6 +42,7 @@ def main() -> int:
     )
     selinux = read(base / "core/java/android/os/SELinux.java", failures)
     properties = read(base / "core/java/android/os/SystemProperties.java", failures)
+    lineage_sdk = read(args.lineage_sdk_source, failures)
 
     system_dashboard = read(
         settings / "src/com/android/settings/system/SystemDashboardFragment.java",
@@ -80,6 +82,19 @@ def main() -> int:
         properties,
         r"get\s*\(\s*String\s+key\s*,\s*String\s+def\s*\)",
         "SystemProperties.get(String, String)",
+        failures,
+    )
+
+    require(
+        lineage_sdk,
+        r"public\s+static\s+int\s+getInt\s*\(\s*ContentResolver\s+cr\s*,\s*String\s+name\s*,\s*int\s+def\s*\)",
+        "LineageSettings.System.getInt(ContentResolver, String, int)",
+        failures,
+    )
+    require(
+        lineage_sdk,
+        r"public\s+static\s+boolean\s+putInt\s*\(\s*ContentResolver\s+cr\s*,\s*String\s+name\s*,\s*int\s+value\s*\)",
+        "LineageSettings.System.putInt(ContentResolver, String, int)",
         failures,
     )
 
