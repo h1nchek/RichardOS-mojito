@@ -32,6 +32,13 @@ jobs:
           ref: lineage-24.0
           path: upstream/Settings
 
+      - name: Check out LineageOS framework target
+        uses: actions/checkout@v5
+        with:
+          repository: LineageOS/android_frameworks_base
+          ref: lineage-24.0
+          path: upstream/frameworks_base
+
       - name: Check out LineageOS SDK target
         uses: actions/checkout@v5
         with:
@@ -44,6 +51,11 @@ jobs:
           python3 scripts/audit_lineage_settings_api.py \
             upstream/lineage-sdk/sdk/src/java/lineageos/providers/LineageSettings.java \
             patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch
+
+      - name: Audit RichardOS Android framework API
+        run: |
+          python3 scripts/audit_settings_integration.py \\
+            upstream/Settings upstream/frameworks_base
 
       - name: Check RichardOS patch applicability
         run: |
