@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="vendor/richardos/branding/richardos-lion.svg" alt="RichardOS lion emblem" width="180" />
+
 # RichardOS
 
 **A LineageOS-based Android operating system for Xiaomi Redmi Note 10**
@@ -47,6 +49,7 @@ The inherited source manifest pins candidate device, kernel, and vendor reposito
 - `tests/` — unit tests for the helper scripts.
 - `docs/` — device-source notes, design specification, branding guide, and project documentation.
 - `vendor/richardos/config/` — RichardOS product branding layer for integration into the mojito product makefile.
+- `vendor/richardos/branding/` — original RichardOS logo assets.
 
 ## Current roadmap
 
@@ -58,7 +61,7 @@ The inherited source manifest pins candidate device, kernel, and vendor reposito
 6. Add RichardOS applications, settings, and update infrastructure.
 7. Publish reproducible builds, checksums, changelogs, and known issues.
 
-The initial interface and feature direction is documented in [RICHARDOS_DESIGN.md](docs/RICHARDOS_DESIGN.md).
+The initial interface and feature direction is documented in [RICHARDOS_DESIGN.md](docs/RICHARDOS_DESIGN.md). The lion mark and palette are documented in [BRANDING.md](docs/BRANDING.md).
 
 ## Build preparation
 
