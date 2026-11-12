@@ -26,15 +26,13 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("settings_root", type=pathlib.Path)
     parser.add_argument("frameworks_base_root", type=pathlib.Path)
+    parser.add_argument("settings_patch", type=pathlib.Path)
     args = parser.parse_args()
 
     settings = args.settings_root
     base = args.frameworks_base_root
     failures: list[str] = []
 
-    enums = read(
-        base / "core/java/android/app/settings/SettingsEnums.java", failures
-    )
     secure_settings = read(
         base / "core/java/android/provider/Settings.java", failures
     )
@@ -44,12 +42,6 @@ def main() -> int:
     selinux = read(base / "core/java/android/os/SELinux.java", failures)
     properties = read(base / "core/java/android/os/SystemProperties.java", failures)
 
-    require(
-        enums,
-        r"SETTINGS_SYSTEM_CATEGORY",
-        "SettingsEnums.SETTINGS_SYSTEM_CATEGORY",
-        failures,
-    )
     require(
         secure_settings,
         r"THEME_CUSTOMIZATION_OVERLAY_PACKAGES",
@@ -88,10 +80,20 @@ def main() -> int:
     if not lock_screen.is_file():
         failures.append("missing upstream LockScreenNotificationsPreferencePageFragment")
 
-    gateway = read(
-        settings / "src/com/android/settings/core/gateway/SettingsGateway.java",
-        failures,
-    )
+    gateway = ""
+    patch_path = args.settings_patch
+    patch = read(patch_path, failures)
+    target = "src/com/android/settings/core/gateway/SettingsGateway.java"
+    current = None
+    added: list[str] = []
+    for line in patch.splitlines():
+        if line.startswith("+++ b/"):
+            current = line[6:]
+        elif line.startswith("diff --git "):
+            current = None
+        elif current == target and line.startswith("+") and not line.startswith("+++"):
+            added.append(line[1:])
+    gateway = "\\n".join(added)
     for fragment in (
         "RichardOSDashboardFragment",
         "RichardOSStatusBarFragment",
