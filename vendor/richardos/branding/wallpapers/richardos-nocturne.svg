@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="3200" viewBox="0 0 1440 3200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#090B10"/><stop offset=".55" stop-color="#171A22"/><stop offset="1" stop-color="#302516"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#F5BE35" stop-opacity=".26"/><stop offset="1" stop-color="#F5BE35" stop-opacity="0"/></radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FFE6A0"/><stop offset=".5" stop-color="#F5BE35"/><stop offset="1" stop-color="#A86B16"/></linearGradient>
+  </defs>
+  <rect width="1440" height="3200" fill="url(#bg)"/>
+  <circle cx="1110" cy="930" r="850" fill="url(#glow)"/>
+  <path d="M-160 2180C260 1740 470 1940 790 1600s500-420 850-280v1880H-160Z" fill="#F5BE35" opacity=".055"/>
+  <path d="M-180 2470C230 2070 510 2250 820 1920s480-390 820-270" fill="none" stroke="url(#gold)" stroke-width="3" opacity=".42"/>
+  <path d="M-120 2600C260 2220 550 2390 850 2070s470-370 800-250" fill="none" stroke="#F5BE35" stroke-width="1.5" opacity=".22"/>
+  <circle cx="1110" cy="930" r="510" fill="none" stroke="#F5BE35" stroke-width="2" opacity=".18"/>
+  <circle cx="1110" cy="930" r="610" fill="none" stroke="#F5BE35" stroke-width="1" opacity=".1"/>
+  <g fill="#F5BE35" opacity=".72"><circle cx="270" cy="720" r="3"/><circle cx="390" cy="1010" r="2"/><circle cx="1080" cy="420" r="3"/><circle cx="1210" cy="1390" r="2"/><circle cx="520" cy="1560" r="2"/></g>
+  <text x="112" y="2890" fill="#F5BE35" font-family="sans-serif" font-size="34" letter-spacing="12">RICHARDOS</text>
+  <text x="114" y="2950" fill="#D7D1C4" opacity=".65" font-family="sans-serif" font-size="19" letter-spacing="5">YOUR ANDROID. YOUR RULES.</text>
+</svg>
