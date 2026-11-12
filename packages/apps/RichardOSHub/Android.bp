@@ -1,0 +1,9 @@
+android_app {
+    name: "RichardOSHub",
+    manifest: "AndroidManifest.xml",
+    srcs: ["src/**/*.java"],
+    platform_apis: true,
+    certificate: "platform",
+    privileged: true,
+    system_ext_specific: true,
+}
