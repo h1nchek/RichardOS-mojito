@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RichardOS Setup</string>
+    <string name="os_name" translatable="false">RichardOS</string>
+    <string name="setup_welcome_message">Welcome to <xliff:g id="name" example="RichardOS">%1$s</xliff:g></string>
+    <string name="setup_services">RichardOS features</string>
+</resources>
