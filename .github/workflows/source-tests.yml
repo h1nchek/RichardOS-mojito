@@ -32,6 +32,19 @@ jobs:
           ref: lineage-24.0
           path: upstream/Settings
 
+      - name: Check out LineageOS SDK target
+        uses: actions/checkout@v5
+        with:
+          repository: LineageOS/android_lineage-sdk
+          ref: lineage-24.0
+          path: upstream/lineage-sdk
+
+      - name: Audit RichardOS Lineage settings API
+        run: |
+          python3 scripts/audit_lineage_settings_api.py \
+            upstream/lineage-sdk/sdk/src/java/lineageos/providers/LineageSettings.java \
+            patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch
+
       - name: Check RichardOS patch applicability
         run: |
           PATCH="$GITHUB_WORKSPACE/patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch"
