@@ -37,5 +37,26 @@ makefile must include it after the platform product configuration. That include
 has not yet been applied because the exact synced device-tree makefile and
 include order have not been validated.
 
-The SVG asset is now committed, but it is not yet wired into Android resources,
-Settings, or the boot animation. No compiled ROM branding is claimed yet.
+## Original wallpaper artwork
+
+Three original portrait wallpaper masters are committed under
+`vendor/richardos/branding/wallpapers/`:
+
+- `richardos-nocturne.svg` — graphite night gradient, gold orbit and flowing lines.
+- `richardos-eclipse.svg` — dark eclipse with a warm gold rim.
+- `richardos-aurum.svg` — angular gold geometry on graphite.
+
+Each master is 1440×3200 SVG source artwork. Render PNG previews with
+`bash scripts/render-wallpapers.sh`; the script uses `rsvg-convert` or
+Inkscape. Review the rendered images on the target device before shipping them.
+
+Android's default wallpaper pipeline expects raster assets. These SVG masters
+are not yet installed as system wallpapers and are not wired into a device
+resource overlay or Settings wallpaper picker.
+
+## Integration status
+
+The lion and three wallpaper masters are committed as original RichardOS
+branding source assets. Product makefile integration, raster wallpaper
+packaging, Settings integration, and boot animation branding remain pending.
+No compiled ROM branding is claimed yet.
