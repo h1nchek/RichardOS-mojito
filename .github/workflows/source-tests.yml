@@ -39,6 +39,9 @@ jobs:
             upstream/manifest/default.xml \
             upstream/manifest/snippets/lineage.xml
 
+      - name: Validate experimental GSI metadata
+        run: python3 scripts/check-gsi-config.py
+
       - name: Run unit tests
         run: python3 -m unittest discover -s tests -v
 
