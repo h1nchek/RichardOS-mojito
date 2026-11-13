@@ -98,5 +98,14 @@ class RichardOSSettingsPatchTests(unittest.TestCase):
         self.assertGreater(checked, 0)
 
 
+    def test_palette_choices_follow_richardos_graphite_and_gold_identity(self):
+        self.assertIn("return 0xFFF5BE35;", self.patch)
+        self.assertIn('case "graphite":', self.patch)
+        self.assertIn("return 0xFF343840;", self.patch)
+        self.assertIn('<item>RichardOS Gold</item>', self.patch)
+        self.assertNotIn('case "ocean":', self.patch)
+        self.assertNotIn('case "orchid":', self.patch)
+
+
 if __name__ == "__main__":
     unittest.main()
