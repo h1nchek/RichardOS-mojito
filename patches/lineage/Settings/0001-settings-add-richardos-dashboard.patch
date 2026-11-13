@@ -208,7 +208,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/src/com/android/settings/richardos/RichardOSDashboardFragment.java
-@@ -0,0 +1,139 @@
+@@ -0,0 +1,166 @@
 +/*
 + * Copyright (C) 2026 RichardOS
 + *
@@ -281,8 +281,41 @@ index 0000000000000000000000000000000000000000
 +        super.onCreatePreferences(savedInstanceState, rootKey);
 +        ListPreference palette = findPreference(KEY_MONET_PALETTE);
 +        if (palette != null) {
++            palette.setValue(getCurrentPalette());
 +            palette.setOnPreferenceChangeListener((preference, newValue) ->
 +                    applyPalette((String) newValue));
++        }
++    }
++
++    /**
++     * Restore the currently selected RichardOS preset when Settings is reopened.
++     * Unknown or wallpaper-derived colors are represented as the system default.
++     */
++    private String getCurrentPalette() {
++        final String existing = Settings.Secure.getString(
++                requireContext().getContentResolver(),
++                Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES);
++        if (existing == null) {
++            return "system";
++        }
++        try {
++            final JSONObject overlays = new JSONObject(existing);
++            final String color = overlays.optString(KEY_SYSTEM_PALETTE, "");
++            if (color.isEmpty()) {
++                return "system";
++            }
++            switch (color.toUpperCase(Locale.ROOT)) {
++                case "F5BE35": return "gold";
++                case "343840": return "graphite";
++                case "D6A52F": return "gold_dim";
++                case "24272D": return "graphite_dark";
++                case "E8C66A": return "gold_soft";
++                case "FFD65A": return "gold_contrast";
++                default: return "system";
++            }
++        } catch (JSONException e) {
++            Log.w(TAG, "Unable to read current RichardOS palette", e);
++            return "system";
 +        }
 +    }
 +
