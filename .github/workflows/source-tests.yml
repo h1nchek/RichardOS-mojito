@@ -94,6 +94,7 @@ jobs:
           path: upstream/frameworks_av
           sparse-checkout: |
             camera/CameraParameters.cpp
+            media/libmedia/MediaProfiles.cpp
           sparse-checkout-cone-mode: false
 
       - name: Check generic camera parameter null guard patch
