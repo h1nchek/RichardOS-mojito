@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "project": "RichardOS Experimental GSI",
+  "status": "preparation",
+  "platform": {
+    "name": "LineageOS",
+    "branch": "lineage-24.0"
+  },
+  "target": {
+    "name": "gsi_arm64",
+    "product_definition": "device/generic/common/gsi_arm64.mk",
+    "architecture": "arm64",
+    "binder_bitness": 64,
+    "variant": "userdebug",
+    "lunch_alias": "unverified"
+  },
+  "device_specific": false,
+  "image_built": false,
+  "device_tested": false
+}
