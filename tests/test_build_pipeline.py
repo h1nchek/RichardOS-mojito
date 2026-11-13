@@ -31,6 +31,18 @@ class RichardOSBuildPipelineTests(unittest.TestCase):
         self.assertIn("CPUS >= 8", host)
         self.assertIn("MEMORY_GB >= 32", host)
 
+    def test_dependency_preflight_is_read_only_and_wired_into_both_build_stages(self):
+        deps = (ROOT / "scripts/check-build-deps.sh").read_text()
+        baseline = (ROOT / "scripts/build-baseline.sh").read_text()
+        custom = (ROOT / "scripts/build.sh").read_text()
+        self.assertIn("dpkg-query", deps)
+        self.assertIn("lib32readline-dev", deps)
+        self.assertIn("python3-protobuf", deps)
+        self.assertIn("librsvg2-bin", deps)
+        self.assertIn("check-build-deps.sh", baseline)
+        self.assertIn("check-build-deps.sh", custom)
+        self.assertNotIn("apt-get install", deps.split("Suggested install command")[0])
+
     def test_first_build_documentation_keeps_two_stages_separate(self):
         doc = (ROOT / "docs/FIRST_BUILD.md").read_text()
         self.assertIn("build-baseline.sh", doc)
