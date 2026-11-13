@@ -176,14 +176,14 @@ index 0000000000000000000000000000000000000000
 +    <string name="richardos_monet_title">Monet &amp; Themes</string>
 +    <string name="richardos_monet_summary">Choose a system color palette inspired by Material You.</string>
 +    <string name="richardos_statusbar_title">Status Bar &amp; Quick Settings</string>
-+    <string name="richardos_statusbar_summary">Customize battery indicators and status bar behavior.</string>
++    <string name="richardos_statusbar_summary">Customize the battery icon style and percentage display.</string>
 +    <string name="richardos_statusbar_battery_category">Battery indicator</string>
 +    <string name="richardos_statusbar_battery_style">Battery icon style</string>
 +    <string name="richardos_statusbar_battery_percent">Battery percentage</string>
 +    <string name="richardos_statusbar_qs_category">Quick Settings</string>
 +    <string name="richardos_statusbar_qs_hint">Add, remove, or rearrange tiles directly from the Quick Settings panel.</string>
-+    <string name="richardos_root_title">Root &amp; System</string>
-+    <string name="richardos_root_summary">Device information, security status, and boot verification</string>
++    <string name="richardos_root_title">Device &amp; Security</string>
++    <string name="richardos_root_summary">Device information, security state, and boot verification</string>
 +    <string name="richardos_root_device_category">Device</string>
 +    <string name="richardos_root_android">Android version</string>
 +    <string name="richardos_root_build">Build number</string>
@@ -201,7 +201,7 @@ index 0000000000000000000000000000000000000000
 +    <string name="richardos_root_bootloader">Bootloader</string>
 +    <string name="richardos_root_root_status">Root status</string>
 +    <string name="richardos_lockscreen_title">Lock Screen</string>
-+    <string name="richardos_lockscreen_summary">Clock and privacy options — coming soon</string>
++    <string name="richardos_lockscreen_summary">Manage lock-screen notification visibility and privacy.</string>
 +</resources>
 diff --git a/src/com/android/settings/richardos/RichardOSDashboardFragment.java b/src/com/android/settings/richardos/RichardOSDashboardFragment.java
 new file mode 100644
