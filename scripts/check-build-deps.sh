@@ -43,7 +43,7 @@ missing_tools=()
 for tool in repo python3 git sha256sum; do
   command -v "$tool" >/dev/null 2>&1 || missing_tools+=("$tool")
 done
-if ! command -v rsvg-convert >/dev/null 2>&1 && ! command -v inkscape >/dev/null 2>&1; then
+if [[ "$MODE" == full ]] && ! command -v rsvg-convert >/dev/null 2>&1 && ! command -v inkscape >/dev/null 2>&1; then
   missing_tools+=("rsvg-convert (package: librsvg2-bin) or inkscape")
   missing+=(librsvg2-bin)
 fi
