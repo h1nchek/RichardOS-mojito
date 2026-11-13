@@ -1,0 +1,53 @@
+name: RichardOS GSI bug report
+description: Report an issue against a verified RichardOS GSI build
+title: "[GSI bug]: "
+labels: ["gsi", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submit reports only for a named, verified test build. Remove personal information from logs and screenshots. Do not include IMEI, serial numbers, phone numbers, account details or precise location.
+  - type: input
+    id: build
+    attributes:
+      label: RichardOS build ID
+      placeholder: "Unknown / not yet published"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Exact device model and codename
+    validations:
+      required: true
+  - type: input
+    id: android
+    attributes:
+      label: Android and vendor build version
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction details and frequency
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted logs or screenshots
+      description: Remove all personal identifiers before attaching anything.
+    validations:
+      required: false
