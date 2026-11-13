@@ -1,40 +1,37 @@
-# RichardOS GSI — tester intake
+# RichardOS 0.9.0 GSI — tester intake
 
-This page is for collecting compatibility information. It is **not** an installation guide. No RichardOS GSI build is currently available.
+This page collects compatibility information for the experimental 0.9.0 GSI track. **No installable RichardOS image is available yet.** This is not an installation guide.
 
-## Before accepting a device
+## Device information
 
-Record the following without asking testers to change device security settings:
+Record only information needed to assess compatibility:
 
 - Manufacturer and exact model number
-- Device codename, if already known
-- Current Android version
-- Current vendor/build version (from Settings)
-- CPU/userspace architecture, if known
+- Device codename, if known
+- Android version and current vendor build version
+- CPU/userspace architecture, if already known
 - Whether the manufacturer documents Project Treble support
-- Whether the device is a spare test device or a daily-use device
+- Whether this is a spare test device (not a daily-use phone)
 
-A 64-bit processor by itself is not enough. GSI compatibility depends on Treble implementation, vendor interface compatibility, partition layout and other device-specific details. Mark unknown values as **unknown**; do not guess.
+Mark unknown values as unknown; do not guess. A 64-bit processor alone does not establish GSI compatibility.
 
 ## Test stages
 
-- **Stage 0 — intake:** collect device details only.
-- **Stage 1 — compatibility review:** maintainers assess whether the device is a plausible candidate.
-- **Stage 2 — internal validation:** maintainers verify a build and its release notes before any wider testing.
-- **Stage 3 — limited feedback:** testers report only against a named build and checksum.
+- Stage 0 — interest and intake: collect device details only.
+- Stage 1 — compatibility review: maintainers assess the device as a possible candidate.
+- Stage 2 — internal validation: maintainers verify an actual build and its release notes.
+- Stage 3 — limited pre-release feedback: testers report against a named 0.9.0-pre.N build and checksum, once one exists.
 
-Do not ask testers to unlock, erase, modify or flash a phone as part of this intake. Never describe an unbuilt image as ready. Early testing carries a real risk of data loss or device failure, so any future real-device testing needs informed adult oversight, a spare device and a device-specific recovery plan.
+Do not ask testers to change device security settings, erase data or modify their phones during intake. Any future real-device test needs informed adult oversight and a device-specific recovery plan.
 
 ## Bug report checklist
 
-Include:
-- RichardOS build ID and checksum (if a verified build exists)
+- Exact RichardOS build identifier and checksum (once published)
 - Exact device model/codename
 - Android and vendor build versions
-- Expected behaviour
-- Actual behaviour
+- Expected behaviour and actual behaviour
 - Reproduction frequency
-- Relevant screenshot or redacted log excerpt
+- Screenshot or redacted log excerpt
 
 Remove phone numbers, account names, email addresses, serial numbers, IMEI, precise location and other personal identifiers before sharing logs.
 
@@ -42,5 +39,5 @@ Remove phone numbers, account names, email addresses, serial numbers, IMEI, prec
 
 - A GSI does not include every manufacturer's hardware customization.
 - Camera, fingerprint, NFC, mobile data, VoLTE, audio and sensors may vary by device.
-- One device passing a test does not prove compatibility with another device of the same brand.
-- No bug should be marked fixed until the fix is present in a named build and verified.
+- One device passing a test does not prove compatibility with another device.
+- A bug is not fixed until the fix is present in a named build and verified.
