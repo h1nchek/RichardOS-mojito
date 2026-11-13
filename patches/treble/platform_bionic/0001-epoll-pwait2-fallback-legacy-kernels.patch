@@ -1,0 +1,44 @@
+From 1d8d4f5b545dc7846574bb6437b0528e3f4e1bbe Mon Sep 17 00:00:00 2001
+From: "Christopher A. Williamson" <contact@chrisaw.io>
+Date: Thu, 12 Mar 2026 00:27:03 +0000
+Subject: [PATCH] bionic: fall back from epoll_pwait2 on older kernels
+
+Source: cawilliamson/treble_restlessos, android-17.0
+Upstream commit: 1d8d4f5b545dc7846574bb6437b0528e3f4e1bbe
+License/provenance: RestlessOS repository declares its patch/build system Apache-2.0;
+the original author and source are retained here for attribution.
+
+The epoll_pwait2 syscall is unavailable on Linux kernels older than 5.11.
+On ENOSYS, fall back to epoll_pwait so callers do not receive an unexpected
+syscall error on older vendor kernels. Millisecond timeout precision is the
+documented trade-off in the upstream patch.
+
+---
+ libc/bionic/sys_epoll.cpp | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/libc/bionic/sys_epoll.cpp b/libc/bionic/sys_epoll.cpp
+index be97818..d3d841e 100644
+--- a/libc/bionic/sys_epoll.cpp
++++ b/libc/bionic/sys_epoll.cpp
+@@ -80,7 +80,17 @@ int epoll_pwait2_64(int fd, epoll_event* events, int max_events, const timespec*
+     kts_ptr = &kts;
+   }
+ #endif
+-  return __epoll_pwait2(fd, events, max_events, kts_ptr, ss, sizeof(*ss));
++  int result = __epoll_pwait2(fd, events, max_events, kts_ptr, ss, sizeof(*ss));
++  if (result == -1 && errno == ENOSYS) {
++    // Fall back to epoll_pwait for kernels that don't support epoll_pwait2 (< 5.11).
++    // The only loss is timeout precision (milliseconds instead of nanoseconds).
++    int timeout_ms = -1;
++    if (timeout) {
++      timeout_ms = static_cast<int>(timeout->tv_sec * 1000 + timeout->tv_nsec / 1000000);
++    }
++    result = __epoll_pwait(fd, events, max_events, timeout_ms, ss, sizeof(*ss));
++  }
++  return result;
+ }
+ 
+ int epoll_wait(int fd, struct epoll_event* events, int max_events, int timeout) {
+-- 
+2.55.0
