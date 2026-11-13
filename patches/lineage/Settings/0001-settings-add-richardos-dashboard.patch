@@ -208,7 +208,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/src/com/android/settings/richardos/RichardOSDashboardFragment.java
-@@ -0,0 +1,166 @@
+@@ -0,0 +1,168 @@
 +/*
 + * Copyright (C) 2026 RichardOS
 + *
@@ -300,7 +300,10 @@ index 0000000000000000000000000000000000000000
 +        }
 +        try {
 +            final JSONObject overlays = new JSONObject(existing);
-+            final String color = overlays.optString(KEY_SYSTEM_PALETTE, "");
++            String color = overlays.optString(KEY_SYSTEM_PALETTE, "").trim();
++            if (color.startsWith("#")) {
++                color = color.substring(1);
++            }
 +            if (color.isEmpty()) {
 +                return "system";
 +            }
