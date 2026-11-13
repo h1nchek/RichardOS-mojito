@@ -61,8 +61,13 @@ class RichardOSBuildPipelineTests(unittest.TestCase):
             product.write_text(
                 "$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)\n"
                 "$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_system.mk)\n"
+                "$(call inherit-product, device/generic/common/gsi_system_ext.mk)\n"
+                "$(call inherit-product, device/generic/common/gsi_product.mk)\n"
+                "$(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_release.mk)\n"
                 "PRODUCT_NAME := gsi_arm64\n"
-                "PRODUCT_DEVICE := generic_arm64\n",
+                "PRODUCT_DEVICE := generic_arm64\n"
+                "PRODUCT_SOONG_DEFINED_SYSTEM_IMAGE := android_gsi\n"
+                "USE_SOONG_DEFINED_SYSTEM_IMAGE := true\n",
                 encoding="utf-8",
             )
             result = subprocess.run(
