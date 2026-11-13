@@ -70,6 +70,11 @@ class RichardOSSettingsPatchTests(unittest.TestCase):
         self.assertNotIn('overlays.put(KEY_ACCENT_COLOR, color)', self.patch)
         self.assertIn('overlays.remove(KEY_THEME_STYLE)', self.patch)
 
+    def test_palette_parser_normalizes_android_seed_color_format(self):
+        self.assertIn('overlays.optString(KEY_SYSTEM_PALETTE, "").trim()', self.patch)
+        self.assertIn('color.startsWith("#")', self.patch)
+        self.assertIn('color.substring(1)', self.patch)
+
     def test_palette_selection_is_restored_from_secure_theme_state(self):
         self.assertIn('palette.setValue(getCurrentPalette())', self.patch)
         self.assertIn('Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES', self.patch)
