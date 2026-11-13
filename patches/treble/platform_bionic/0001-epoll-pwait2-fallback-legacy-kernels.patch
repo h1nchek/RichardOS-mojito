@@ -14,14 +14,14 @@ syscall error on older vendor kernels. Millisecond timeout precision is the
 documented trade-off in the upstream patch.
 
 ---
- libc/bionic/sys_epoll.cpp | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ libc/bionic/sys_epoll.cpp | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
 diff --git a/libc/bionic/sys_epoll.cpp b/libc/bionic/sys_epoll.cpp
 index be97818..d3d841e 100644
 --- a/libc/bionic/sys_epoll.cpp
 +++ b/libc/bionic/sys_epoll.cpp
-@@ -80,7 +80,17 @@ int epoll_pwait2_64(int fd, epoll_event* events, int max_events, const timespec*
+@@ -80,7 +80,27 @@ int epoll_pwait2_64(int fd, epoll_event* events, int max_events, const timespec*
      kts_ptr = &kts;
    }
  #endif
