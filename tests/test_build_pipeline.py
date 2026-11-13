@@ -51,6 +51,33 @@ class RichardOSBuildPipelineTests(unittest.TestCase):
         self.assertIn("scripts/build.sh", doc)
         self.assertIn("does **not** apply RichardOS branding", doc)
 
+    def test_gsi_checker_validates_upstream_product_definition(self):
+        import subprocess
+        import tempfile
+
+        checker = ROOT / "scripts/check-gsi-config.py"
+        with tempfile.TemporaryDirectory() as directory:
+            product = pathlib.Path(directory) / "gsi_arm64.mk"
+            product.write_text(
+                "$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)\n"
+                "$(call inherit-product, $(SRC_TARGET_DIR)/product/generic_system.mk)\n"
+                "PRODUCT_NAME := gsi_arm64\n"
+                "PRODUCT_DEVICE := generic_arm64\n",
+                encoding="utf-8",
+            )
+            result = subprocess.run(
+                ["python3", str(checker), str(product)],
+                capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            product.write_text("PRODUCT_NAME := wrong_target\n", encoding="utf-8")
+            result = subprocess.run(
+                ["python3", str(checker), str(product)],
+                capture_output=True, text=True, check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("PRODUCT_NAME", result.stderr)
+
     def test_experimental_gsi_metadata_is_explicitly_unbuilt(self):
         import json
         config = json.loads((ROOT / "gsi/targets.json").read_text())
