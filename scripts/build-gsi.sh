@@ -32,7 +32,8 @@ done
 apply_patch_once() {
   local project="$1"
   local patch="$2"
-  [[ -d "$project/.git" && -f "$patch" ]] || fail "missing source checkout or patch: $project / $patch"
+  git -C "$project" rev-parse --git-dir >/dev/null 2>&1 || fail "missing Git checkout: $project"
+  [[ -f "$patch" ]] || fail "missing patch file: $patch"
   if git -C "$project" apply --check "$patch"; then
     git -C "$project" apply "$patch"
     echo "Applied: $patch"
