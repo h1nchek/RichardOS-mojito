@@ -13,6 +13,7 @@ CONFIG = ROOT / "gsi" / "targets.json"
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("upstream_product", nargs="?", type=Path)
+    parser.add_argument("--repo-root", type=Path, default=ROOT)
     args = parser.parse_args()
 
     try:
@@ -41,6 +42,22 @@ def main() -> int:
     ])
     errors = [message for passed, message in checks if not passed]
 
+    # Keep the generic GSI source set independent from the separate Xiaomi port.
+    gsi_root = args.repo_root / "gsi"
+    forbidden = re.compile(r"(?i)(?:mojito|sm6150|xiaomi)")
+    if gsi_root.is_dir():
+        for source in sorted(gsi_root.rglob("*")):
+            if source.is_file() and source.suffix.lower() in {".json", ".mk", ".bp", ".mk", ".xml", ".sh", ".py", ".md"}:
+                try:
+                    contents = source.read_text(encoding="utf-8")
+                except (OSError, UnicodeError) as exc:
+                    errors.append(f"cannot audit GSI source {source.relative_to(args.repo_root)}: {exc}")
+                    continue
+                if forbidden.search(contents):
+                    errors.append(f"GSI source {source.relative_to(args.repo_root)} contains Xiaomi mojito-specific references")
+    else:
+        errors.append("GSI source directory is missing")
+
     if args.upstream_product:
         try:
             product = args.upstream_product.read_text(encoding="utf-8")
@@ -66,7 +83,7 @@ def main() -> int:
             print(f"ERROR: {error}", file=sys.stderr)
         return 1
     suffix = " and upstream product definition" if args.upstream_product else ""
-    print(f"GSI metadata{suffix} valid; build and device testing remain unclaimed.")
+    print(f"GSI metadata{suffix} and source separation valid; build and device testing remain unclaimed.")
     return 0
 
 
