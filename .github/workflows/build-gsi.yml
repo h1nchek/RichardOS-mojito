@@ -1,0 +1,47 @@
+name: RichardOS GSI build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-gsi:
+    # Android source builds need a dedicated Linux runner with substantial RAM and disk.
+    runs-on: [self-hosted, linux, x64, android-build]
+    timeout-minutes: 360
+    steps:
+      - name: Check out RichardOS build scripts
+        uses: actions/checkout@v5
+        with:
+          path: RichardOS
+
+      - name: Validate build host and source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f build/envsetup.sh
+          test -f device/generic/common/gsi_arm64.mk
+          free_gb="$(df -BG . | awk 'NR==2 {gsub(/G/, "", $4); print $4}')"
+          echo "Free disk: ${free_gb} GiB"
+          if (( free_gb < 180 )); then
+            echo "ERROR: at least 180 GiB free disk is required for this build job." >&2
+            exit 2
+          fi
+
+      - name: Build ARM64 GSI
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash RichardOS/scripts/build-gsi.sh
+
+      - name: Upload GSI image and checksum
+        uses: actions/upload-artifact@v4
+        with:
+          name: RichardOS-0.9.0-pre-gsi-arm64
+          path: |
+            out/target/product/generic_arm64/system.img
+            out/target/product/generic_arm64/system.img.sha256
+          if-no-files-found: error
+          retention-days: 7
