@@ -69,6 +69,23 @@ jobs:
           git -C upstream/system_netd apply --check "$PATCH"
           git -C upstream/system_netd apply "$PATCH"
           git -C upstream/system_netd diff --check
+      - name: Check out LineageOS bionic target
+        uses: actions/checkout@v5
+        with:
+          repository: LineageOS/android_bionic
+          ref: lineage-24.0
+          path: upstream/bionic
+          sparse-checkout: |
+            libc/bionic/sys_epoll.cpp
+          sparse-checkout-cone-mode: false
+
+      - name: Check Android 17 legacy-kernel epoll fallback patch
+        run: |
+          PATCH="$GITHUB_WORKSPACE/patches/treble/platform_bionic/0001-epoll-pwait2-fallback-legacy-kernels.patch"
+          git -C upstream/bionic apply --check "$PATCH"
+          git -C upstream/bionic apply "$PATCH"
+          git -C upstream/bionic diff --check
+
       - name: Check out LineageOS Settings target
         uses: actions/checkout@v5
         with:
