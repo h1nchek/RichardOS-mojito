@@ -56,6 +56,19 @@ jobs:
         run: python3 -m unittest discover -s tests -v
 
 
+      - name: Check out LineageOS netd target
+        uses: actions/checkout@v5
+        with:
+          repository: LineageOS/android_system_netd
+          ref: lineage-24.0
+          path: upstream/system_netd
+
+      - name: Check Android 17 GSI netd compatibility patch
+        run: |
+          PATCH="$GITHUB_WORKSPACE/patches/treble/platform_system_netd/0001-netd-legacy-kernel-oneshot-nonfatal.patch"
+          git -C upstream/system_netd apply --check "$PATCH"
+          git -C upstream/system_netd apply "$PATCH"
+          git -C upstream/system_netd diff --check
       - name: Check out LineageOS Settings target
         uses: actions/checkout@v5
         with:
