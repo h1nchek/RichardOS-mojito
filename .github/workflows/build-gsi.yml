@@ -8,6 +8,8 @@ permissions:
 
 jobs:
   build-gsi:
+    env:
+      ANDROID_BUILD_TOP: ${{ vars.ANDROID_BUILD_TOP }}
     # Android source builds need a dedicated Linux runner with substantial RAM and disk.
     runs-on: [self-hosted, linux, x64, android-build]
     timeout-minutes: 360
@@ -21,6 +23,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          : "${ANDROID_BUILD_TOP:?Set the repository Actions variable ANDROID_BUILD_TOP to the absolute path of the pre-synced LineageOS 24.0 source tree on the self-hosted runner}"
+          cd "$ANDROID_BUILD_TOP"
           test -f build/envsetup.sh
           test -f device/generic/common/gsi_arm64.mk
           test -d .repo
@@ -37,8 +41,7 @@ jobs:
       - name: Build ARM64 GSI
         shell: bash
         env:
-          ANDROID_BUILD_TOP: ${{ github.workspace }}
-          OUT_DIR: ${{ github.workspace }}/out
+          OUT_DIR: ${{ vars.ANDROID_BUILD_TOP }}/out
         run: |
           set -euo pipefail
           bash RichardOS/scripts/build-gsi.sh
@@ -48,7 +51,7 @@ jobs:
         with:
           name: RichardOS-0.9.0-pre-gsi-arm64
           path: |
-            out/target/product/generic_arm64/system.img
-            out/target/product/generic_arm64/system.img.sha256
+            ${{ vars.ANDROID_BUILD_TOP }}/out/target/product/generic_arm64/system.img
+            ${{ vars.ANDROID_BUILD_TOP }}/out/target/product/generic_arm64/system.img.sha256
           if-no-files-found: error
           retention-days: 7
