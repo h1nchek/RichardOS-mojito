@@ -13,13 +13,13 @@ failure from the pre-start check can trigger reboot_on_failure before zygote.
 
 ---
  server/main.cpp | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/server/main.cpp b/server/main.cpp
 index e84899e4..9fb09f28 100644
 --- a/server/main.cpp
 +++ b/server/main.cpp
-@@ -123,7 +123,12 @@ bool initDnsResolver() {
+@@ -123,7 +123,11 @@ bool initDnsResolver() {
  int main(const int argc, const char* argv[]) {
      if ((argc == 2) && !strcmp(argv[1], "oneshot")) {
          setenv("NETD_ONESHOT", "1", 1);
