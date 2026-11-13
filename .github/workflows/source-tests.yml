@@ -86,6 +86,23 @@ jobs:
           git -C upstream/bionic apply "$PATCH"
           git -C upstream/bionic diff --check
 
+      - name: Check out LineageOS frameworks_av target
+        uses: actions/checkout@v5
+        with:
+          repository: LineageOS/android_frameworks_av
+          ref: lineage-24.0
+          path: upstream/frameworks_av
+          sparse-checkout: |
+            camera/CameraParameters.cpp
+          sparse-checkout-cone-mode: false
+
+      - name: Check generic camera parameter null guard patch
+        run: |
+          PATCH="$GITHUB_WORKSPACE/patches/treble/platform_frameworks_av/0001-camera-parameters-null-guard.patch"
+          git -C upstream/frameworks_av apply --check "$PATCH"
+          git -C upstream/frameworks_av apply "$PATCH"
+          git -C upstream/frameworks_av diff --check
+
       - name: Check out LineageOS Settings target
         uses: actions/checkout@v5
         with:
