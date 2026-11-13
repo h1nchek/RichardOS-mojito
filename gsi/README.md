@@ -1,42 +1,52 @@
 # RichardOS Experimental GSI
 
+**Release track: 0.9.0 pre-release**  
 **Status: preparation only — no image has been built or validated.**
 
-RichardOS is prioritizing an experimental ARM64 Generic System Image (GSI) for compatibility research and controlled tester feedback. The existing Redmi Note 10 (`mojito`) device port remains separate and is not the GSI target.
+RichardOS 0.9.0 is the experimental GSI track. Its purpose is to establish the shared system experience, collect compatibility feedback and fix issues before the first stable release. It is not the finished RichardOS operating system.
+
+The Redmi Note 10 (mojito) device port is intentionally deferred to the **1.0.0 stable release**. Do not merge device-specific Xiaomi configuration into the generic GSI target.
+
+## Release policy
+
+- **0.9.0 pre-release:** experimental GSI development, compatibility research, tester feedback and bug fixing.
+- **1.0.0 stable:** planned stable milestone. The separate mojito port is planned for this release cycle, subject to build and device validation.
+- Pre-release builds, if and when produced, must use explicit identifiers such as 0.9.0-pre.1; do not label an unbuilt artifact as a release.
+- No public binary is available yet. This repository currently contains preparation files only.
 
 ## Initial target
 
-- Platform branch: LineageOS `lineage-24.0`
+- Platform branch: LineageOS lineage-24.0
 - Architecture: ARM64 userspace, 64-bit Binder
-- Upstream product definition: `device/generic/common/gsi_arm64.mk`
-- Expected output class: generic ARM64 system image
-- Build variant intended for development validation: `userdebug`
+- Upstream product definition: device/generic/common/gsi_arm64.mk
+- Intended development variant: userdebug
 
-The LineageOS 24.0 generic device tree currently contains `gsi_arm64.mk`. The exact lunch alias and complete build integration must be confirmed from a synced source tree before attempting a build; this repository deliberately does not invent a product makefile or fork upstream GSI definitions.
+The LineageOS 24.0 generic device tree contains the ARM64 GSI product definition. The exact lunch alias and build integration must be confirmed against the complete synced source tree before a build is attempted. The repository does not invent or replace upstream product definitions.
 
 ## Design boundary
 
-The GSI supplies the Android system side. Each phone still relies on its own compatible vendor implementation, firmware, kernel and device configuration. ARM64 alone does not establish compatibility. A device must meet Android Treble/GSI requirements and be assessed individually.
+The GSI provides the Android system side. Each phone still relies on its own compatible vendor implementation, firmware, kernel and device configuration. ARM64 alone does not establish compatibility. Treble support, vendor compatibility and device-specific constraints must be assessed individually.
 
-RichardOS-specific changes should be layered onto the generic product only after the unmodified upstream GSI target is confirmed to build. Keep device-specific Xiaomi files out of the generic target.
+RichardOS features should be integrated incrementally on top of a verified generic baseline. Keep device-specific Xiaomi files out of the generic target.
 
-## Milestones
+## 0.9.0 milestones
 
-1. **Repository preparation** — target metadata, compatibility intake and issue templates.
-2. **Source validation** — sync the intended LineageOS branch and confirm the GSI product and lunch alias.
-3. **Baseline build** — build an unmodified generic ARM64 GSI in a suitable development environment.
-4. **RichardOS integration** — add shared branding and Settings changes incrementally, with CI checks.
-5. **Internal validation** — inspect build output and test in a controlled environment before recruiting device testers.
-6. **Limited tester programme** — publish only a verified build, checksums, known issues and clear risk information.
+1. Repository preparation — target metadata, compatibility intake and issue templates.
+2. Source validation — confirm the upstream product definition and exact build target.
+3. Baseline validation — build an unmodified generic ARM64 image in a suitable development environment.
+4. RichardOS integration — add shared branding and Settings changes incrementally.
+5. Internal quality checks — review build-critical configuration, build output, known issues and release notes.
+6. Pre-release candidate — only after a real artifact exists, publish its checksum and exact limitations for controlled testing.
+7. Tester feedback — triage reports and publish fixes as new pre-release versions.
 
 ## Tester safety and reporting
 
-Do not distribute an unbuilt, unverified or experimental image as ready to install. GSI testing can cause data loss or leave a device unusable. No universal installation procedure applies to every phone; device-specific eligibility and recovery planning must be reviewed by a knowledgeable adult before any real-device test. Do not use a daily-use phone or any device containing important data as an early test device.
+Do not distribute an unbuilt, unverified or experimental image as ready to install. GSI testing can cause data loss or leave a device unusable. Device compatibility and recovery planning must be reviewed before any real-device test. Do not use a daily-use phone or a device containing important data as an early test device.
 
-Use the [GSI compatibility intake](GSI_TESTING.md) and [bug report template](../.github/ISSUE_TEMPLATE/gsi_bug_report.yml) to collect model, Android/vendor version, observed behaviour and logs with personal information removed.
+Use the GSI compatibility intake (GSI_TESTING.md) and bug report template. Remove personal information from logs and screenshots.
 
 ## Upstream references
 
-- [LineageOS generic device tree, lineage-24.0](https://github.com/LineageOS/android_device_generic_common/tree/lineage-24.0)
-- [LineageOS ARM64 GSI product definition](https://github.com/LineageOS/android_device_generic_common/blob/lineage-24.0/gsi_arm64.mk)
-- [Android GSI overview and compatibility requirements](https://source.android.com/docs/core/tests/vts/gsi)
+- https://github.com/LineageOS/android_device_generic_common/tree/lineage-24.0
+- https://github.com/LineageOS/android_device_generic_common/blob/lineage-24.0/gsi_arm64.mk
+- https://developer.android.com/topic/generic-system-image
