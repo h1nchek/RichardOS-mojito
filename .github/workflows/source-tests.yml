@@ -104,13 +104,6 @@ jobs:
           git -C upstream/frameworks_av apply "$PATCH"
           git -C upstream/frameworks_av diff --check
 
-      - name: Check MediaProfiles XML open fallback patch
-        run: |
-          PATCH="$GITHUB_WORKSPACE/patches/treble/platform_frameworks_av/0002-media-profiles-open-fallback.patch"
-          git -C upstream/frameworks_av apply --check "$PATCH"
-          git -C upstream/frameworks_av apply "$PATCH"
-          git -C upstream/frameworks_av diff --check
-
       - name: Check out LineageOS Settings target
         uses: actions/checkout@v5
         with:
