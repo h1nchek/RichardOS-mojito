@@ -52,6 +52,11 @@ def main() -> int:
                 (r"(?m)^PRODUCT_DEVICE\s*:=\s*generic_arm64\s*$", "upstream PRODUCT_DEVICE is not generic_arm64"),
                 (r"core_64_bit\.mk", "upstream product does not inherit core_64_bit.mk"),
                 (r"generic_system\.mk", "upstream product does not inherit generic_system.mk"),
+                (r"gsi_system_ext\.mk", "upstream product does not inherit gsi_system_ext.mk"),
+                (r"gsi_product\.mk", "upstream product does not inherit gsi_product.mk"),
+                (r"gsi_release\.mk", "upstream product does not inherit gsi_release.mk"),
+                (r"(?m)^PRODUCT_SOONG_DEFINED_SYSTEM_IMAGE\s*:=\s*android_gsi\s*$", "upstream system image definition is not android_gsi"),
+                (r"(?m)^USE_SOONG_DEFINED_SYSTEM_IMAGE\s*:=\s*true\s*$", "upstream product does not enable the Soong-defined system image"),
             ]:
                 if not re.search(expression, product):
                     errors.append(message)
