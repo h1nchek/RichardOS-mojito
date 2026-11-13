@@ -253,8 +253,8 @@ index 0000000000000000000000000000000000000000
 +    private static final String KEY_MONET_PALETTE = "richardos_monet_palette";
 +    private static final String KEY_SYSTEM_PALETTE =
 +            "android.theme.customization.system_palette";
-+    private static final String KEY_ACCENT_COLOR =
-+            "android.theme.customization.accent_color";
++    private static final String KEY_THEME_STYLE =
++            "android.theme.customization.theme_style";
 +    private static final String KEY_COLOR_SOURCE =
 +            "android.theme.customization.color_source";
 +    private static final String KEY_COLOR_BOTH =
@@ -301,14 +301,14 @@ index 0000000000000000000000000000000000000000
 +            if ("system".equals(palette)) {
 +                // Restore wallpaper-derived colors without disturbing unrelated overlay settings.
 +                overlays.remove(KEY_SYSTEM_PALETTE);
-+                overlays.remove(KEY_ACCENT_COLOR);
++                overlays.remove(KEY_THEME_STYLE);
 +                overlays.remove(KEY_COLOR_SOURCE);
 +                overlays.remove(KEY_COLOR_BOTH);
 +            } else {
 +                final String color = String.format(Locale.ROOT, "%06X",
 +                        seedColor.intValue() & 0xFFFFFF);
 +                overlays.put(KEY_SYSTEM_PALETTE, color);
-+                overlays.put(KEY_ACCENT_COLOR, color);
++                overlays.put(KEY_THEME_STYLE, "TONAL_SPOT");
 +                overlays.put(KEY_COLOR_SOURCE, "preset");
 +                overlays.put(KEY_COLOR_BOTH, "1");
 +            }
