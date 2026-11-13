@@ -70,6 +70,12 @@ class RichardOSSettingsPatchTests(unittest.TestCase):
         self.assertNotIn('overlays.put(KEY_ACCENT_COLOR, color)', self.patch)
         self.assertIn('overlays.remove(KEY_THEME_STYLE)', self.patch)
 
+    def test_palette_selection_is_restored_from_secure_theme_state(self):
+        self.assertIn('palette.setValue(getCurrentPalette())', self.patch)
+        self.assertIn('Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES', self.patch)
+        self.assertIn('case "F5BE35": return "gold";', self.patch)
+        self.assertIn('default: return "system";', self.patch)
+
     def test_unified_diff_hunk_line_counts_are_consistent(self):
         lines = self.patch.splitlines()
         hunk_re = re.compile(
