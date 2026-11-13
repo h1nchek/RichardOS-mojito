@@ -13,7 +13,7 @@ Recommended minimum for this source set:
 - 350 GB free SSD before syncing; keep additional room for build output and caches.
 - Stable internet connection.
 - A filesystem with enough free inodes.
-- Android `repo`, Git, Python 3, Java/build dependencies required by the target LineageOS branch.
+- Android `repo`, Git, Python 3, and the build packages listed by the official LineageOS build guide for this branch.\n- `rsvg-convert` (from `librsvg2-bin`) or Inkscape for RichardOS wallpaper assets.\n\nRun `bash scripts/check-build-deps.sh` before syncing. It checks the documented Ubuntu/Debian package set and required helper tools without installing anything. If packages are missing, it prints a suggested `apt-get install` command for review; it never runs the package manager itself. The dependency list follows the [LineageOS build guide](https://wiki.lineageos.org/devices/discovery/build/).
 
 The read-only `scripts/check-build-host.sh` preflight checks Linux x86_64, at least 8 CPU threads, 32 GB RAM, and free space (350 GB before sync; 80 GB after sync). It does not install packages, modify disks, or delete files. The build helper caps parallel compilation at 8 jobs by default. Override with `JOBS=4` or another value from 1 to 8 if memory is constrained.
 
