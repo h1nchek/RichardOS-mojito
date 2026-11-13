@@ -4,7 +4,7 @@
 
 # RichardOS
 
-**A LineageOS-based Android operating system for Xiaomi Redmi Note 10**
+**A LineageOS-based Android project: experimental ARM64 GSI first, Redmi Note 10 port maintained separately**
 
 `mojito` · Snapdragon 678 · ARM64
 
@@ -18,7 +18,7 @@
 
 RichardOS is intended to become a full Android operating system with a coherent **Material You** design language, its own system applications, settings, update experience, and device-specific integration.
 
-The initial target is Xiaomi Redmi Note 10 (`mojito`). The project uses LineageOS as its Android platform foundation; it is not affiliated with LineageOS or Xiaomi.
+The current priority is an experimental ARM64 GSI for compatibility research and tester feedback. Xiaomi Redmi Note 10 (`mojito`) remains a separate device-specific port. The project uses LineageOS as its Android platform foundation; it is not affiliated with LineageOS or Xiaomi.
 
 ## Design goals
 
@@ -44,6 +44,7 @@ The inherited source manifest pins candidate device, kernel, and vendor reposito
 
 ## Repository layout
 
+- `gsi/` — experimental GSI target metadata, compatibility intake and tester guidance. No GSI image has been built yet.
 - `manifests/` — local Android repo manifests.
 - `scripts/` — source audits, guarded device-tree fix, and build helper.
 - `tests/` — unit tests for the helper scripts.
@@ -60,13 +61,12 @@ The inherited source manifest pins candidate device, kernel, and vendor reposito
 
 ## Current roadmap
 
-1. Re-audit the inherited device sources and manifest against LineageOS 24.0 / Android 17.
-2. Sync the Android platform and run static preflight checks when suitable storage is available.
-3. Build an unmodified LineageOS baseline for `mojito`.
-4. Boot-test the baseline and validate core hardware.
-5. Implement the first RichardOS SystemUI and Settings customizations.
-6. Add RichardOS applications, settings, and update infrastructure.
-7. Publish reproducible builds, checksums, changelogs, and known issues.
+1. Validate the LineageOS 24.0 generic ARM64 GSI product and exact lunch alias.
+2. Build and inspect an unmodified generic GSI baseline in a suitable development environment.
+3. Integrate RichardOS branding and Settings customizations without importing `mojito` hardware dependencies.
+4. Validate the resulting image and document known limitations before any tester release.
+5. Collect device compatibility reports through the GSI tester intake.
+6. Continue the separate Redmi Note 10 (`mojito`) port.
 
 The first clean baseline compilation procedure is documented in [FIRST_BUILD.md](docs/FIRST_BUILD.md); use `scripts/build-baseline.sh` before applying RichardOS branding or the experimental Settings patch. The initial interface and feature direction is documented in [RICHARDOS_DESIGN.md](docs/RICHARDOS_DESIGN.md). The lion mark, graphite/gold identity, original wallpaper artwork, and framework default-wallpaper overlay installer are documented in [BRANDING.md](docs/BRANDING.md). The first native Settings dashboard patch is documented in [SETTINGS_INTEGRATION.md](docs/SETTINGS_INTEGRATION.md).
 
@@ -117,3 +117,8 @@ Do not flash experimental images unless they are explicitly built for `mojito`, 
 ## Licensing
 
 Original scripts and documentation retain their applicable notices. Android platform code, LineageOS components, device trees, kernel sources, and proprietary vendor files retain their upstream licenses and redistribution restrictions. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+
+## Experimental GSI
+
+RichardOS is prioritizing the generic ARM64 GSI. See [GSI preparation](gsi/README.md) and [tester intake](gsi/GSI_TESTING.md). Repository CI validates only target metadata and source files; it does not compile Android. There is no downloadable GSI image or approved device list yet.
