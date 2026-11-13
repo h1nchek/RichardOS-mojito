@@ -39,8 +39,10 @@ class RichardOSBuildPipelineTests(unittest.TestCase):
         self.assertIn("lib32readline-dev", deps)
         self.assertIn("python3-protobuf", deps)
         self.assertIn("librsvg2-bin", deps)
-        self.assertIn("check-build-deps.sh", baseline)
-        self.assertIn("check-build-deps.sh", custom)
+        self.assertIn('check-build-deps.sh" baseline', baseline)
+        self.assertIn('check-build-deps.sh"\n', custom)
+        self.assertIn('MODE="${1:-full}"', deps)
+        self.assertIn('[[ "$MODE" == full ]]', deps)
         self.assertNotIn("apt-get install", deps.split("Suggested install command")[0])
 
     def test_first_build_documentation_keeps_two_stages_separate(self):
