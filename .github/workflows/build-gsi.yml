@@ -23,12 +23,14 @@ jobs:
           set -euo pipefail
           test -f build/envsetup.sh
           test -f device/generic/common/gsi_arm64.mk
-          free_gb="$(df -BG . | awk 'NR==2 {gsub(/G/, "", $4); print $4}')"
-          echo "Free disk: ${free_gb} GiB"
-          if (( free_gb < 180 )); then
-            echo "ERROR: at least 180 GiB free disk is required for this build job." >&2
+          cpu_count="$(nproc)"
+          mem_gib="$(awk '/MemTotal/ {print int($2/1024/1024)}' /proc/meminfo)"
+          free_gib="$(df -BG . | awk 'NR==2 {gsub(/G/, "", $4); print $4}')"
+          echo "Runner: ${cpu_count} vCPU, ${mem_gib} GiB RAM, ${free_gib} GiB free disk"
+          (( cpu_count >= 8 && mem_gib >= 28 && free_gib >= 300 )) || {
+            echo "ERROR: need at least 8 vCPU, 28 GiB RAM and 300 GiB free disk; 16 vCPU / 64 GiB / 500 GiB NVMe recommended." >&2
             exit 2
-          fi
+          }
 
       - name: Build ARM64 GSI
         shell: bash
