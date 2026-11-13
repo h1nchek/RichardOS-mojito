@@ -16,7 +16,7 @@ command -v repo >/dev/null 2>&1 || fail "Android repo tool is missing from PATH.
 command -v python3 >/dev/null 2>&1 || fail "Python 3 is required."
 command -v git >/dev/null 2>&1 || fail "git is required."
 command -v sha256sum >/dev/null 2>&1 || fail "sha256sum is required."
-bash "$ROOT/scripts/check-build-deps.sh"
+bash "$ROOT/scripts/check-build-deps.sh" baseline
 
 ANDROID_DIR="$(realpath -m "$ANDROID_DIR")"
 [[ -d "$ANDROID_DIR/.repo" ]] || fail "No repo checkout at $ANDROID_DIR. Follow docs/FIRST_BUILD.md to initialize and sync sources first."
