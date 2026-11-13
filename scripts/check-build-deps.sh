@@ -2,6 +2,12 @@
 # Read-only Ubuntu/Debian package and tool preflight for LineageOS 24 / RichardOS.
 set -Eeuo pipefail
 
+MODE="${1:-full}"
+case "$MODE" in
+  full|baseline) ;;
+  *) echo "Usage: $0 [full|baseline]" >&2; exit 2 ;;
+esac
+
 fail() { echo "ERROR: $*" >&2; exit 1; }
 command -v dpkg-query >/dev/null 2>&1 || fail "This dependency checker supports Ubuntu/Debian systems with dpkg-query."
 command -v apt-get >/dev/null 2>&1 || fail "apt-get was not found; install dependencies using your distribution's package manager and re-run."
@@ -57,5 +63,5 @@ if (( ${#missing[@]} || ${#missing_tools[@]} )); then
   exit 1
 fi
 
-echo "PASS: documented LineageOS build packages and RichardOS helper tools are present."
+echo "PASS: documented LineageOS build packages and required ${MODE} helper tools are present."
 echo "This check is read-only; it does not install or change anything."
