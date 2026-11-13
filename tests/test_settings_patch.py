@@ -64,6 +64,12 @@ class RichardOSSettingsPatchTests(unittest.TestCase):
             self.patch,
         )
 
+    def test_palette_uses_current_android_dynamic_color_contract(self):
+        self.assertIn('android.theme.customization.theme_style', self.patch)
+        self.assertIn('overlays.put(KEY_THEME_STYLE, "TONAL_SPOT")', self.patch)
+        self.assertNotIn('overlays.put(KEY_ACCENT_COLOR, color)', self.patch)
+        self.assertIn('overlays.remove(KEY_THEME_STYLE)', self.patch)
+
     def test_unified_diff_hunk_line_counts_are_consistent(self):
         lines = self.patch.splitlines()
         hunk_re = re.compile(
