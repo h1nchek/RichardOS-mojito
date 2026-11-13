@@ -110,6 +110,12 @@ class RichardOSSettingsPatchTests(unittest.TestCase):
         self.assertGreater(checked, 0)
 
 
+    def test_settings_summaries_only_promise_existing_features(self):
+        self.assertIn("Customize the battery icon style and percentage display.", self.patch)
+        self.assertIn("Manage lock-screen notification visibility and privacy.", self.patch)
+        self.assertIn("Device &amp; Security", self.patch)
+        self.assertNotIn("Clock and privacy options — coming soon", self.patch)
+
     def test_palette_choices_follow_richardos_graphite_and_gold_identity(self):
         self.assertIn("return 0xFFF5BE35;", self.patch)
         self.assertIn('case "graphite":', self.patch)
