@@ -51,6 +51,17 @@ class RichardOSBuildPipelineTests(unittest.TestCase):
         self.assertIn("scripts/build.sh", doc)
         self.assertIn("does **not** apply RichardOS branding", doc)
 
+    def test_experimental_gsi_metadata_is_explicitly_unbuilt(self):
+        import json
+        config = json.loads((ROOT / "gsi/targets.json").read_text())
+        self.assertEqual(config["target"]["name"], "gsi_arm64")
+        self.assertEqual(config["target"]["architecture"], "arm64")
+        self.assertEqual(config["target"]["binder_bitness"], 64)
+        self.assertEqual(config["target"]["lunch_alias"], "unverified")
+        self.assertFalse(config["image_built"])
+        self.assertFalse(config["device_tested"])
+        self.assertTrue((ROOT / "gsi/GSI_TESTING.md").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()
