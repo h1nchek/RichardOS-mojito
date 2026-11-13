@@ -92,7 +92,7 @@ def main() -> int:
 
     theme_contract = {
         "OVERLAY_CATEGORY_SYSTEM_PALETTE": "android.theme.customization.system_palette",
-        "OVERLAY_CATEGORY_ACCENT_COLOR": "android.theme.customization.accent_color",
+        "OVERLAY_CATEGORY_THEME_STYLE": "android.theme.customization.theme_style",
         "OVERLAY_COLOR_SOURCE": "android.theme.customization.color_source",
         "OVERLAY_COLOR_BOTH": "android.theme.customization.color_both",
         "COLOR_SOURCE_PRESET": "preset",
