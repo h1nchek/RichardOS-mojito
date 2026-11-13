@@ -25,7 +25,7 @@ printf 'Build host: %s | %s vCPU | %s GiB RAM | %s GiB free disk\n' "$arch" "$cp
 (( mem_gib >= 28 )) || fail "at least 28 GiB RAM required; 64 GiB recommended"
 (( free_gib >= 300 )) || fail "at least 300 GiB free disk required; use a 500 GiB NVMe volume"
 
-for tool in git python3 java clang lz4; do
+for tool in git python3 java make; do
   command -v "$tool" >/dev/null 2>&1 || fail "missing required host tool: $tool"
 done
 
