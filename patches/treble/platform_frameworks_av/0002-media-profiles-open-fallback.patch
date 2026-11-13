@@ -16,7 +16,7 @@ Return a recoverable failure and let getInstance() use built-in defaults.
 diff --git a/media/libmedia/MediaProfiles.cpp b/media/libmedia/MediaProfiles.cpp
 --- a/media/libmedia/MediaProfiles.cpp
 +++ b/media/libmedia/MediaProfiles.cpp
-@@ -1004,4 +1004,9 @@
+@@ -1004,5 +1004,10 @@
          } else {
              sInstance = createInstanceFromXmlFile(value);
          }
@@ -27,7 +27,7 @@ diff --git a/media/libmedia/MediaProfiles.cpp b/media/libmedia/MediaProfiles.cpp
 +        }
          CHECK(sInstance != NULL);
          sInstance->checkAndAddRequiredProfilesIfNecessary();
-@@ -1254,4 +1259,7 @@
+@@ -1245,6 +1245,7 @@
  MediaProfiles::createInstanceFromXmlFile(const char *xml)
  {
 -    FILE *fp = NULL;
