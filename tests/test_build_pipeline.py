@@ -108,6 +108,15 @@ class RichardOSBuildPipelineTests(unittest.TestCase):
             self.assertNotEqual(contaminated.returncode, 0)
             self.assertIn("Xiaomi mojito-specific", contaminated.stderr)
 
+    def test_treble_compatibility_sources_are_tracked_but_not_imported(self):
+        import json
+        catalog = json.loads((ROOT / "gsi/compatibility-sources.json").read_text())
+        self.assertEqual(catalog["target_platform"], "LineageOS lineage-24.0")
+        self.assertTrue(catalog["sources"])
+        self.assertTrue(all(source["integrated"] is False for source in catalog["sources"]))
+        generic_tree = next(source for source in catalog["sources"] if source["name"] == "TrebleDroid generic device tree")
+        self.assertEqual(generic_tree["android_generation"], 16)
+        self.assertEqual(catalog["target_android_generation"], 17)
     def test_experimental_gsi_metadata_is_explicitly_unbuilt(self):
         import json
         config = json.loads((ROOT / "gsi/targets.json").read_text())
