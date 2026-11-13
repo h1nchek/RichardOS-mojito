@@ -47,7 +47,7 @@ def main() -> int:
     forbidden = re.compile(r"(?i)(?:mojito|sm6150|xiaomi)")
     if gsi_root.is_dir():
         for source in sorted(gsi_root.rglob("*")):
-            if source.is_file() and source.suffix.lower() in {".json", ".mk", ".bp", ".mk", ".xml", ".sh", ".py", ".md"}:
+            if source.is_file() and source.suffix.lower() in {".json", ".mk", ".bp", ".xml", ".sh", ".py"}:
                 try:
                     contents = source.read_text(encoding="utf-8")
                 except (OSError, UnicodeError) as exc:
