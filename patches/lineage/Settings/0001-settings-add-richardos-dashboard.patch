@@ -131,12 +131,12 @@ index 0000000000000000000000000000000000000000
 +<resources>
 +    <string-array name="richardos_palette_entries">
 +        <item>System default</item>
-+        <item>Ocean</item>
-+        <item>Sage</item>
-+        <item>Orchid</item>
-+        <item>Ember</item>
++        <item>RichardOS Gold</item>
 +        <item>Graphite</item>
-+        <item>Rose</item>
++        <item>Gold Dim</item>
++        <item>Graphite Dark</item>
++        <item>Gold Soft</item>
++        <item>Gold Contrast</item>
 +    </string-array>
 +    <string-array name="richardos_battery_style_entries">
 +        <item>Default</item><item>Circle</item><item>Text</item><item>Dotted circle</item>
@@ -152,12 +152,12 @@ index 0000000000000000000000000000000000000000
 +    </string-array>
 +    <string-array name="richardos_palette_values">
 +        <item>system</item>
-+        <item>ocean</item>
-+        <item>sage</item>
-+        <item>orchid</item>
-+        <item>ember</item>
++        <item>gold</item>
 +        <item>graphite</item>
-+        <item>rose</item>
++        <item>gold_dim</item>
++        <item>graphite_dark</item>
++        <item>gold_soft</item>
++        <item>gold_contrast</item>
 +    </string-array>
 +</resources>
 +
@@ -327,18 +327,18 @@ index 0000000000000000000000000000000000000000
 +        switch (palette) {
 +            case "system":
 +                return 0;
-+            case "ocean":
-+                return 0xFF3978C6;
-+            case "sage":
-+                return 0xFF66856A;
-+            case "orchid":
-+                return 0xFF9865B5;
-+            case "ember":
-+                return 0xFFC66A35;
++            case "gold":
++                return 0xFFF5BE35;
 +            case "graphite":
-+                return 0xFF747985;
-+            case "rose":
-+                return 0xFFCA6685;
++                return 0xFF343840;
++            case "gold_dim":
++                return 0xFFD6A52F;
++            case "graphite_dark":
++                return 0xFF24272D;
++            case "gold_soft":
++                return 0xFFE8C66A;
++            case "gold_contrast":
++                return 0xFFFFD65A;
 +            default:
 +                return null;
 +        }
