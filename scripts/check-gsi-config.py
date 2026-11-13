@@ -7,7 +7,6 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CONFIG = ROOT / "gsi" / "targets.json"
 
 
 def main() -> int:
@@ -16,8 +15,9 @@ def main() -> int:
     parser.add_argument("--repo-root", type=Path, default=ROOT)
     args = parser.parse_args()
 
+    config_path = args.repo_root / "gsi" / "targets.json"
     try:
-        data = json.loads(CONFIG.read_text(encoding="utf-8"))
+        data = json.loads(config_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         print(f"ERROR: cannot read GSI metadata: {exc}", file=sys.stderr)
         return 2
@@ -42,6 +42,25 @@ def main() -> int:
     ])
     errors = [message for passed, message in checks if not passed]
 
+    # Track community compatibility projects without importing patches from
+    # a different Android generation into the generic LineageOS target.
+    catalog_path = args.repo_root / "gsi" / "compatibility-sources.json"
+    try:
+        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        errors.append(f"cannot read compatibility source catalog: {exc}")
+    else:
+        if catalog.get("schema_version") != 1:
+            errors.append("unsupported compatibility source catalog schema")
+        if catalog.get("target_platform") != "LineageOS lineage-24.0":
+            errors.append("compatibility catalog target does not match the GSI platform")
+        sources = catalog.get("sources")
+        if not isinstance(sources, list) or not sources:
+            errors.append("compatibility source catalog must contain at least one source")
+        else:
+            for source in sources:
+                if source.get("integrated") is not False:
+                    errors.append("compatibility source must remain review-only: " + str(source.get("name", "unnamed")))
     # Keep the generic GSI source set independent from the separate Xiaomi port.
     gsi_root = args.repo_root / "gsi"
     forbidden = re.compile(r"(?i)(?:mojito|sm6150|xiaomi)")
