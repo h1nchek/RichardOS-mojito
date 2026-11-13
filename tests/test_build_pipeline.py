@@ -83,6 +83,31 @@ class RichardOSBuildPipelineTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("PRODUCT_NAME", result.stderr)
 
+    def test_gsi_source_set_rejects_mojito_specific_references(self):
+        import shutil
+        import subprocess
+        import tempfile
+
+        checker = ROOT / "scripts/check-gsi-config.py"
+        with tempfile.TemporaryDirectory() as directory:
+            temp_root = pathlib.Path(directory)
+            shutil.copytree(ROOT / "gsi", temp_root / "gsi")
+            clean = subprocess.run(
+                ["python3", str(checker), "--repo-root", str(temp_root)],
+                capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(clean.returncode, 0, clean.stderr)
+            (temp_root / "gsi" / "accidental-device-reference.mk").write_text(
+                "# device/xiaomi/mojito must never enter a generic GSI source set\\n",
+                encoding="utf-8",
+            )
+            contaminated = subprocess.run(
+                ["python3", str(checker), "--repo-root", str(temp_root)],
+                capture_output=True, text=True, check=False,
+            )
+            self.assertNotEqual(contaminated.returncode, 0)
+            self.assertIn("Xiaomi mojito-specific", contaminated.stderr)
+
     def test_experimental_gsi_metadata_is_explicitly_unbuilt(self):
         import json
         config = json.loads((ROOT / "gsi/targets.json").read_text())
