@@ -12,7 +12,7 @@
 
 </div>
 
-> **Project status:** early development / device bring-up. The repository contains inherited device-source mappings and static audit tools. No RichardOS build has been completed or boot-tested yet. No installable ZIP is available.
+> **Project status:** 0.9.0 pre-release preparation, GSI-first. No RichardOS GSI image has been built or validated yet. The Redmi Note 10 (mojito) port is deferred to the 1.0.0 stable release cycle.
 
 ## Vision
 
@@ -122,3 +122,11 @@ Original scripts and documentation retain their applicable notices. Android plat
 ## Experimental GSI
 
 RichardOS is prioritizing the generic ARM64 GSI. See [GSI preparation](gsi/README.md) and [tester intake](gsi/GSI_TESTING.md). Repository CI validates only target metadata and source files; it does not compile Android. There is no downloadable GSI image or approved device list yet.
+
+
+## Release tracks
+
+- **0.9.0 pre-release:** experimental ARM64 GSI preparation, compatibility research and tester feedback. No installable image is available yet.
+- **1.0.0 stable:** planned stable milestone; the separate Redmi Note 10 (mojito) port is deferred to this release cycle.
+
+See [release strategy](docs/RELEASE_STRATEGY.md), [changelog](CHANGELOG.md), and [GSI preparation](gsi/README.md). A version label is not evidence of a completed build or supported device.
