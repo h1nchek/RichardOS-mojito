@@ -13,14 +13,14 @@ On ENOSYS, fall back to epoll_pwait. Validate timespec values, round positive
 sub-millisecond values up, and saturate large timeouts to INT_MAX.
 
 ---
- libc/bionic/sys_epoll.cpp | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ libc/bionic/sys_epoll.cpp | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletion(-)
 
 diff --git a/libc/bionic/sys_epoll.cpp b/libc/bionic/sys_epoll.cpp
 index be97818..d3d841e 100644
 --- a/libc/bionic/sys_epoll.cpp
 +++ b/libc/bionic/sys_epoll.cpp
-@@ -80,7 +80,20 @@ int epoll_pwait2_64(int fd, epoll_event* events, int max_events, const timespec*
+@@ -80,7 +80,23 @@ int epoll_pwait2_64(int fd, epoll_event* events, int max_events, const timespec*
      kts_ptr = &kts;
    }
  #endif
