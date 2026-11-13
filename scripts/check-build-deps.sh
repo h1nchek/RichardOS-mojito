@@ -39,6 +39,7 @@ for tool in repo python3 git sha256sum; do
 done
 if ! command -v rsvg-convert >/dev/null 2>&1 && ! command -v inkscape >/dev/null 2>&1; then
   missing_tools+=("rsvg-convert (package: librsvg2-bin) or inkscape")
+  missing+=(librsvg2-bin)
 fi
 
 if (( ${#missing[@]} || ${#missing_tools[@]} )); then
