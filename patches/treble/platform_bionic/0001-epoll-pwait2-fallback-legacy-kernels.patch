@@ -9,30 +9,35 @@ License/provenance: RestlessOS repository declares its patch/build system Apache
 the original author and source are retained here for attribution.
 
 The epoll_pwait2 syscall is unavailable on Linux kernels older than 5.11.
-On ENOSYS, fall back to epoll_pwait so callers do not receive an unexpected
-syscall error on older vendor kernels. Millisecond timeout precision is the
-documented trade-off in the upstream patch.
+On ENOSYS, fall back to epoll_pwait. Validate timespec values, round positive
+sub-millisecond values up, and saturate large timeouts to INT_MAX.
 
 ---
- libc/bionic/sys_epoll.cpp | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ libc/bionic/sys_epoll.cpp | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/libc/bionic/sys_epoll.cpp b/libc/bionic/sys_epoll.cpp
 index be97818..d3d841e 100644
 --- a/libc/bionic/sys_epoll.cpp
 +++ b/libc/bionic/sys_epoll.cpp
-@@ -80,7 +80,27 @@ int epoll_pwait2_64(int fd, epoll_event* events, int max_events, const timespec*
+@@ -80,7 +80,20 @@ int epoll_pwait2_64(int fd, epoll_event* events, int max_events, const timespec*
      kts_ptr = &kts;
    }
  #endif
 -  return __epoll_pwait2(fd, events, max_events, kts_ptr, ss, sizeof(*ss));
 +  int result = __epoll_pwait2(fd, events, max_events, kts_ptr, ss, sizeof(*ss));
 +  if (result == -1 && errno == ENOSYS) {
-+    // Fall back to epoll_pwait for kernels that don't support epoll_pwait2 (< 5.11).
-+    // The only loss is timeout precision (milliseconds instead of nanoseconds).
 +    int timeout_ms = -1;
 +    if (timeout) {
-+      timeout_ms = static_cast<int>(timeout->tv_sec * 1000 + timeout->tv_nsec / 1000000);
++      if (timeout->tv_sec < 0 || timeout->tv_nsec < 0 || timeout->tv_nsec >= 1000000000) {
++        errno = EINVAL;
++        return -1;
++      }
++      const long long timeout_ms_64 = timeout->tv_sec > 2147483
++                                          ? 2147483647LL
++                                          : static_cast<long long>(timeout->tv_sec) * 1000 +
++                                                (timeout->tv_nsec + 999999) / 1000000;
++      timeout_ms = timeout_ms_64 > 2147483647LL ? 2147483647 : static_cast<int>(timeout_ms_64);
 +    }
 +    result = __epoll_pwait(fd, events, max_events, timeout_ms, ss, sizeof(*ss));
 +  }
