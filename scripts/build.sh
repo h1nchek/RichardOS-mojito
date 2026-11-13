@@ -22,6 +22,7 @@ command -v rsvg-convert >/dev/null 2>&1 || command -v inkscape >/dev/null 2>&1 |
 python3 "$ROOT/scripts/audit_repo_manifests.py" "$ROOT/manifests/mojito-lineage24.xml"
 echo "Running RichardOS helper unit tests..."
 python3 -m unittest discover -s "$ROOT/tests" -v
+bash "$ROOT/scripts/check-build-deps.sh"
 mkdir -p "$ANDROID_DIR"
 bash "$ROOT/scripts/check-build-host.sh" pre-sync "$ANDROID_DIR"
 AVAILABLE_GB="$(df -BG "$ANDROID_DIR" | awk 'NR==2 {gsub(/G/,"",$4); print $4}')"
