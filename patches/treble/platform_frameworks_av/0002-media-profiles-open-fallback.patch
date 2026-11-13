@@ -16,7 +16,7 @@ Return a recoverable failure and let getInstance() use built-in defaults.
 diff --git a/media/libmedia/MediaProfiles.cpp b/media/libmedia/MediaProfiles.cpp
 --- a/media/libmedia/MediaProfiles.cpp
 +++ b/media/libmedia/MediaProfiles.cpp
-@@ -1017,5 +1017,10 @@
+@@ -1004,4 +1004,9 @@
          } else {
              sInstance = createInstanceFromXmlFile(value);
          }
