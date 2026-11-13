@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "target_platform": "LineageOS lineage-24.0",
+  "target_android_generation": 17,
+  "policy": "Do not import TrebleDroid patches until an Android 17-compatible source branch is available and each patch passes applicability and regression review.",
+  "sources": [
+    {
+      "name": "TrebleDroid generic device tree",
+      "repository": "https://github.com/TrebleDroid/device_phh_treble",
+      "branch": "android-16.0",
+      "role": "generic Treble device configuration and compatibility hooks",
+      "android_generation": 16,
+      "integrated": false,
+      "status": "not-compatible-with-current-target"
+    },
+    {
+      "name": "TrebleDroid hardware overlays",
+      "repository": "https://github.com/TrebleDroid/vendor_hardware_overlay",
+      "branch": "pie",
+      "role": "hardware-specific resource overlays",
+      "android_generation": null,
+      "integrated": false,
+      "status": "requires-per-overlay-review"
+    },
+    {
+      "name": "TrebleDroid build and patch experiments",
+      "repository": "https://github.com/TrebleDroid/treble_experimentations",
+      "branch": "master",
+      "role": "GSI build scripts and patch history",
+      "android_generation": null,
+      "integrated": false,
+      "status": "legacy-build-flow-not-imported"
+    }
+  ]
+}
