@@ -17,3 +17,7 @@ PRODUCT_SYSTEM_PROPERTIES += \
     ro.richardos.codename=RichardOS \
     ro.richardos.build_type=UNOFFICIAL \
     ro.richardos.maintainer=h1nchek
+
+# RichardOS Font Studio prototype (preview/import only; no system font mutation).
+PRODUCT_PACKAGES += \
+    RichardOSFontStudio
