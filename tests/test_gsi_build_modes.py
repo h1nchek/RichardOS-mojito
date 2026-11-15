@@ -43,6 +43,7 @@ class GsiBuildModeTests(unittest.TestCase):
         script = (ROOT / "scripts/build-gsi.sh").read_text()
         self.assertIn('repo manifest -r -o "$OUT_DIR/manifest.lock.xml"', script)
         self.assertIn('MANIFEST_SHA256=%s', script)
+        self.assertIn('RICHARDOS_REVISION=%s', script)
         self.assertIn('IMAGE_SHA256=%s', script)
         self.assertIn('richardos-build-info.txt', script)
 
