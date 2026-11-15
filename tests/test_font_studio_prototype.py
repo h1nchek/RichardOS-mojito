@@ -76,6 +76,16 @@ class FontStudioPrototypeTests(unittest.TestCase):
         self.assertIn('intent.setClassName("com.richardos.fontstudio"', patch)
         self.assertIn("richardos_font_studio_unavailable", patch)
 
+    def test_font_manager_plan_matches_lineage24_api_and_security_gates(self):
+        design = (ROOT / "docs/features/font-studio.md").read_text()
+        self.assertIn("FontUpdateRequest", design)
+        self.assertIn("UPDATE_FONTS", design)
+        self.assertIn("fs-verity", design)
+        self.assertIn("config_fontManagerServiceCerts", design)
+        self.assertIn("RESULT_ERROR_FONT_UPDATER_DISABLED", design)
+        self.assertNotIn("FontFamilyUpdateRequest", design)
+        self.assertNotIn("FontFileUpdateRequest", design)
+
     def test_prototype_does_not_claim_system_wide_apply(self):
         source = JAVA.read_text()
         readme = (APP / "README.md").read_text()
