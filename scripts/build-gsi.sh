@@ -34,9 +34,17 @@ printf 'Build host: %s | %s vCPU | %s GiB RAM | %s GiB free disk\n' "$arch" "$cp
 (( mem_gib >= 28 )) || fail "at least 28 GiB RAM required; 64 GiB recommended"
 (( free_gib >= 300 )) || fail "at least 300 GiB free disk required; use a 500 GiB NVMe volume"
 
-for tool in git python3 java make; do
+for tool in git python3 java make repo sha256sum date; do
   command -v "$tool" >/dev/null 2>&1 || fail "missing required host tool: $tool"
 done
+
+export OUT_DIR="${OUT_DIR:-$SOURCE_ROOT/out}"
+mkdir -p "$OUT_DIR"
+
+# Record exact project revisions; lineage-24.0 is a moving branch.
+repo manifest -r -o "$OUT_DIR/manifest.lock.xml"
+[[ -s "$OUT_DIR/manifest.lock.xml" ]] || fail "repo did not produce a pinned manifest snapshot"
+manifest_sha256="$(sha256sum "$OUT_DIR/manifest.lock.xml" | awk '{print $1}')"
 
 apply_patch_once() {
   local project="$1"
@@ -65,7 +73,6 @@ else
   echo "Baseline mode: no RichardOS patches will be applied."
 fi
 
-export OUT_DIR="${OUT_DIR:-$SOURCE_ROOT/out}"
 source build/envsetup.sh
 lunch gsi_arm64-userdebug
 
@@ -80,5 +87,16 @@ m -j"$cpu_count" systemimage
 
 IMAGE="$OUT_DIR/target/product/generic_arm64/system.img"
 [[ -s "$IMAGE" ]] || fail "build ended without expected image: $IMAGE"
-sha256sum "$IMAGE" | tee "$IMAGE.sha256"
+image_sha256="$(sha256sum "$IMAGE" | tee "$IMAGE.sha256" | awk '{print $1}')"
+{
+  printf 'RICHARDOS_VERSION=0.9.0-pre-release\n'
+  printf 'GSI_MODE=%s\n' "$MODE"
+  printf 'BUILD_UTC=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  printf 'SOURCE_ROOT=%s\n' "$SOURCE_ROOT"
+  printf 'MANIFEST_SHA256=%s\n' "$manifest_sha256"
+  printf 'IMAGE_SHA256=%s\n' "$image_sha256"
+  printf 'TARGET_PRODUCT=%s\n' "$actual_product"
+  printf 'TARGET_DEVICE=%s\n' "$actual_device"
+  printf 'TARGET_BUILD_VARIANT=%s\n' "$actual_variant"
+} | tee "$OUT_DIR/richardos-build-info.txt"
 printf 'GSI_MODE=%s\nGSI_IMAGE=%s\n' "$MODE" "$IMAGE"
