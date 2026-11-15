@@ -52,6 +52,15 @@ class FontStudioPrototypeTests(unittest.TestCase):
         self.assertIn('name: "RichardOSFontStudio"', module)
         self.assertIn("system_ext_specific: true", module)
 
+    def test_settings_dashboard_opens_font_studio_app(self):
+        patch = (
+            ROOT / "patches/lineage/Settings/"
+            "0001-settings-add-richardos-dashboard.patch"
+        ).read_text()
+        self.assertIn('android:key="richardos_font_studio"', patch)
+        self.assertIn('intent.setClassName("com.richardos.fontstudio"', patch)
+        self.assertIn("richardos_font_studio_unavailable", patch)
+
     def test_prototype_does_not_claim_system_wide_apply(self):
         source = JAVA.read_text()
         readme = (APP / "README.md").read_text()
