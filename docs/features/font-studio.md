@@ -43,7 +43,7 @@ Extend the existing native Settings RichardOS dashboard with a Font Studio prefe
 
 ### Privileged apply backend (required for system-wide changes)
 
-Use Android's supported runtime font-management path rather than writing `/system/fonts`. AOSP provides the `FontManager` system service (Android 12+) and `FontManagerService`; the service checks the privileged `UPDATE_FONTS` permission for font configuration updates. The platform API includes `FontFamilyUpdateRequest` and `FontFileUpdateRequest` for installing font files and defining a family.
+Use Android's supported runtime font-management path rather than writing `/system/fonts`. AOSP provides the `FontManager` system service (Android 12+) and `FontManagerService`; the service checks the privileged `UPDATE_FONTS` permission for font configuration updates.
 
 **LineageOS 24.0 source inspection (verified):** `FontManagerService` is present at `services/core/java/com/android/server/graphics/fonts/FontManagerService.java`. Its Binder API exposes `getFontConfig()`, `updateFontFamily(List<FontUpdateRequest>, int baseVersion)`, and `updateFontFallbacks(List<FontUpdateRequest>)`; it enforces `android.permission.UPDATE_FONTS`. The request type in this branch is `android.graphics.fonts.FontUpdateRequest` (not the newer/different `FontFamilyUpdateRequest` / `FontFileUpdateRequest` names), so code must follow this branch's exact API.
 
