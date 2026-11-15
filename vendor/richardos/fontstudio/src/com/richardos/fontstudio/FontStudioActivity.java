@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.database.Cursor;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -188,13 +187,25 @@ public class FontStudioActivity extends Activity {
             throw new IOException("Unsupported or malformed font", e);
         }
 
-        if (customFont.exists() && !customFont.delete()) {
+        File backup = new File(getFilesDir(), CUSTOM_FILE + ".bak");
+        if (backup.exists() && !backup.delete()) {
             temporary.delete();
-            throw new IOException("Unable to replace staged font");
+            throw new IOException("Unable to clear previous backup");
+        }
+        boolean hadPrevious = customFont.exists();
+        if (hadPrevious && !customFont.renameTo(backup)) {
+            temporary.delete();
+            throw new IOException("Unable to stage previous font for rollback");
         }
         if (!temporary.renameTo(customFont)) {
             temporary.delete();
+            if (hadPrevious) {
+                backup.renameTo(customFont);
+            }
             throw new IOException("Unable to commit staged font");
+        }
+        if (backup.exists()) {
+            backup.delete();
         }
         preview.setTypeface(candidate);
     }
