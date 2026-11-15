@@ -33,6 +33,13 @@ class FontStudioPrototypeTests(unittest.TestCase):
         self.assertNotIn("/system/fonts", source)
         self.assertNotIn("Runtime.getRuntime().exec", source)
 
+    def test_product_includes_the_font_studio_module(self):
+        product_config = (ROOT / "vendor/richardos/config/branding.mk").read_text()
+        module = (APP / "Android.bp").read_text()
+        self.assertIn("RichardOSFontStudio", product_config)
+        self.assertIn('name: "RichardOSFontStudio"', module)
+        self.assertIn("system_ext_specific: true", module)
+
     def test_prototype_does_not_claim_system_wide_apply(self):
         source = (APP / "src/com/richardos/fontstudio/FontStudioActivity.java").read_text()
         readme = (APP / "README.md").read_text()
