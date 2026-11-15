@@ -21,6 +21,27 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install Java syntax parser
+        run: python3 -m pip install --disable-pip-version-check javalang
+
+      - name: Parse Font Studio Java source
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import javalang
+
+          source = Path(
+              "vendor/richardos/fontstudio/src/com/richardos/fontstudio/FontStudioActivity.java"
+          ).read_text()
+          tree = javalang.parse.parse(source)
+          assert tree.package.name == "com.richardos.fontstudio"
+          assert any(
+              item.name == "FontStudioActivity"
+              for item in tree.types
+          )
+          print("Font Studio Java syntax: OK")
+          PY
+
       - name: Check out LineageOS manifest
         uses: actions/checkout@v5
         with:
@@ -55,7 +76,6 @@ jobs:
       - name: Run unit tests
         run: python3 -m unittest discover -s tests -v
 
-
       - name: Check out LineageOS netd target
         uses: actions/checkout@v5
         with:
@@ -69,6 +89,7 @@ jobs:
           git -C upstream/system_netd apply --check "$PATCH"
           git -C upstream/system_netd apply "$PATCH"
           git -C upstream/system_netd diff --check
+
       - name: Check out LineageOS bionic target
         uses: actions/checkout@v5
         with:
