@@ -45,7 +45,11 @@ Extend the existing native Settings RichardOS dashboard with a Font Studio prefe
 
 Use Android's supported runtime font-management path rather than writing `/system/fonts`. AOSP provides the `FontManager` system service (Android 12+) and `FontManagerService`; the service checks the privileged `UPDATE_FONTS` permission for font configuration updates. The platform API includes `FontFamilyUpdateRequest` and `FontFileUpdateRequest` for installing font files and defining a family.
 
-The AOSP design also describes a trusted, signature/privileged `FontUpdater` component and signed font files. Therefore, the app-private preview/import app must not call a guessed hidden API directly or be granted broad root access. First inspect the exact LineageOS 24.0 branch APIs, permission declaration/protection level, updater trust/signature flow, font-file signature format, and per-user behavior. Then implement a narrow platform-signed updater/backend that accepts validated staged assets, constructs a complete family update request, and returns structured success/error results. Do not hardcode assumptions from a different AOSP revision.
+**LineageOS 24.0 source inspection (verified):** `FontManagerService` is present at `services/core/java/com/android/server/graphics/fonts/FontManagerService.java`. Its Binder API exposes `getFontConfig()`, `updateFontFamily(List<FontUpdateRequest>, int baseVersion)`, and `updateFontFallbacks(List<FontUpdateRequest>)`; it enforces `android.permission.UPDATE_FONTS`. The request type in this branch is `android.graphics.fonts.FontUpdateRequest` (not the newer/different `FontFamilyUpdateRequest` / `FontFileUpdateRequest` names), so code must follow this branch's exact API.
+
+The service creates its updatable font directory only when fs-verity is supported and safe mode is off. It loads trusted certificates from `config_fontManagerServiceCerts`, verifies detached PKCS#7 signatures against fs-verity digests, and returns `RESULT_ERROR_FONT_UPDATER_DISABLED` when the updater is unavailable. Updates also use a base config version to reject stale writes. These are hard prerequisites, not optional implementation details.
+
+Therefore, the app-private preview/import app must not call a guessed hidden API directly or be granted broad root access. Before implementing a backend, verify the exact `UPDATE_FONTS` protection level and allowlist policy, the product's fs-verity support, the trusted certificate resource and signing-key custody, the signed-font format, and the API's request parceling/lifecycle. Only then implement a narrowly scoped platform-signed updater/backend that supplies signed font assets and the current base version. Do not add an unsigned arbitrary-font bypass or weaken fs-verity checks.
 
 The backend must preserve the platform fallback configuration and support rollback/reset. Verify that the target LineageOS build actually enables the FontManager service and updater flow before choosing this route. Do not assume that changing a Settings key or replacing a file immediately changes Android's system font.
 
@@ -69,7 +73,7 @@ Remaining Phase A work: integrate the screen into the native Settings dashboard,
 ### Phase B — platform integration
 - Inspect LineageOS 24.0 `FontManager`, `FontManagerService`, `FontUpdater`, `UPDATE_FONTS`, and signature validation implementation.
 - Confirm that the service and trusted updater are enabled in the target build; record exact source paths and API signatures.
-- Implement a platform-signed updater/backend using `FontFamilyUpdateRequest` / `FontFileUpdateRequest` only after confirming branch compatibility.
+- Implement a platform-signed updater/backend using this branch's `FontUpdateRequest` API only after verifying fs-verity availability, trusted certificate provisioning, permission policy, and signing-key custody.
 - Add atomic apply, reset, rollback, and per-user persistence.
 - Verify that changes affect Settings, SystemUI, launcher, and third-party apps consistently where platform policy permits.
 
