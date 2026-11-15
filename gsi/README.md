@@ -21,7 +21,16 @@ The Redmi Note 10 (mojito) device port is intentionally deferred to the **1.0.0 
 - Upstream product definition: device/generic/common/gsi_arm64.mk
 - Intended development variant: userdebug
 
-The LineageOS 24.0 generic device tree contains the ARM64 GSI product definition. The exact lunch alias and build integration must be confirmed against the complete synced source tree before a build is attempted. The repository does not invent or replace upstream product definitions.
+The LineageOS 24.0 generic device tree contains the ARM64 GSI product definition. The build script selects `gsi_arm64-userdebug` and checks the resolved `TARGET_PRODUCT`, `TARGET_DEVICE`, and `TARGET_BUILD_VARIANT` before compiling. This check must still be confirmed on the complete synced source tree; source-only CI does not prove that a full Android build works. The repository does not invent or replace upstream product definitions.
+
+## Build modes
+
+The build workflow exposes two explicit modes:
+
+- `baseline` (default): builds the upstream generic ARM64 GSI without applying RichardOS patches. This is the first required build and establishes whether the pinned LineageOS tree and host can produce a valid image.
+- `richardos`: applies the reviewed RichardOS netd, bionic, frameworks/av, and Settings patches before building. Run this only after a baseline image has been built and inspected.
+
+Both modes produce `out/target/product/generic_arm64/system.img` plus `system.img.sha256`. A successful build job is not a device-compatibility certification. The `richardos` mode is an integration candidate, not automatically a release candidate.
 
 ## Design boundary
 
@@ -33,8 +42,8 @@ RichardOS features should be integrated incrementally on top of a verified gener
 
 1. Repository preparation — target metadata, compatibility intake and issue templates.
 2. Source validation — confirm the upstream product definition and exact build target.
-3. Baseline validation — build an unmodified generic ARM64 image in a suitable development environment.
-4. RichardOS integration — add shared branding and Settings changes incrementally.
+3. Baseline validation — build an unmodified generic ARM64 image in a suitable development environment and record its checksum.
+4. RichardOS integration — apply compatibility patches and the shared Settings dashboard incrementally, then rebuild in `richardos` mode.
 5. Internal quality checks — review build-critical configuration, build output, known issues and release notes.
 6. Pre-release candidate — only after a real artifact exists, publish its checksum and exact limitations for controlled testing.
 7. Tester feedback — triage reports and publish fixes as new pre-release versions.
