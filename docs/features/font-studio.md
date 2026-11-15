@@ -43,9 +43,11 @@ Extend the existing native Settings RichardOS dashboard with a Font Studio prefe
 
 ### Privileged apply backend (required for system-wide changes)
 
-Implement a narrow system API/service in the platform layer. It should accept only validated staged font assets and a declared family configuration, enforce ownership and size/path constraints, atomically update the supported font configuration, and report a structured result. Do not expose generic file-write, shell, or root capabilities to Settings.
+Use Android's supported runtime font-management path rather than writing `/system/fonts`. AOSP provides the `FontManager` system service (Android 12+) and `FontManagerService`; the service checks the privileged `UPDATE_FONTS` permission for font configuration updates. The platform API includes `FontFamilyUpdateRequest` and `FontFileUpdateRequest` for installing font files and defining a family.
 
-The backend must preserve the platform fallback configuration and support rollback. Its exact integration point must be selected after inspecting the LineageOS 24.0 font-loading path and verifying that the mechanism supports runtime changes on the target build. Do not assume that changing a Settings key or replacing a file immediately changes Android's system font.
+The AOSP design also describes a trusted, signature/privileged `FontUpdater` component and signed font files. Therefore, the app-private preview/import app must not call a guessed hidden API directly or be granted broad root access. First inspect the exact LineageOS 24.0 branch APIs, permission declaration/protection level, updater trust/signature flow, font-file signature format, and per-user behavior. Then implement a narrow platform-signed updater/backend that accepts validated staged assets, constructs a complete family update request, and returns structured success/error results. Do not hardcode assumptions from a different AOSP revision.
+
+The backend must preserve the platform fallback configuration and support rollback/reset. Verify that the target LineageOS build actually enables the FontManager service and updater flow before choosing this route. Do not assume that changing a Settings key or replacing a file immediately changes Android's system font.
 
 ### State model
 
@@ -65,9 +67,10 @@ Persist only the selected preset/import identifier and backend-reported state. N
 Remaining Phase A work: integrate the screen into the native Settings dashboard, improve family/style metadata and accessibility, and run Soong plus on-device tests.
 
 ### Phase B — platform integration
-- Inspect LineageOS 24.0 font configuration and font service lifecycle.
-- Implement the narrow privileged backend and permission boundary.
-- Add atomic apply, rollback, and persistence.
+- Inspect LineageOS 24.0 `FontManager`, `FontManagerService`, `FontUpdater`, `UPDATE_FONTS`, and signature validation implementation.
+- Confirm that the service and trusted updater are enabled in the target build; record exact source paths and API signatures.
+- Implement a platform-signed updater/backend using `FontFamilyUpdateRequest` / `FontFileUpdateRequest` only after confirming branch compatibility.
+- Add atomic apply, reset, rollback, and per-user persistence.
 - Verify that changes affect Settings, SystemUI, launcher, and third-party apps consistently where platform policy permits.
 
 ### Phase C — validation
