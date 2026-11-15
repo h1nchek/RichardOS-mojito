@@ -85,13 +85,17 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/xml/richardos_dashboard.xml
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,39 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 +
 +    <PreferenceCategory
 +        android:key="richardos_appearance"
 +        android:title="@string/richardos_category_appearance">
++        <Preference
++            android:key="richardos_font_studio"
++            android:title="@string/richardos_font_studio_title"
++            android:summary="@string/richardos_font_studio_summary" />
 +        <ListPreference
 +            android:key="richardos_monet_palette"
 +            android:title="@string/richardos_monet_title"
@@ -166,10 +170,13 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/res/values/richardos_strings.xml
-@@ -0,0 +1,36 @@
+@@ -0,0 +1,39 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<resources>
 +    <string name="richardos_title">RichardOS</string>
++    <string name="richardos_font_studio_title">Font Studio</string>
++    <string name="richardos_font_studio_summary">Preview and import your own fonts</string>
++    <string name="richardos_font_studio_unavailable">Font Studio is not available in this build.</string>
 +    <string name="richardos_summary">Your Android. Your rules.</string>
 +    <string name="richardos_category_appearance">Appearance</string>
 +    <string name="richardos_category_system">System customization</string>
@@ -208,7 +215,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000
 --- /dev/null
 +++ b/src/com/android/settings/richardos/RichardOSDashboardFragment.java
-@@ -0,0 +1,168 @@
+@@ -0,0 +1,198 @@
 +/*
 + * Copyright (C) 2026 RichardOS
 + *
@@ -227,9 +234,12 @@ index 0000000000000000000000000000000000000000
 +package com.android.settings.richardos;
 +
 +import android.app.settings.SettingsEnums;
++import android.content.ActivityNotFoundException;
++import android.content.Intent;
 +import android.os.Bundle;
 +import android.provider.Settings;
 +import android.util.Log;
++import android.widget.Toast;
 +
 +import com.android.settings.R;
 +import com.android.settings.dashboard.DashboardFragment;
@@ -237,6 +247,7 @@ index 0000000000000000000000000000000000000000
 +import com.android.settingslib.search.SearchIndexable;
 +
 +import androidx.preference.ListPreference;
++import androidx.preference.Preference;
 +
 +import org.json.JSONException;
 +import org.json.JSONObject;
@@ -284,6 +295,25 @@ index 0000000000000000000000000000000000000000
 +            palette.setValue(getCurrentPalette());
 +            palette.setOnPreferenceChangeListener((preference, newValue) ->
 +                    applyPalette((String) newValue));
++        }
++
++        Preference fontStudio = findPreference("richardos_font_studio");
++        if (fontStudio != null) {
++            fontStudio.setOnPreferenceClickListener(preference -> {
++                Intent intent = new Intent();
++                intent.setClassName("com.richardos.fontstudio",
++                        "com.richardos.fontstudio.FontStudioActivity");
++                try {
++                    startActivity(intent);
++                    return true;
++                } catch (ActivityNotFoundException e) {
++                    Log.w(TAG, "Font Studio app is unavailable", e);
++                    Toast.makeText(requireContext(),
++                            R.string.richardos_font_studio_unavailable,
++                            Toast.LENGTH_SHORT).show();
++                    return false;
++                }
++            });
 +        }
 +    }
 +
