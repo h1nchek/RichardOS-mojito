@@ -7,11 +7,11 @@ package com.richardos.fontstudio;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
-import android.database.Cursor;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,8 +21,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class FontStudioActivity extends Activity {
     private static final int REQUEST_FONT = 4102;
@@ -34,13 +34,32 @@ public class FontStudioActivity extends Activity {
     private TextView status;
     private TextView preview;
     private File customFont;
+    private File backupFont;
 
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         customFont = new File(getFilesDir(), CUSTOM_FILE);
+        backupFont = new File(getFilesDir(), CUSTOM_FILE + ".bak");
+        recoverInterruptedImport();
         buildUi();
         restoreSelection();
+    }
+
+    /*
+     * A previous process may have stopped between moving the active font aside
+     * and committing its replacement. Prefer restoring the backup if no active
+     * font exists; otherwise the active file is already the committed version.
+     */
+    private void recoverInterruptedImport() {
+        if (!customFont.exists() && backupFont.isFile()) {
+            if (!backupFont.renameTo(customFont)) {
+                // Keep the backup intact; importing another font must not erase it.
+                return;
+            }
+        } else if (customFont.isFile() && backupFont.exists()) {
+            backupFont.delete();
+        }
     }
 
     private void buildUi() {
@@ -76,8 +95,7 @@ public class FontStudioActivity extends Activity {
         preview.setPadding(dp(16), dp(18), dp(16), dp(18));
         preview.setBackgroundColor(0xFFF0ECE2);
         preview.setTextColor(0xFF24272D);
-        LinearLayout.LayoutParams previewParams =
-                new LinearLayout.LayoutParams(-1, -2);
+        LinearLayout.LayoutParams previewParams = new LinearLayout.LayoutParams(-1, -2);
         previewParams.setMargins(0, dp(8), 0, dp(18));
         root.addView(preview, previewParams);
 
@@ -97,7 +115,6 @@ public class FontStudioActivity extends Activity {
         note.setTextSize(12);
         note.setPadding(0, dp(18), 0, 0);
         root.addView(note);
-
         setContentView(scroll);
     }
 
@@ -106,15 +123,13 @@ public class FontStudioActivity extends Activity {
         button.setText(label);
         button.setAllCaps(false);
         button.setOnClickListener(listener);
-        LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(-1, -2);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2);
         params.setMargins(0, dp(4), 0, dp(4));
         parent.addView(button, params);
     }
 
     private void selectPreset(String family, String label) {
-        Typeface typeface = Typeface.create(family, Typeface.NORMAL);
-        preview.setTypeface(typeface);
+        preview.setTypeface(Typeface.create(family, Typeface.NORMAL));
         saveSelection("preset:" + family);
         status.setText("Previewing: " + label);
     }
@@ -134,9 +149,8 @@ public class FontStudioActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode != REQUEST_FONT || resultCode != RESULT_OK
-                || data == null || data.getData() == null) {
-            return;
-        }
+                || data == null || data.getData() == null) return;
+
         Uri uri = data.getData();
         String displayName = queryDisplayName(uri);
         try {
@@ -154,16 +168,12 @@ public class FontStudioActivity extends Activity {
         long total = 0;
         try (InputStream input = getContentResolver().openInputStream(uri);
              FileOutputStream output = new FileOutputStream(temporary)) {
-            if (input == null) {
-                throw new IOException("Unable to open selected document");
-            }
+            if (input == null) throw new IOException("Unable to open selected document");
             byte[] buffer = new byte[8192];
             int count;
             while ((count = input.read(buffer)) != -1) {
                 total += count;
-                if (total > MAX_FONT_BYTES) {
-                    throw new IOException("Font file exceeds size limit");
-                }
+                if (total > MAX_FONT_BYTES) throw new IOException("Font file exceeds size limit");
                 output.write(buffer, 0, count);
             }
             output.getFD().sync();
@@ -177,9 +187,7 @@ public class FontStudioActivity extends Activity {
             throw new IOException("Empty font file");
         }
 
-        // Typeface parsing is the validation gate. Keep the active font untouched
-        // unless the candidate can actually be parsed.
-        Typeface candidate;
+        final Typeface candidate;
         try {
             candidate = Typeface.createFromFile(temporary);
         } catch (RuntimeException e) {
@@ -187,45 +195,46 @@ public class FontStudioActivity extends Activity {
             throw new IOException("Unsupported or malformed font", e);
         }
 
-        File backup = new File(getFilesDir(), CUSTOM_FILE + ".bak");
-        if (backup.exists() && !backup.delete()) {
+        // Never delete a recovery copy left by an interrupted transaction.
+        if (backupFont.exists()) {
             temporary.delete();
-            throw new IOException("Unable to clear previous backup");
+            throw new IOException("A previous font recovery file needs attention");
         }
-        boolean hadPrevious = customFont.exists();
-        if (hadPrevious && !customFont.renameTo(backup)) {
+
+        boolean hadPrevious = customFont.isFile();
+        if (hadPrevious && !customFont.renameTo(backupFont)) {
             temporary.delete();
             throw new IOException("Unable to stage previous font for rollback");
         }
+
         if (!temporary.renameTo(customFont)) {
             temporary.delete();
-            if (hadPrevious) {
-                backup.renameTo(customFont);
+            if (hadPrevious && !backupFont.renameTo(customFont)) {
+                throw new IOException("Commit failed; recovery copy retained at "
+                        + backupFont.getAbsolutePath());
             }
             throw new IOException("Unable to commit staged font");
         }
-        if (backup.exists()) {
-            backup.delete();
-        }
+
+        // The new file is committed. Failure to remove the backup is harmless;
+        // recoverInterruptedImport() will clean it up on the next launch.
+        if (backupFont.exists()) backupFont.delete();
         preview.setTypeface(candidate);
     }
 
     private String queryDisplayName(Uri uri) {
         String name = "custom font";
         try (Cursor cursor = getContentResolver().query(
-                uri, new String[] { OpenableColumns.DISPLAY_NAME },
-                null, null, null)) {
+                uri, new String[] { OpenableColumns.DISPLAY_NAME }, null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
                 int index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                 if (index >= 0) {
                     String value = cursor.getString(index);
-                    if (value != null && !value.trim().isEmpty()) {
-                        name = value;
-                    }
+                    if (value != null && !value.trim().isEmpty()) name = value;
                 }
             }
         } catch (RuntimeException ignored) {
-            // The provider may not expose metadata; the content itself is validated.
+            // Some document providers do not expose display metadata.
         }
         return name;
     }
@@ -249,8 +258,8 @@ public class FontStudioActivity extends Activity {
     }
 
     private void saveSelection(String selection) {
-        getSharedPreferences(PREFS, MODE_PRIVATE)
-                .edit().putString(KEY_SELECTION, selection).apply();
+        getSharedPreferences(PREFS, MODE_PRIVATE).edit()
+                .putString(KEY_SELECTION, selection).apply();
     }
 
     private int dp(int value) {
