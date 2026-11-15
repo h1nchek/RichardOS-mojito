@@ -60,7 +60,7 @@ jobs:
           path: upstream/device_generic_common
 
       - name: Validate experimental GSI metadata against upstream product
-        run: python3 scripts/check-gsi-config.py --upstream upstream/device_generic_common
+        run: python3 scripts/check-gsi-config.py upstream/device_generic_common/gsi_arm64.mk
 
       - name: Run unit tests
         run: python3 -m unittest discover -s tests -v
