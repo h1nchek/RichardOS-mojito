@@ -30,7 +30,7 @@ The build workflow exposes two explicit modes:
 - `baseline` (default): builds the upstream generic ARM64 GSI without applying RichardOS patches. This is the first required build and establishes whether the pinned LineageOS tree and host can produce a valid image.
 - `richardos`: applies the reviewed RichardOS netd, bionic, frameworks/av, and Settings patches before building. Run this only after a baseline image has been built and inspected.
 
-Both modes produce `out/target/product/generic_arm64/system.img` plus `system.img.sha256`. A successful build job is not a device-compatibility certification. The `richardos` mode is an integration candidate, not automatically a release candidate.
+Both modes produce `out/target/product/generic_arm64/system.img` plus `system.img.sha256`. The script also saves `out/manifest.lock.xml` (the exact synced project revisions) and `out/richardos-build-info.txt` (mode, target, manifest hash and image hash). Keep these files with every test report so a build can be traced to its source state. A successful build job is not a device-compatibility certification. The `richardos` mode is an integration candidate, not automatically a release candidate.
 
 ## Design boundary
 
