@@ -182,3 +182,39 @@ jobs:
           while IFS= read -r -d '' script; do
             bash -n "$script"
           done < <(find scripts -type f -name '*.sh' -print0)
+
+
+  fontstudio-android-api-compile:
+    name: Compile Font Studio against Android SDK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android platform
+        run: sdkmanager "platforms;android-35"
+
+      - name: Compile Font Studio Java against Android APIs
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_PLATFORM="$ANDROID_HOME/platforms/android-35"
+          test -f "$SDK_PLATFORM/android.jar"
+          mkdir -p "$RUNNER_TEMP/fontstudio-classes"
+          javac \
+            -source 8 \
+            -target 8 \
+            -bootclasspath "$SDK_PLATFORM/android.jar" \
+            -d "$RUNNER_TEMP/fontstudio-classes" \
+            vendor/richardos/fontstudio/src/com/richardos/fontstudio/FontStudioActivity.java
+          test -f "$RUNNER_TEMP/fontstudio-classes/com/richardos/fontstudio/FontStudioActivity.class"
+          echo "Font Studio Java API compilation succeeded."
