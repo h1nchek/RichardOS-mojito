@@ -231,6 +231,7 @@ jobs:
           find "$WORK/classes" -name '*.class' -print0 | \
             xargs -0 "$BUILD_TOOLS/d8" \
               --lib "$SDK_PLATFORM/android.jar" \
+              --min-api 29 \
               --output "$WORK/dex"
 
           cd "$WORK/dex"
@@ -267,6 +268,7 @@ jobs:
             APK="$RUNNER_TEMP/fontstudio-apk/RichardOSFontStudio-smoke.apk"
             adb install "$APK"
             adb shell am start -W -n com.richardos.fontstudio/.FontStudioActivity
+            adb shell pidof com.richardos.fontstudio
             adb shell dumpsys activity activities | grep -F "com.richardos.fontstudio/.FontStudioActivity"
             adb shell am force-stop com.richardos.fontstudio
       - name: Upload smoke-test APK
