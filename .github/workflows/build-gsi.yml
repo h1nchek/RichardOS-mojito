@@ -2,6 +2,15 @@ name: RichardOS GSI build
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "Build untouched upstream baseline first; choose RichardOS integration only after baseline validation."
+        required: true
+        type: choice
+        default: baseline
+        options:
+          - baseline
+          - richardos
 
 permissions:
   contents: read
@@ -10,6 +19,7 @@ jobs:
   build-gsi:
     env:
       ANDROID_BUILD_TOP: ${{ vars.ANDROID_BUILD_TOP }}
+      RICHARDOS_GSI_MODE: ${{ inputs.mode }}
     # Android source builds need a dedicated Linux runner with substantial RAM and disk.
     runs-on: [self-hosted, linux, x64, android-build]
     timeout-minutes: 360
@@ -49,9 +59,11 @@ jobs:
       - name: Upload GSI image and checksum
         uses: actions/upload-artifact@v4
         with:
-          name: RichardOS-0.9.0-pre-gsi-arm64
+          name: RichardOS-0.9.0-pre-${{ inputs.mode }}-gsi-arm64
           path: |
             ${{ vars.ANDROID_BUILD_TOP }}/out/target/product/generic_arm64/system.img
             ${{ vars.ANDROID_BUILD_TOP }}/out/target/product/generic_arm64/system.img.sha256
+            ${{ vars.ANDROID_BUILD_TOP }}/out/manifest.lock.xml
+            ${{ vars.ANDROID_BUILD_TOP }}/out/richardos-build-info.txt
           if-no-files-found: error
           retention-days: 7
