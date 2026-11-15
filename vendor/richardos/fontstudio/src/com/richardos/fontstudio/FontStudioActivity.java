@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -182,9 +183,9 @@ public class FontStudioActivity extends Activity {
             throw e;
         }
 
-        if (total == 0) {
+        if (total < 12 || !hasSupportedSfntHeader(temporary)) {
             temporary.delete();
-            throw new IOException("Empty font file");
+            throw new IOException("Selected file is not a supported TTF or OTF font");
         }
 
         final Typeface candidate;
@@ -220,6 +221,24 @@ public class FontStudioActivity extends Activity {
         // recoverInterruptedImport() will clean it up on the next launch.
         if (backupFont.exists()) backupFont.delete();
         preview.setTypeface(candidate);
+    }
+
+    /*
+     * Accept the common SFNT signatures used by TrueType and OpenType fonts.
+     * Typeface parsing below remains the final structural validation step.
+     */
+    private boolean hasSupportedSfntHeader(File file) throws IOException {
+        try (InputStream input = new FileInputStream(file)) {
+            int a = input.read();
+            int b = input.read();
+            int c = input.read();
+            int d = input.read();
+            boolean truetype = a == 0x00 && b == 0x01 && c == 0x00 && d == 0x00;
+            boolean cffOpenType = a == 'O' && b == 'T' && c == 'T' && d == 'O';
+            boolean appleTrueType = a == 't' && b == 'r' && c == 'u' && d == 'e';
+            boolean postscriptType1 = a == 't' && b == 'y' && c == 'p' && d == '1';
+            return truetype || cffOpenType || appleTrueType || postscriptType1;
+        }
     }
 
     private String queryDisplayName(Uri uri) {
