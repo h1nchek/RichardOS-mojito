@@ -39,6 +39,13 @@ class GsiBuildModeTests(unittest.TestCase):
         self.assertIn("- richardos", workflow)
         self.assertIn("RICHARDOS_GSI_MODE: ${{ inputs.mode }}", workflow)
 
+    def test_build_records_pinned_manifest_and_image_metadata(self):
+        script = (ROOT / "scripts/build-gsi.sh").read_text()
+        self.assertIn('repo manifest -r -o "$OUT_DIR/manifest.lock.xml"', script)
+        self.assertIn('MANIFEST_SHA256=%s', script)
+        self.assertIn('IMAGE_SHA256=%s', script)
+        self.assertIn('richardos-build-info.txt', script)
+
 
 if __name__ == "__main__":
     unittest.main()
