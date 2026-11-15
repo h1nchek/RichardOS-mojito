@@ -1,6 +1,6 @@
 # RichardOS Font Studio
 
-Status: design accepted for implementation planning; not implemented or runtime-tested.
+Status: a launcher-based preview/import prototype now exists in `vendor/richardos/fontstudio`; Android compilation and on-device testing are still pending. System-wide font switching is not implemented.
 
 Target release: 1.0.0 (device/system integration milestone). The feature must remain separate from the generic GSI/device-port split: the Settings UI may be shared, but the privileged font backend must be integrated and tested on each supported product.
 
@@ -55,11 +55,14 @@ Persist only the selected preset/import identifier and backend-reported state. N
 
 ## Delivery plan
 
-### Phase A — Settings experience
-- Add Font Studio entry and screen.
-- Implement preset catalog metadata and preview.
-- Implement private import, parser validation, and removal of imported items.
-- Until the privileged backend exists, label imports as **Preview only** and keep Apply disabled. Do not fake a system-wide apply.
+### Phase A — preview/import prototype (implemented in source; build/test pending)
+- Add a launcher-accessible Font Studio prototype app.
+- Preview built-in Android typeface families and Latin/Cyrillic sample text.
+- Import TTF/OTF into app-private staging with a 20 MiB limit and Typeface parser validation.
+- Persist the last preview selection and preserve the previous imported font if replacement fails.
+- Imports are **Preview only**; no system-wide apply is exposed.
+
+Remaining Phase A work: integrate the screen into the native Settings dashboard, improve family/style metadata and accessibility, and run Soong plus on-device tests.
 
 ### Phase B — platform integration
 - Inspect LineageOS 24.0 font configuration and font service lifecycle.
