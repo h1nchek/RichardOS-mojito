@@ -63,5 +63,7 @@ jobs:
           path: |
             ${{ vars.ANDROID_BUILD_TOP }}/out/target/product/generic_arm64/system.img
             ${{ vars.ANDROID_BUILD_TOP }}/out/target/product/generic_arm64/system.img.sha256
+            ${{ vars.ANDROID_BUILD_TOP }}/out/manifest.lock.xml
+            ${{ vars.ANDROID_BUILD_TOP }}/out/richardos-build-info.txt
           if-no-files-found: error
           retention-days: 7
