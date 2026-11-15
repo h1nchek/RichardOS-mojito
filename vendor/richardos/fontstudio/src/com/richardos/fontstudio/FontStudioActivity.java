@@ -105,11 +105,31 @@ public class FontStudioActivity extends Activity {
         status.setPadding(0, 0, 0, dp(12));
         root.addView(status);
 
-        addButton(root, "System default", v -> selectPreset("sans-serif", "System default"));
-        addButton(root, "Roboto / Sans", v -> selectPreset("sans-serif", "Roboto / Sans"));
-        addButton(root, "Serif", v -> selectPreset("serif", "Serif"));
-        addButton(root, "Monospace", v -> selectPreset("monospace", "Monospace"));
-        addButton(root, "Import TTF / OTF", v -> openFontPicker());
+        addButton(root, "System default", new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                selectPreset("sans-serif", "System default");
+            }
+        });
+        addButton(root, "Roboto / Sans", new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                selectPreset("sans-serif", "Roboto / Sans");
+            }
+        });
+        addButton(root, "Serif", new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                selectPreset("serif", "Serif");
+            }
+        });
+        addButton(root, "Monospace", new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                selectPreset("monospace", "Monospace");
+            }
+        });
+        addButton(root, "Import TTF / OTF", new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                openFontPicker();
+            }
+        });
 
         TextView note = new TextView(this);
         note.setText("Prototype: fonts are previewed inside this app only. System-wide font replacement is not implemented.");
