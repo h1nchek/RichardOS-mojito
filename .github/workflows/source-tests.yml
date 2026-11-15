@@ -200,21 +200,63 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android platform
-        run: sdkmanager "platforms;android-35"
+      - name: Install Android platform and build tools
+        run: |
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-      - name: Compile Font Studio Java against Android APIs
+      - name: Compile and package a smoke-test APK
         shell: bash
         run: |
           set -euo pipefail
           SDK_PLATFORM="$ANDROID_HOME/platforms/android-35"
-          test -f "$SDK_PLATFORM/android.jar"
-          mkdir -p "$RUNNER_TEMP/fontstudio-classes"
+          BUILD_TOOLS="$ANDROID_HOME/build-tools/35.0.0"
+          WORK="$RUNNER_TEMP/fontstudio-apk"
+          mkdir -p "$WORK/classes" "$WORK/dex" "$WORK/generated"
+
           javac \
             -source 8 \
             -target 8 \
             -bootclasspath "$SDK_PLATFORM/android.jar" \
-            -d "$RUNNER_TEMP/fontstudio-classes" \
+            -d "$WORK/classes" \
             vendor/richardos/fontstudio/src/com/richardos/fontstudio/FontStudioActivity.java
-          test -f "$RUNNER_TEMP/fontstudio-classes/com/richardos/fontstudio/FontStudioActivity.class"
-          echo "Font Studio Java API compilation succeeded."
+
+          "$BUILD_TOOLS/aapt2" link \
+            -I "$SDK_PLATFORM/android.jar" \
+            --manifest vendor/richardos/fontstudio/AndroidManifest.xml \
+            --min-sdk-version 29 \
+            --target-sdk-version 35 \
+            --java "$WORK/generated" \
+            -o "$WORK/FontStudio-unsigned.apk"
+
+          "$BUILD_TOOLS/d8" \
+            --lib "$SDK_PLATFORM/android.jar" \
+            --output "$WORK/dex" \
+            "$WORK/classes/com/richardos/fontstudio/FontStudioActivity.class"
+
+          cd "$WORK"
+          zip -q FontStudio-unsigned.apk dex/classes.dex
+
+          keytool -genkeypair -v \
+            -keystore "$WORK/debug.keystore" \
+            -storepass android -keypass android \
+            -alias androiddebugkey \
+            -dname "CN=Android Debug,O=Android,C=US" \
+            -keyalg RSA -keysize 2048 -validity 10000
+
+          "$BUILD_TOOLS/apksigner" sign \
+            --ks "$WORK/debug.keystore" \
+            --ks-pass pass:android \
+            --key-pass pass:android \
+            --out "$WORK/RichardOSFontStudio-smoke.apk" \
+            "$WORK/FontStudio-unsigned.apk"
+
+          "$BUILD_TOOLS/apksigner" verify "$WORK/RichardOSFontStudio-smoke.apk"
+          test -s "$WORK/RichardOSFontStudio-smoke.apk"
+
+      - name: Upload smoke-test APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: richardos-fontstudio-smoke-apk
+          path: ${{ runner.temp }}/fontstudio-apk/RichardOSFontStudio-smoke.apk
+          if-no-files-found: error
+          retention-days: 7
