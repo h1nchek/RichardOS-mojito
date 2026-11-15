@@ -228,13 +228,14 @@ jobs:
             --java "$WORK/generated" \
             -o "$WORK/FontStudio-unsigned.apk"
 
-          "$BUILD_TOOLS/d8" \
-            --lib "$SDK_PLATFORM/android.jar" \
-            --output "$WORK/dex" \
-            "$WORK/classes/com/richardos/fontstudio/FontStudioActivity.class"
+          find "$WORK/classes" -name '*.class' -print0 | \
+            xargs -0 "$BUILD_TOOLS/d8" \
+              --lib "$SDK_PLATFORM/android.jar" \
+              --output "$WORK/dex"
 
+          cd "$WORK/dex"
+          zip -q "$WORK/FontStudio-unsigned.apk" classes.dex
           cd "$WORK"
-          zip -q FontStudio-unsigned.apk dex/classes.dex
 
           keytool -genkeypair -v \
             -keystore "$WORK/debug.keystore" \
