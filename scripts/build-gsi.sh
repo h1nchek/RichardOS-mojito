@@ -1,12 +1,20 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# Run on a dedicated Linux build host with a fully synced LineageOS tree.
+# Build the generic ARM64 GSI in two deliberately separate stages:
+#   baseline  - untouched upstream LineageOS GSI (default, first build)
+#   richardos - apply reviewed RichardOS compatibility + Settings patches
 RICHARDOS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SOURCE_ROOT="${ANDROID_BUILD_TOP:-$(dirname "$RICHARDOS_ROOT")}"
+MODE="${RICHARDOS_GSI_MODE:-baseline}"
 cd "$SOURCE_ROOT"
 
 fail() { echo "ERROR: $*" >&2; exit 2; }
+
+case "$MODE" in
+  baseline|richardos) ;;
+  *) fail "RICHARDOS_GSI_MODE must be 'baseline' or 'richardos' (got: $MODE)" ;;
+esac
 
 [[ -f build/envsetup.sh ]] || fail "missing build/envsetup.sh; sync the LineageOS source tree first"
 [[ -f device/generic/common/gsi_arm64.mk ]] || fail "missing generic ARM64 GSI product definition"
@@ -20,6 +28,7 @@ mem_kb="$(awk '/MemTotal/ {print $2}' /proc/meminfo)"
 mem_gib="$((mem_kb / 1024 / 1024))"
 free_gib="$(df -BG . | awk 'NR==2 {gsub(/G/, "", $4); print $4}')"
 
+printf 'RichardOS GSI mode: %s\n' "$MODE"
 printf 'Build host: %s | %s vCPU | %s GiB RAM | %s GiB free disk\n' "$arch" "$cpu_count" "$mem_gib" "$free_gib"
 (( cpu_count >= 8 )) || fail "at least 8 vCPU are required; 16 recommended"
 (( mem_gib >= 28 )) || fail "at least 28 GiB RAM required; 64 GiB recommended"
@@ -46,18 +55,30 @@ apply_patch_once() {
   git -C "$project" diff --check
 }
 
-# Only patches that passed source-branch applicability checks are included.
-apply_patch_once system/netd "$RICHARDOS_ROOT/patches/treble/platform_system_netd/0001-netd-legacy-kernel-oneshot-nonfatal.patch"
-apply_patch_once bionic "$RICHARDOS_ROOT/patches/treble/platform_bionic/0001-epoll-pwait2-fallback-legacy-kernels.patch"
-apply_patch_once frameworks/av "$RICHARDOS_ROOT/patches/treble/platform_frameworks_av/0001-camera-parameters-null-guard.patch"
-apply_patch_once packages/apps/Settings "$RICHARDOS_ROOT/patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch"
+if [[ "$MODE" == "richardos" ]]; then
+  # Integration is opt-in and happens only after the upstream baseline is built.
+  apply_patch_once system/netd "$RICHARDOS_ROOT/patches/treble/platform_system_netd/0001-netd-legacy-kernel-oneshot-nonfatal.patch"
+  apply_patch_once bionic "$RICHARDOS_ROOT/patches/treble/platform_bionic/0001-epoll-pwait2-fallback-legacy-kernels.patch"
+  apply_patch_once frameworks/av "$RICHARDOS_ROOT/patches/treble/platform_frameworks_av/0001-camera-parameters-null-guard.patch"
+  apply_patch_once packages/apps/Settings "$RICHARDOS_ROOT/patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch"
+else
+  echo "Baseline mode: no RichardOS patches will be applied."
+fi
 
 export OUT_DIR="${OUT_DIR:-$SOURCE_ROOT/out}"
 source build/envsetup.sh
 lunch gsi_arm64-userdebug
+
+actual_product="$(get_build_var TARGET_PRODUCT)"
+actual_device="$(get_build_var TARGET_DEVICE)"
+actual_variant="$(get_build_var TARGET_BUILD_VARIANT)"
+[[ "$actual_product" == "gsi_arm64" ]] || fail "unexpected TARGET_PRODUCT: $actual_product"
+[[ "$actual_device" == "generic_arm64" ]] || fail "unexpected TARGET_DEVICE: $actual_device"
+[[ "$actual_variant" == "userdebug" ]] || fail "unexpected TARGET_BUILD_VARIANT: $actual_variant"
+
 m -j"$cpu_count" systemimage
 
 IMAGE="$OUT_DIR/target/product/generic_arm64/system.img"
 [[ -s "$IMAGE" ]] || fail "build ended without expected image: $IMAGE"
 sha256sum "$IMAGE" | tee "$IMAGE.sha256"
-printf 'GSI_IMAGE=%s\n' "$IMAGE"
+printf 'GSI_MODE=%s\nGSI_IMAGE=%s\n' "$MODE" "$IMAGE"
