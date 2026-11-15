@@ -52,6 +52,21 @@ class FontStudioPrototypeTests(unittest.TestCase):
         self.assertIn('name: "RichardOSFontStudio"', module)
         self.assertIn("system_ext_specific: true", module)
 
+    def test_font_studio_is_mojito_only_not_generic_gsi(self):
+        product_config = (ROOT / "vendor/richardos/config/branding.mk").read_text()
+        self.assertIn("Included at the end of the mojito product makefile", product_config)
+        gsi_root = ROOT / "gsi"
+        for path in gsi_root.rglob("*"):
+            if path.is_file() and path.suffix in {".mk", ".bp", ".json", ".py", ".sh"}:
+                self.assertNotIn("RichardOSFontStudio", path.read_text(errors="replace"))
+
+    def test_custom_font_is_previewed_and_selection_persisted(self):
+        source = JAVA.read_text()
+        self.assertIn("preview.setTypeface(candidate)", source)
+        self.assertIn('saveSelection("custom")', source)
+        self.assertIn('prefs.getString(KEY_SELECTION, "preset:sans-serif")', source)
+        self.assertIn("Typeface.createFromFile(customFont)", source)
+
     def test_settings_dashboard_opens_font_studio_app(self):
         patch = (
             ROOT / "patches/lineage/Settings/"
