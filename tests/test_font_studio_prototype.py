@@ -60,6 +60,11 @@ class FontStudioPrototypeTests(unittest.TestCase):
             if path.is_file() and path.suffix in {".mk", ".bp", ".json", ".py", ".sh"}:
                 self.assertNotIn("RichardOSFontStudio", path.read_text(errors="replace"))
 
+    def test_android_sdk_smoke_source_avoids_lambda_metafactory(self):
+        source = (ROOT / "vendor/richardos/fontstudio/src/com/richardos/fontstudio/FontStudioActivity.java").read_text()
+        self.assertNotIn("->", source)
+        self.assertIn("new View.OnClickListener()", source)
+
     def test_custom_font_is_previewed_and_selection_persisted(self):
         source = JAVA.read_text()
         self.assertIn("preview.setTypeface(candidate)", source)
