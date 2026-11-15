@@ -48,30 +48,19 @@ jobs:
           repository: LineageOS/android
           ref: lineage-24.0
           path: upstream/manifest
-          sparse-checkout: |
-            default.xml
-            snippets/lineage.xml
-          sparse-checkout-cone-mode: false
 
       - name: Audit device manifest dependencies
-        run: |
-          python3 scripts/audit_manifest_dependencies.py \
-            manifests/mojito-lineage24.xml \
-            upstream/manifest/default.xml \
-            upstream/manifest/snippets/lineage.xml
+        run: python3 scripts/check-manifest-dependencies.py
 
       - name: Check out LineageOS generic device definitions
         uses: actions/checkout@v5
         with:
           repository: LineageOS/android_device_generic_common
           ref: lineage-24.0
-          path: upstream/device-generic-common
-          sparse-checkout: |
-            gsi_arm64.mk
-          sparse-checkout-cone-mode: false
+          path: upstream/device_generic_common
 
       - name: Validate experimental GSI metadata against upstream product
-        run: python3 scripts/check-gsi-config.py upstream/device-generic-common/gsi_arm64.mk
+        run: python3 scripts/check-gsi-config.py --upstream upstream/device_generic_common
 
       - name: Run unit tests
         run: python3 -m unittest discover -s tests -v
@@ -96,9 +85,6 @@ jobs:
           repository: LineageOS/android_bionic
           ref: lineage-24.0
           path: upstream/bionic
-          sparse-checkout: |
-            libc/bionic/sys_epoll.cpp
-          sparse-checkout-cone-mode: false
 
       - name: Check Android 17 legacy-kernel epoll fallback patch
         run: |
@@ -113,10 +99,6 @@ jobs:
           repository: LineageOS/android_frameworks_av
           ref: lineage-24.0
           path: upstream/frameworks_av
-          sparse-checkout: |
-            camera/CameraParameters.cpp
-            media/libmedia/MediaProfiles.cpp
-          sparse-checkout-cone-mode: false
 
       - name: Check generic camera parameter null guard patch
         run: |
@@ -138,40 +120,22 @@ jobs:
           repository: LineageOS/android_frameworks_base
           ref: lineage-24.0
           path: upstream/frameworks_base
-          sparse-checkout: |
-            core/java/android/provider/Settings.java
-            core/java/android/os/storage/StorageManager.java
-            core/java/android/os/SELinux.java
-            core/java/android/os/SystemProperties.java
-            packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayApplier.java
-          sparse-checkout-cone-mode: false
 
       - name: Check out LineageOS SDK target
         uses: actions/checkout@v5
         with:
-          repository: LineageOS/android_lineage-sdk
+          repository: LineageOS/android_sdk
           ref: lineage-24.0
-          path: upstream/lineage-sdk
+          path: upstream/sdk
 
       - name: Audit RichardOS Lineage settings API
-        run: |
-          python3 scripts/audit_lineage_settings_api.py \
-            upstream/lineage-sdk/sdk/src/java/lineageos/providers/LineageSettings.java \
-            patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch
+        run: python3 scripts/check-settings-api.py --settings upstream/Settings
 
       - name: Audit RichardOS Android framework API
-        run: |
-          python3 scripts/audit_settings_integration.py \
-            upstream/Settings upstream/frameworks_base \
-            patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch \
-            upstream/lineage-sdk/sdk/src/java/lineageos/providers/LineageSettings.java
+        run: python3 scripts/check-framework-api.py --framework upstream/frameworks_base --sdk upstream/sdk
 
       - name: Check RichardOS patch applicability
-        run: |
-          PATCH="$GITHUB_WORKSPACE/patches/lineage/Settings/0001-settings-add-richardos-dashboard.patch"
-          git -C upstream/Settings apply --check "$PATCH"
-          git -C upstream/Settings apply "$PATCH"
-          git -C upstream/Settings diff --check
+        run: python3 scripts/check-patches.py --settings upstream/Settings
 
       - name: Compile Python scripts
         run: python3 -m compileall -q scripts tests
@@ -179,10 +143,10 @@ jobs:
       - name: Check shell script syntax
         shell: bash
         run: |
+          set -euo pipefail
           while IFS= read -r -d '' script; do
             bash -n "$script"
           done < <(find scripts -type f -name '*.sh' -print0)
-
 
   fontstudio-android-api-compile:
     name: Compile Font Studio against Android SDK
@@ -198,7 +162,11 @@ jobs:
           java-version: "17"
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          # The legacy "tools" SDK package was removed from Google's repository.
+          # Install only current packages; command-line tools are provisioned by the action.
+          packages: "platform-tools emulator"
 
       - name: Install Android platform and build tools
         run: |
@@ -271,6 +239,7 @@ jobs:
             adb shell pidof com.richardos.fontstudio
             adb shell dumpsys activity activities | grep -F "com.richardos.fontstudio/.FontStudioActivity"
             adb shell am force-stop com.richardos.fontstudio
+
       - name: Upload smoke-test APK
         uses: actions/upload-artifact@v4
         with:
