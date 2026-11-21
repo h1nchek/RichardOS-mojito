@@ -1,0 +1,52 @@
+name: RichardOS clean GSI baseline
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-gsi-baseline:
+    # Register a dedicated runner with the android-build label and a pre-synced
+    # LineageOS lineage-24.0 checkout. Never run this job on GitHub-hosted runners.
+    runs-on: [self-hosted, linux, x64, android-build]
+    timeout-minutes: 360
+    env:
+      ANDROID_BUILD_TOP: ${{ vars.ANDROID_BUILD_TOP }}
+      JOBS: ${{ vars.ANDROID_BUILD_JOBS }}
+    steps:
+      - name: Check out RichardOS build scripts
+        uses: actions/checkout@v5
+        with:
+          ref: gsi/0.9.0-expansion
+          path: RichardOS
+
+      - name: Validate configured source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${ANDROID_BUILD_TOP:?Set repository Actions variable ANDROID_BUILD_TOP to the absolute path of a pre-synced LineageOS lineage-24.0 checkout}"
+          test -d "$ANDROID_BUILD_TOP/.repo"
+          test -f "$ANDROID_BUILD_TOP/build/envsetup.sh"
+          test -f "$ANDROID_BUILD_TOP/device/generic/common/AndroidProducts.mk"
+          test -f "$ANDROID_BUILD_TOP/device/generic/common/gsi_arm64.mk"
+          echo "Source tree: $ANDROID_BUILD_TOP"
+          git -C "$ANDROID_BUILD_TOP/device/generic/common" rev-parse HEAD || true
+
+      - name: Build clean upstream GSI baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash RichardOS/scripts/build-gsi-baseline.sh
+
+      - name: Upload baseline image and provenance
+        uses: actions/upload-artifact@v4
+        with:
+          name: RichardOS-upstream-gsi-arm64-baseline
+          path: |
+            ${{ vars.ANDROID_BUILD_TOP }}/out/target/product/generic_arm64/system.img
+            ${{ vars.ANDROID_BUILD_TOP }}/out/target/product/generic_arm64/system.img.sha256
+            ${{ vars.ANDROID_BUILD_TOP }}/out/target/product/generic_arm64/resolved-manifest.xml
+          if-no-files-found: error
+          retention-days: 7
