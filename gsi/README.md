@@ -23,7 +23,7 @@ The Redmi Note 10 (mojito) device port is intentionally deferred to the **1.0.0 
 
 The LineageOS 24.0 generic device tree registers `gsi_arm64.mk` in `AndroidProducts.mk`. The makefile declares `PRODUCT_NAME := gsi_arm64` and `PRODUCT_DEVICE := generic_arm64`. The exact lunch alias and build integration must still be confirmed against the complete synced source tree before a build is attempted. The repository does not invent or replace upstream product definitions.
 
-The source-verified execution sequence, integration boundaries, compatibility intake, maintainer tiers and release gates are documented in [UNIVERSAL_GSI_PLAN.md](../docs/UNIVERSAL_GSI_PLAN.md).
+The source-verified execution sequence, integration boundaries, compatibility intake, maintainer tiers and release gates are documented in [UNIVERSAL_GSI_PLAN.md](../docs/UNIVERSAL_GSI_PLAN.md). The clean upstream baseline build procedure is documented in [GSI_BASELINE_BUILD.md](../docs/GSI_BASELINE_BUILD.md), with a separate manual self-hosted workflow at `.github/workflows/build-gsi-baseline.yml`.
 
 ## Design boundary
 
