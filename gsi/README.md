@@ -34,7 +34,7 @@ RichardOS features should be integrated incrementally on top of a verified gener
 ## 0.9.0 milestones
 
 1. Repository preparation — target metadata, compatibility intake and issue templates.
-2. Source validation — confirm the upstream product definition and exact build target.
+2. Source validation — upstream product definition and `gsi_arm64-userdebug` target verified; the build helper performs final checks against the synced tree.
 3. Baseline validation — build an unmodified generic ARM64 image in a suitable development environment.
 4. RichardOS integration — add shared branding and Settings changes incrementally.
 5. Internal quality checks — review build-critical configuration, build output, known issues and release notes.
@@ -52,3 +52,4 @@ Use the GSI compatibility intake (GSI_TESTING.md) and bug report template. Remov
 - https://github.com/LineageOS/android_device_generic_common/tree/lineage-24.0
 - https://github.com/LineageOS/android_device_generic_common/blob/lineage-24.0/gsi_arm64.mk
 - https://developer.android.com/topic/generic-system-image
+- https://source.android.com/docs/core/tests/vts/gsi
