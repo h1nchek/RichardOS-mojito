@@ -24,7 +24,7 @@ The exact build combo is verified as `gsi_arm64-userdebug`. AOSP documents this 
 
 ## 2. First GSI baseline — no RichardOS changes
 
-1. Prepare a dedicated Linux x86_64 build host. Use the requirements in `docs/FIRST_BUILD.md` as a conservative starting point; this GSI-specific host requirement has not yet been measured.
+1. Prepare a dedicated Linux x86_64 build host using the GSI-specific sizing and preflight requirements in `docs/GSI_BASELINE_BUILD.md`.
 2. Initialize and sync the LineageOS `lineage-24.0` source tree.
 3. Confirm that the synced `device/generic/common/AndroidProducts.mk` registers `gsi_arm64.mk`.
 4. Inspect `gsi_arm64.mk` and its inherited makefiles from the actual synced revision.
@@ -104,6 +104,6 @@ The existing `mojito` port remains a separate device-specific workstream and is 
 
 - [x] Confirm the exact lunch combo from AOSP GSI documentation and the LineageOS `lineage-24.0` product definition.
 - [ ] Produce and inspect the unmodified `gsi_arm64` baseline.
-- [ ] Add a GSI-specific build helper only after the real combo and output paths are confirmed.
+- [x] Add the baseline build helper with source-tree, host-resource, lunch-target and artifact checks.
 - [ ] Integrate RichardOS changes incrementally.
 - [ ] Publish the first artifact only after the release gate is met.
