@@ -33,13 +33,13 @@ printf 'Build host: %s | %s vCPU | %s GiB RAM | %s GiB free disk\n' "$(uname -m)
 (( mem_gib >= 28 )) || fail "at least 28 GiB RAM required; 64 GiB recommended"
 (( free_gib >= 300 )) || fail "at least 300 GiB free disk required; 500 GiB recommended"
 
-for tool in git python3 java make sha256sum; do
+for tool in git repo python3 java make sha256sum; do
   command -v "$tool" >/dev/null 2>&1 || fail "missing required host tool: $tool"
 done
 
 source build/envsetup.sh
-# Candidate alias based on the registered product name. Validate resolved
-# product variables immediately; stop rather than building a different target.
+# Verified AOSP/LineageOS ARM64 GSI target. Validate resolved product
+# variables immediately; stop rather than building a different target.
 lunch gsi_arm64-userdebug
 [[ "${TARGET_PRODUCT:-}" == "gsi_arm64" ]] || fail "lunch resolved TARGET_PRODUCT='${TARGET_PRODUCT:-unset}', expected gsi_arm64"
 [[ "${TARGET_BUILD_VARIANT:-}" == "userdebug" ]] || fail "lunch resolved TARGET_BUILD_VARIANT='${TARGET_BUILD_VARIANT:-unset}', expected userdebug"
