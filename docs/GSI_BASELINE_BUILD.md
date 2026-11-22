@@ -31,7 +31,7 @@ ANDROID_BUILD_TOP="$HOME/android/richardos-gsi" JOBS=8 \
   bash scripts/build-gsi-baseline.sh
 ```
 
-The helper checks the source tree, product registration and host resources; runs the candidate `gsi_arm64-userdebug` lunch selection; verifies `TARGET_PRODUCT`, `TARGET_DEVICE` and `TARGET_BUILD_VARIANT`; builds `systemimage` without RichardOS patches; and saves `system.img`, its SHA-256 checksum and a resolved repo manifest.
+The helper checks the source tree, product registration and host resources; runs the verified `gsi_arm64-userdebug` lunch selection; verifies `TARGET_PRODUCT`, `TARGET_DEVICE` and `TARGET_BUILD_VARIANT`; builds `systemimage` without RichardOS patches; and saves `system.img`, its SHA-256 checksum and a resolved repo manifest.
 
 If lunch cannot resolve to the expected product/device/variant, the script stops. Do not bypass that check by forcing different variables; inspect the actual synced product definitions and update the documented target deliberately.
 
