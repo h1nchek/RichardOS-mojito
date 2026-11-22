@@ -17,7 +17,7 @@ repo sync -j4 --fail-fast
 
 The synced tree must contain `.repo/`, `build/envsetup.sh`, `device/generic/common/AndroidProducts.mk` and `device/generic/common/gsi_arm64.mk`.
 
-The project has verified upstream that `AndroidProducts.mk` registers `gsi_arm64.mk` and that the makefile declares product `gsi_arm64` and device `generic_arm64`. The exact lunch alias is treated as a candidate and validated at runtime rather than assumed to be proven by static source inspection.
+The project has verified upstream that `AndroidProducts.mk` registers `gsi_arm64.mk` and that the makefile declares product `gsi_arm64` and device `generic_arm64`. AOSP documents `gsi_arm64-userdebug` as the standard ARM64 GSI build target. The helper still validates the resolved product, device and variant against the actual synced checkout before compiling.
 
 ## Run the baseline builder
 
