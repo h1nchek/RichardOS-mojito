@@ -21,7 +21,9 @@ The Redmi Note 10 (mojito) device port is intentionally deferred to the **1.0.0 
 - Upstream product definition: device/generic/common/gsi_arm64.mk
 - Intended development variant: userdebug
 
-The LineageOS 24.0 generic device tree contains the ARM64 GSI product definition. The exact lunch alias and build integration must be confirmed against the complete synced source tree before a build is attempted. The repository does not invent or replace upstream product definitions.
+The LineageOS 24.0 generic device tree registers `gsi_arm64.mk` in `AndroidProducts.mk`. The makefile declares `PRODUCT_NAME := gsi_arm64` and `PRODUCT_DEVICE := generic_arm64`. The verified build target is `gsi_arm64-userdebug`, the standard ARM64 GSI target documented by AOSP. Before compiling, the build helper still validates that the complete synced checkout resolves to product `gsi_arm64`, device `generic_arm64` and variant `userdebug`. The repository does not invent or replace upstream product definitions.
+
+The source-verified execution sequence, integration boundaries, compatibility intake, maintainer tiers and release gates are documented in [UNIVERSAL_GSI_PLAN.md](../docs/UNIVERSAL_GSI_PLAN.md). The clean upstream baseline build procedure is documented in [GSI_BASELINE_BUILD.md](../docs/GSI_BASELINE_BUILD.md), with a separate manual self-hosted workflow at `.github/workflows/build-gsi-baseline.yml`.
 
 ## Design boundary
 
@@ -32,7 +34,7 @@ RichardOS features should be integrated incrementally on top of a verified gener
 ## 0.9.0 milestones
 
 1. Repository preparation — target metadata, compatibility intake and issue templates.
-2. Source validation — confirm the upstream product definition and exact build target.
+2. Source validation — upstream product definition and `gsi_arm64-userdebug` target verified; the build helper performs final checks against the synced tree.
 3. Baseline validation — build an unmodified generic ARM64 image in a suitable development environment.
 4. RichardOS integration — add shared branding and Settings changes incrementally.
 5. Internal quality checks — review build-critical configuration, build output, known issues and release notes.
@@ -50,3 +52,4 @@ Use the GSI compatibility intake (GSI_TESTING.md) and bug report template. Remov
 - https://github.com/LineageOS/android_device_generic_common/tree/lineage-24.0
 - https://github.com/LineageOS/android_device_generic_common/blob/lineage-24.0/gsi_arm64.mk
 - https://developer.android.com/topic/generic-system-image
+- https://source.android.com/docs/core/tests/vts/gsi
