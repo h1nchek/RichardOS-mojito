@@ -102,7 +102,7 @@ The existing `mojito` port remains a separate device-specific workstream and is 
 
 ## 8. Immediate next actions
 
-- [ ] Confirm the exact lunch combo from a complete synced LineageOS checkout.
+- [x] Confirm the exact lunch combo from AOSP GSI documentation and the LineageOS `lineage-24.0` product definition.
 - [ ] Produce and inspect the unmodified `gsi_arm64` baseline.
 - [ ] Add a GSI-specific build helper only after the real combo and output paths are confirmed.
 - [ ] Integrate RichardOS changes incrementally.
