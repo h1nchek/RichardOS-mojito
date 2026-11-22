@@ -28,7 +28,7 @@ The exact build combo is verified as `gsi_arm64-userdebug`. AOSP documents this 
 2. Initialize and sync the LineageOS `lineage-24.0` source tree.
 3. Confirm that the synced `device/generic/common/AndroidProducts.mk` registers `gsi_arm64.mk`.
 4. Inspect `gsi_arm64.mk` and its inherited makefiles from the actual synced revision.
-5. Run `source build/envsetup.sh`, inspect available lunch choices, and select the combo that resolves to product `gsi_arm64` with the `userdebug` variant. Record the exact combo and resolved product variables in the build log.
+5. Run `source build/envsetup.sh` and select the verified `gsi_arm64-userdebug` combo. Confirm that it resolves to product `gsi_arm64`, device `generic_arm64` and variant `userdebug`; the build helper enforces these checks and records the selected target in the build log.
 6. Build the upstream baseline without RichardOS branding, Settings patches, or `mojito` dependencies.
 7. Verify the expected output exists, inspect its partition/image metadata, record the resolved repo manifest and SHA-256, and retain the complete build log.
 
