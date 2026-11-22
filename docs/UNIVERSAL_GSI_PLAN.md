@@ -20,7 +20,7 @@ Upstream source references:
 - https://github.com/LineageOS/android_device_generic_common/blob/lineage-24.0/AndroidProducts.mk
 - https://github.com/LineageOS/android_device_generic_common/blob/lineage-24.0/gsi_arm64.mk
 
-The product name is verified; the exact `lunch` combo must still be confirmed in the fully synced checkout. Do not hard-code a guessed alias into automation.
+The exact build combo is verified as `gsi_arm64-userdebug`. AOSP documents this ARM64 GSI target, and the LineageOS `lineage-24.0` product registry includes `gsi_arm64.mk`. The build helper still checks the resolved product variables in the complete synced checkout before compilation.
 
 ## 2. First GSI baseline — no RichardOS changes
 
